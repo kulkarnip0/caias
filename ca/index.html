@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Computer Architecture Visual Lab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <div><strong>Computer Architecture</strong> <span>Visual Lab</span></div>
+  <nav><button id="restartTop">Restart lesson</button></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow">INTERACTIVE LESSON 01</p>
+    <h1>How does the CPU execute<br><code>ADD 2050H</code>?</h1>
+    <p class="lead">Don't memorize the fetch–decode–execute cycle. Operate the CPU and watch every address, instruction, control signal and value move.</p>
+    <div class="equation">ACC ← ACC + Memory[2050H] &nbsp;&nbsp; | &nbsp;&nbsp; 05H + 03H = <strong>08H</strong></div>
+    <button class="primary" id="startBtn">Start the CPU →</button>
+  </section>
+
+  <section id="lab" class="lab">
+    <div class="phasebar">
+      <div data-phase="FETCH">1 <span>FETCH</span></div>
+      <div data-phase="DECODE">2 <span>DECODE</span></div>
+      <div data-phase="OPERAND">3 <span>FETCH OPERAND</span></div>
+      <div data-phase="EXECUTE">4 <span>EXECUTE</span></div>
+      <div data-phase="WRITEBACK">5 <span>WRITE BACK</span></div>
+    </div>
+
+    <div class="lesson-grid">
+      <aside class="story">
+        <p id="stepNo" class="eyebrow"></p>
+        <h2 id="stepTitle"></h2>
+        <p id="stepText"></p>
+        <div id="micro" class="micro"></div>
+        <div id="question" class="question hidden"></div>
+      </aside>
+
+      <div class="machine-wrap">
+        <svg id="machine" viewBox="0 0 1000 620" role="img" aria-label="Interactive CPU architecture">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" /></marker>
+            <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <rect class="cpu-shell" x="25" y="35" width="650" height="530" rx="24" />
+          <text class="section-label" x="55" y="72">CPU</text>
+
+          <g id="PC" class="component"><rect x="70" y="105" width="145" height="80" rx="12"/><text x="142" y="132">PC</text><text id="PCval" class="value" x="142" y="164">1000H</text></g>
+          <g id="MAR" class="component"><rect x="265" y="105" width="145" height="80" rx="12"/><text x="337" y="132">MAR</text><text id="MARval" class="value" x="337" y="164">—</text></g>
+          <g id="MDR" class="component"><rect x="460" y="105" width="165" height="80" rx="12"/><text x="542" y="132">MDR</text><text id="MDRval" class="value small" x="542" y="164">—</text></g>
+          <g id="IR" class="component"><rect x="70" y="245" width="210" height="85" rx="12"/><text x="175" y="274">INSTRUCTION REGISTER</text><text id="IRval" class="value small" x="175" y="309">—</text></g>
+          <g id="CU" class="component"><rect x="335" y="245" width="180" height="85" rx="12"/><text x="425" y="274">CONTROL UNIT</text><text id="CUval" class="tiny" x="425" y="307">waiting</text></g>
+          <g id="ACC" class="component"><rect x="70" y="405" width="160" height="90" rx="12"/><text x="150" y="434">ACC</text><text id="ACCval" class="value" x="150" y="474">05H</text></g>
+          <g id="ALU" class="component"><path d="M330 395 L515 415 L475 505 L370 505 Z"/><text x="424" y="443">ALU</text><text id="ALUval" class="value" x="424" y="480">—</text></g>
+
+          <g id="memory"><rect class="memory-shell" x="745" y="90" width="225" height="410" rx="20"/><text class="section-label" x="775" y="130">MEMORY</text>
+            <g id="mem1000" class="memrow"><rect x="775" y="165" width="165" height="75" rx="10"/><text x="800" y="193">1000H</text><text x="800" y="222">ADD 2050H</text></g>
+            <g id="mem1001" class="memrow"><rect x="775" y="255" width="165" height="60" rx="10"/><text x="800" y="292">1001H</text><text x="900" y="292">…</text></g>
+            <g id="mem2050" class="memrow"><rect x="775" y="335" width="165" height="75" rx="10"/><text x="800" y="363">2050H</text><text x="800" y="394">03H</text></g>
+          </g>
+
+          <path id="addressBus" class="bus address" d="M410 145 C600 145 650 175 745 175"/>
+          <path id="dataBus" class="bus data" d="M745 220 C675 220 660 160 625 160"/>
+          <path id="controlBus" class="bus control" d="M515 285 C650 285 680 300 745 300"/>
+          <text class="bus-label addressText" x="575" y="128">ADDRESS BUS · WHERE?</text>
+          <text class="bus-label dataText" x="620" y="210">DATA BUS · INFORMATION</text>
+          <text class="bus-label controlText" x="575" y="325">CONTROL BUS · WHAT TO DO?</text>
+
+          <g id="packet" class="packet hidden"><rect x="0" y="0" width="90" height="34" rx="17"/><text id="packetText" x="45" y="22">1000H</text></g>
+        </svg>
+        <div id="caption" class="caption">Press Start to begin.</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="prevBtn">← Previous</button>
+      <button id="replayBtn">↻ Replay</button>
+      <button id="nextBtn" class="primary">Next micro-operation →</button>
+      <label>Speed <select id="speed"><option value="1.5">Slow</option><option value="1" selected>Normal</option><option value="0.55">Fast</option></select></label>
+    </div>
+  </section>
+
+  <section class="cheatsheet">
+    <h2>Three buses. Three jobs.</h2>
+    <div class="cards"><article><b>Address Bus</b><strong>WHERE?</strong><p>Carries the address of the memory location.</p></article><article><b>Control Bus</b><strong>WHAT TO DO?</strong><p>Carries signals such as READ and WRITE.</p></article><article><b>Data Bus</b><strong>INFORMATION</strong><p>Carries instructions and actual data.</p></article></div>
+  </section>
+</main>
+<footer>Computer Architecture Visual Lab · Built for learning by seeing</footer>
+<script src="app.js"></script>
+</body>
+</html>

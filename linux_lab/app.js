@@ -18,6 +18,7 @@ function run(cmd){
   if(!c)return;
   if(c==='pwd') write(cwd==='~'?'/home/student':`/home/student/${cwd.replace('~/','')}`);
   else if(c==='whoami') write('student');
+  else if(c==='ls'&&arg==='-l') write(files.map((f,i)=>`${i%2?'drwxr-xr-x':'-rw-r--r--'} student student ${f}`).join('\n'));
   else if(c==='ls') write(files.join('  '));
   else if(c==='date') write(new Date().toString());
   else if(c==='clear'){output.textContent='';return;}
@@ -29,8 +30,7 @@ function run(cmd){
     else if(arg==='..'){cwd='~'; write('Moved to parent directory.');}
     else write(`bash: cd: ${arg}: No such file or directory`);
   }
-  else if(c==='ls'&&arg==='-l') write(files.map((f,i)=>`${i%2?'drwxr-xr-x':'-rw-r--r--'} student student ${f}`).join('\n'));
-  else write(`Try one of these: pwd, ls, whoami, date, mkdir linux_lab, cd linux_lab, touch test.txt, clear`);
+  else write(`Try one of these: pwd, ls, ls -l, whoami, date, mkdir linux_lab, cd linux_lab, touch test.txt, clear`);
 }
 input.addEventListener('keydown',e=>{if(e.key==='Enter'){const cmd=input.value;input.value='';run(cmd);setPrompt();}});
 setPrompt();

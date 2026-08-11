@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Digital Foundations · CAIAS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <a class="brand" href="../">← Computer Architecture</a>
+  <strong>Digital Foundations</strong>
+</header>
+<main>
+  <section class="hero">
+    <p class="eyebrow">INTERACTIVE MODULE</p>
+    <h1>How does a computer turn numbers, codes and logic into useful work?</h1>
+    <p>Explore arithmetic, character codes, error control, logic gates, Boolean algebra and K-maps through small experiments instead of memorizing rules.</p>
+  </section>
+
+  <nav class="chapter-nav" aria-label="Module chapters">
+    <button data-target="arith">1 · Arithmetic</button>
+    <button data-target="codes">2 · Codes</button>
+    <button data-target="errors">3 · Errors</button>
+    <button data-target="gates">4 · Logic Gates</button>
+    <button data-target="universal">5 · Universal Gates</button>
+    <button data-target="boolean">6 · Boolean Algebra</button>
+    <button data-target="kmap">7 · K-Map</button>
+  </nav>
+
+  <section id="arith" class="chapter">
+    <div class="chapter-head"><span>01</span><div><h2>How do we calculate in BCD, octal and hexadecimal?</h2><p>Choose a number system, then watch the carry/correction rule appear step by step.</p></div></div>
+    <div class="lab-grid">
+      <div class="panel controls-panel">
+        <label>Number system<select id="arithMode"><option value="bcd">BCD</option><option value="oct">Octal</option><option value="hex">Hexadecimal</option></select></label>
+        <label>Operation<select id="arithOp"><option value="add">Addition</option><option value="sub">Subtraction</option></select></label>
+        <label>First value<input id="arithA" value="59" /></label>
+        <label>Second value<input id="arithB" value="27" /></label>
+        <button class="primary" id="arithRun">Show me why →</button>
+      </div>
+      <div class="panel result-panel"><p class="eyebrow">STEP-BY-STEP</p><div id="arithResult" class="steps"></div></div>
+    </div>
+  </section>
+
+  <section id="codes" class="chapter">
+    <div class="chapter-head"><span>02</span><div><h2>How does a computer store numbers, letters and symbols?</h2><p>Compare binary, BCD, ASCII, EBCDIC and Unicode representations.</p></div></div>
+    <div class="lab-grid">
+      <div class="panel controls-panel"><label>Type one character or decimal number<input id="codeInput" value="A" maxlength="4" /></label><button class="primary" id="codeRun">Reveal the codes →</button></div>
+      <div class="panel"><div id="codeResult" class="code-cards"></div></div>
+    </div>
+  </section>
+
+  <section id="errors" class="chapter">
+    <div class="chapter-head"><span>03</span><div><h2>How can a computer notice that a bit changed?</h2><p>Build even parity, flip a bit during transmission, and see the receiver detect the error.</p></div></div>
+    <div class="panel error-lab">
+      <div><label>Data bits<input id="parityData" value="1011001" /></label><button id="makeParity" class="primary">Add even parity</button></div>
+      <div id="bitRow" class="bits"></div>
+      <p id="parityMessage" class="callout">Create a parity bit first.</p>
+    </div>
+  </section>
+
+  <section id="gates" class="chapter">
+    <div class="chapter-head"><span>04</span><div><h2>How does a computer make decisions using only 0 and 1?</h2><p>Toggle inputs and observe the output of each gate in real time.</p></div></div>
+    <div class="panel gate-lab">
+      <div class="switches"><button id="toggleA">A = 0</button><button id="toggleB">B = 0</button></div>
+      <div class="gate-grid" id="gateGrid"></div>
+    </div>
+  </section>
+
+  <section id="universal" class="chapter">
+    <div class="chapter-head"><span>05</span><div><h2>Why are NAND and NOR called universal gates?</h2><p>See how familiar gates can be reconstructed using only one gate type.</p></div></div>
+    <div class="panel universal-grid">
+      <button data-univ="not">Build NOT using NAND</button><button data-univ="and">Build AND using NAND</button><button data-univ="or">Build OR using NAND</button>
+      <div id="universalResult" class="callout">Choose a challenge.</div>
+    </div>
+  </section>
+
+  <section id="boolean" class="chapter">
+    <div class="chapter-head"><span>06</span><div><h2>Can we simplify logic before building hardware?</h2><p>Pick the correct Boolean law and watch the circuit idea become simpler.</p></div></div>
+    <div class="panel boolean-lab"><div class="expression">A + A·B</div><div class="choices"><button data-law="identity">Identity</button><button data-law="absorption">Absorption</button><button data-law="demorgan">De Morgan</button></div><div id="booleanResult" class="callout">Which law reduces this expression?</div></div>
+  </section>
+
+  <section id="kmap" class="chapter">
+    <div class="chapter-head"><span>07</span><div><h2>Can we simplify logic just by grouping 1s?</h2><p>Click cells in a 2-variable K-map, then let the lab derive the simplified expression.</p></div></div>
+    <div class="panel kmap-lab">
+      <div class="kmap" id="kmapGrid">
+        <button data-cell="00">0</button><button data-cell="01">0</button><button data-cell="10">0</button><button data-cell="11">0</button>
+      </div>
+      <button class="primary" id="solveKmap">Simplify map →</button>
+      <div id="kmapResult" class="callout">Turn on cells representing output 1.</div>
+    </div>
+  </section>
+</main>
+<footer>CAIAS · Computer Architecture · Digital Foundations</footer>
+<script src="app.js"></script>
+</body>
+</html>

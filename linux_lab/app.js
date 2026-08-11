@@ -34,3 +34,58 @@ function run(cmd){
 }
 input.addEventListener('keydown',e=>{if(e.key==='Enter'){const cmd=input.value;input.value='';run(cmd);setPrompt();}});
 setPrompt();
+
+// Add a copy button to every code block automatically.
+// This keeps future lab programs consistent without editing each <pre> manually.
+function addCopyButtons(){
+  $$('pre').forEach(pre=>{
+    if(pre.parentElement?.classList.contains('code-block-wrap')) return;
+
+    const wrap=document.createElement('div');
+    wrap.className='code-block-wrap';
+    pre.parentNode.insertBefore(wrap,pre);
+    wrap.appendChild(pre);
+
+    const btn=document.createElement('button');
+    btn.className='copy-code-btn';
+    btn.type='button';
+    btn.setAttribute('aria-label','Copy code to clipboard');
+    btn.title='Copy code';
+    btn.innerHTML='<span class="copy-icon" aria-hidden="true">⧉</span><span class="copy-label">Copy</span>';
+    wrap.appendChild(btn);
+
+    btn.addEventListener('click',async()=>{
+      const code=pre.querySelector('code')?.innerText ?? pre.innerText;
+      try{
+        await navigator.clipboard.writeText(code.replace(/\n$/,''));
+        btn.classList.add('copied');
+        btn.querySelector('.copy-icon').textContent='✓';
+        btn.querySelector('.copy-label').textContent='Copied';
+        setTimeout(()=>{
+          btn.classList.remove('copied');
+          btn.querySelector('.copy-icon').textContent='⧉';
+          btn.querySelector('.copy-label').textContent='Copy';
+        },1600);
+      }catch(err){
+        // Fallback for browsers/contexts where Clipboard API is unavailable.
+        const area=document.createElement('textarea');
+        area.value=code;
+        area.style.position='fixed';
+        area.style.opacity='0';
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+        btn.classList.add('copied');
+        btn.querySelector('.copy-icon').textContent='✓';
+        btn.querySelector('.copy-label').textContent='Copied';
+        setTimeout(()=>{
+          btn.classList.remove('copied');
+          btn.querySelector('.copy-icon').textContent='⧉';
+          btn.querySelector('.copy-label').textContent='Copy';
+        },1600);
+      }
+    });
+  });
+}
+addCopyButtons();

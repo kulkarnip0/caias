@@ -35,10 +35,35 @@ function run(cmd){
 input.addEventListener('keydown',e=>{if(e.key==='Enter'){const cmd=input.value;input.value='';run(cmd);setPrompt();}});
 setPrompt();
 
-// Add a copy button to every code block automatically.
-// This keeps future lab programs consistent without editing each <pre> manually.
-function addCopyButtons(){
-  $$('pre').forEach(pre=>{
+function getCode(pre){
+  return (pre.querySelector('code')?.innerText ?? pre.innerText).replace(/\n$/,'');
+}
+
+function suggestedFilename(pre,index){
+  const code=getCode(pre);
+  if(code.includes('for ((num=m; num<=n; num++))')) return 'prime.sh';
+  if(code.includes('original=$num') && code.includes('reverse=0')) return 'palindrome.sh';
+  if(code.includes('while (( n > 0 ))') && code.includes('sum=$(( sum + digit ))')) return 'sum_loop.sh';
+  if(code.includes('grep -o .') && code.includes('paste -sd+')) return 'sum_no_loop.sh';
+  if(code.startsWith('#!/bin/bash')) return `shell_program_${index+1}.sh`;
+  return `linux_lab_snippet_${index+1}.txt`;
+}
+
+function downloadTextFile(text,filename){
+  const blob=new Blob([text+'\n'],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+// Add Copy and Save to file actions to every code block automatically.
+function addCodeActions(){
+  $$('pre').forEach((pre,index)=>{
     if(pre.parentElement?.classList.contains('code-block-wrap')) return;
 
     const wrap=document.createElement('div');
@@ -46,28 +71,31 @@ function addCopyButtons(){
     pre.parentNode.insertBefore(wrap,pre);
     wrap.appendChild(pre);
 
-    const btn=document.createElement('button');
-    btn.className='copy-code-btn';
-    btn.type='button';
-    btn.setAttribute('aria-label','Copy code to clipboard');
-    btn.title='Copy code';
-    btn.innerHTML='<span class="copy-icon" aria-hidden="true">⧉</span><span class="copy-label">Copy</span>';
-    wrap.appendChild(btn);
+    const actions=document.createElement('div');
+    actions.className='code-actions';
+    wrap.appendChild(actions);
 
-    btn.addEventListener('click',async()=>{
-      const code=pre.querySelector('code')?.innerText ?? pre.innerText;
+    const copyBtn=document.createElement('button');
+    copyBtn.className='code-action-btn copy-code-btn';
+    copyBtn.type='button';
+    copyBtn.setAttribute('aria-label','Copy code to clipboard');
+    copyBtn.title='Copy code';
+    copyBtn.innerHTML='<span class="action-icon" aria-hidden="true">⧉</span><span class="action-label">Copy</span>';
+    actions.appendChild(copyBtn);
+
+    const saveBtn=document.createElement('button');
+    saveBtn.className='code-action-btn save-code-btn';
+    saveBtn.type='button';
+    saveBtn.setAttribute('aria-label','Save code to file');
+    saveBtn.title='Save code to file';
+    saveBtn.innerHTML='<span class="action-icon" aria-hidden="true">↓</span><span class="action-label">Save file</span>';
+    actions.appendChild(saveBtn);
+
+    copyBtn.addEventListener('click',async()=>{
+      const code=getCode(pre);
       try{
-        await navigator.clipboard.writeText(code.replace(/\n$/,''));
-        btn.classList.add('copied');
-        btn.querySelector('.copy-icon').textContent='✓';
-        btn.querySelector('.copy-label').textContent='Copied';
-        setTimeout(()=>{
-          btn.classList.remove('copied');
-          btn.querySelector('.copy-icon').textContent='⧉';
-          btn.querySelector('.copy-label').textContent='Copy';
-        },1600);
+        await navigator.clipboard.writeText(code);
       }catch(err){
-        // Fallback for browsers/contexts where Clipboard API is unavailable.
         const area=document.createElement('textarea');
         area.value=code;
         area.style.position='fixed';
@@ -76,16 +104,29 @@ function addCopyButtons(){
         area.select();
         document.execCommand('copy');
         area.remove();
-        btn.classList.add('copied');
-        btn.querySelector('.copy-icon').textContent='✓';
-        btn.querySelector('.copy-label').textContent='Copied';
-        setTimeout(()=>{
-          btn.classList.remove('copied');
-          btn.querySelector('.copy-icon').textContent='⧉';
-          btn.querySelector('.copy-label').textContent='Copy';
-        },1600);
       }
+      copyBtn.classList.add('success');
+      copyBtn.querySelector('.action-icon').textContent='✓';
+      copyBtn.querySelector('.action-label').textContent='Copied';
+      setTimeout(()=>{
+        copyBtn.classList.remove('success');
+        copyBtn.querySelector('.action-icon').textContent='⧉';
+        copyBtn.querySelector('.action-label').textContent='Copy';
+      },1600);
+    });
+
+    saveBtn.addEventListener('click',()=>{
+      const filename=suggestedFilename(pre,index);
+      downloadTextFile(getCode(pre),filename);
+      saveBtn.classList.add('success');
+      saveBtn.querySelector('.action-icon').textContent='✓';
+      saveBtn.querySelector('.action-label').textContent=`Saved ${filename}`;
+      setTimeout(()=>{
+        saveBtn.classList.remove('success');
+        saveBtn.querySelector('.action-icon').textContent='↓';
+        saveBtn.querySelector('.action-label').textContent='Save file';
+      },1800);
     });
   });
 }
-addCopyButtons();
+addCodeActions();

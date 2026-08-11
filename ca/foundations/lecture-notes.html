@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Digital Foundations - Lecture Notes · CAIAS</title>
+<style>
+:root{--ink:#18324a;--blue:#2e74b5;--soft:#eef5fa;--gold:#fff3cd;--line:#ccd8e2}*{box-sizing:border-box}body{margin:0;background:#f3f6f8;color:#1f2933;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.58}.toolbar{position:sticky;top:0;z-index:10;background:#0c1d2e;color:white;padding:12px 5vw;display:flex;justify-content:space-between;align-items:center;gap:12px}.toolbar a,.toolbar button{color:white;background:#183a59;border:1px solid #3f6382;border-radius:9px;padding:9px 13px;text-decoration:none;font:inherit;cursor:pointer}.toolbar .primary{background:#56c8ff;color:#07111f;border-color:transparent;font-weight:800}.paper{width:min(900px,calc(100% - 32px));margin:28px auto;background:white;padding:48px 58px;box-shadow:0 8px 32px #172b3d1a}.cover{text-align:center;padding:48px 0 36px;border-bottom:3px solid var(--blue);margin-bottom:35px}.cover .brand{color:var(--blue);font-weight:900;letter-spacing:.15em}.cover h1{font-size:2.4rem;line-height:1.1;color:var(--ink);margin:14px 0}.cover p{color:#526675}.note{background:var(--soft);border-left:4px solid var(--blue);padding:13px 16px;margin:18px 0}.exam{background:var(--gold);border-left:4px solid #d19a00;padding:13px 16px;margin:18px 0}h2{color:var(--ink);font-size:1.65rem;border-bottom:1px solid var(--line);padding-bottom:7px;margin-top:38px}h3{color:var(--blue);margin-top:25px}code,.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.example{background:#f7f9fb;border:1px solid #dde5ec;border-radius:8px;padding:14px 16px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.94rem}th,td{border:1px solid #cbd6df;padding:8px 9px;text-align:left}th{background:#dcebf6;color:var(--ink)}ul{padding-left:22px}.section-break{margin:44px 0;border:0;border-top:2px solid #e2e8ee}.footer{text-align:center;color:#748594;font-size:.85rem;margin-top:45px;padding-top:18px;border-top:1px solid var(--line)}@media(max-width:650px){.paper{padding:30px 22px}.toolbar{align-items:flex-start;flex-wrap:wrap}.cover h1{font-size:2rem}}@media print{body{background:white}.toolbar{display:none}.paper{width:auto;margin:0;box-shadow:none;padding:10mm 12mm}.section-break{break-before:page}h2{break-after:avoid}.example,.note,.exam,table{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="toolbar"><a href="./">← Back to interactive module</a><div><a href="lecture-notes.html" download>Download HTML</a> <button class="primary" id="printBtn">Print / Save as PDF</button></div></div>
+<article class="paper">
+<section class="cover"><div class="brand">CAIAS</div><h1>Digital Foundations - Lecture Notes</h1><p>BCD, Octal & Hexadecimal Arithmetic · Codes · Error Control · Logic Gates · Boolean Algebra · K-Maps</p><p>Use these notes after exploring the interactive activities for definitions, worked examples and exam revision.</p></section>
+
+<h2>1. How Do We Calculate in BCD, Octal and Hexadecimal?</h2>
+<p>The arithmetic rule always follows the base. Decimal uses base 10, octal uses base 8, hexadecimal uses base 16, while BCD stores each decimal digit separately in four bits.</p>
+<h3>1.1 Octal arithmetic</h3><p>Octal uses digits 0 to 7. When a column sum reaches 8 or more, write the base-8 remainder and carry one group of 8 to the next column. During subtraction, one borrow adds 8 to the current digit.</p>
+<div class="example">Example: 57₈ + 26₈
+7 + 6 = 13₁₀ = 15₈ → write 5, carry 1
+5 + 2 + 1 = 8₁₀ = 10₈ → write 0, carry 1
+Result = 105₈</div>
+<div class="example">Example: 65₈ - 27₈
+5 - 7 requires a borrow of 8
+(5 + 8) - 7 = 6
+5 - 1(borrow) - 2 = 2
+Result = 36₈</div>
+<h3>1.2 Hexadecimal arithmetic</h3><p>Hexadecimal uses 0-9 and A-F, where A=10, B=11, C=12, D=13, E=14 and F=15. A carry represents one group of 16; a borrow adds 16 to the current digit.</p>
+<div class="example">Example: 9A₁₆ + 2F₁₆
+A + F = 10 + 15 = 25₁₀ = 19₁₆ → write 9, carry 1
+9 + 2 + 1 = 12₁₀ = C₁₆
+Result = C9₁₆</div>
+<h3>1.3 BCD addition and subtraction</h3><p>In 8421 BCD, each decimal digit is represented by four bits. Only 0000 through 1001 are valid BCD digit patterns.</p>
+<table><tr><th>Decimal</th><th>0</th><th>1</th><th>2</th><th>5</th><th>8</th><th>9</th></tr><tr><td>BCD</td><td>0000</td><td>0001</td><td>0010</td><td>0101</td><td>1000</td><td>1001</td></tr></table>
+<div class="example">Example: 5 + 7 in BCD
+5 = 0101
+7 = 0111
+0101 + 0111 = 1100  ← invalid BCD digit
+Add correction 0110
+1100 + 0110 = 1 0010
+Result = 0001 0010 = decimal 12</div>
+<div class="note"><strong>BCD correction rule:</strong> after adding one BCD digit, add <span class="mono">0110</span> if the 4-bit result is greater than <span class="mono">1001</span> or if the addition produces a carry out.</div>
+<p>BCD subtraction is commonly implemented using complement-based addition. The key idea is that hardware can reuse an adder rather than requiring a completely separate decimal subtraction circuit.</p>
+
+<hr class="section-break">
+<h2>2. How Does a Computer Represent Numbers Using Codes?</h2>
+<h3>2.1 Pure binary versus BCD</h3><p>Pure binary represents the whole number in base 2. BCD converts each decimal digit separately to four bits.</p>
+<div class="example">Decimal 59
+Pure binary: 59₁₀ = 111011₂
+BCD: 5 → 0101, 9 → 1001
+BCD(59) = 0101 1001</div>
+<p>BCD uses more bits than pure binary but is convenient when exact decimal digits must be displayed or processed.</p>
+<h3>2.2 Decimal codes</h3><p>A decimal code assigns a binary pattern to each decimal digit. 8421 BCD is a weighted decimal code because its bit positions have weights 8, 4, 2 and 1.</p>
+
+<h2>3. How Does a Computer Store Letters and Symbols?</h2>
+<h3>ASCII</h3><p>ASCII is a 7-bit character code designed for basic English letters, digits, punctuation and control characters. It defines 128 values from 0 to 127.</p>
+<div class="example">A = decimal 65
+ASCII binary = 1000001</div>
+<h3>EBCDIC</h3><p>EBCDIC is an 8-bit character encoding historically associated with IBM mainframe and midrange systems. Its byte values are arranged differently from ASCII.</p>
+<h3>Unicode</h3><p>Unicode assigns code points to characters from many writing systems and symbol sets. A code point is commonly written as <span class="mono">U+xxxx</span>; for example, <span class="mono">U+0041</span> represents A. UTF-8, UTF-16 and UTF-32 are encoding formats for storing Unicode data.</p>
+<div class="note"><strong>Why Unicode matters:</strong> modern systems must represent scripts such as Kannada, Hindi, Arabic and Chinese, plus symbols such as ₹ and emoji. ASCII cannot cover this range.</div>
+<table><tr><th>Code</th><th>Typical size</th><th>Main use</th><th>Key idea</th></tr><tr><td>ASCII</td><td>7 bits</td><td>Basic English text</td><td>128 values</td></tr><tr><td>EBCDIC</td><td>8 bits</td><td>IBM systems</td><td>Different mapping from ASCII</td></tr><tr><td>Unicode</td><td>Code points; UTF encodings vary</td><td>Multilingual text</td><td>Global character repertoire</td></tr></table>
+
+<hr class="section-break">
+<h2>4. How Can a Computer Detect and Correct Data Errors?</h2>
+<p>Noise, storage faults or communication problems can change bits. Error-control codes add redundant information so a receiver can test whether a received word is valid.</p>
+<h3>4.1 Parity - error detection</h3><p>With even parity, the total number of 1s including the parity bit must be even. With odd parity, the total must be odd.</p>
+<div class="example">Data = 1011001
+Number of 1s = 4
+Even-parity bit = 0</div>
+<p>A one-bit error changes parity and is detected. Simple parity cannot identify the wrong bit and can miss some even-numbered multiple-bit errors.</p>
+<h3>4.2 Hamming distance</h3><p>The Hamming distance between two binary words is the number of bit positions in which they differ. A code with minimum distance <span class="mono">d</span> can detect up to <span class="mono">d-1</span> errors and correct up to <span class="mono">floor((d-1)/2)</span> errors.</p>
+<h3>4.3 Hamming-code idea</h3><p>Hamming codes place parity bits at positions 1, 2, 4, 8, ... . Each parity bit checks a different subset. The pattern of failed checks forms a syndrome that identifies a single-bit error location.</p>
+<div class="example">If checks give P4=fail, P2=pass, P1=fail:
+Syndrome = 101₂ = 5
+Therefore bit position 5 is the error.
+Flip bit 5 to correct it.</div>
+
+<hr class="section-break">
+<h2>5. How Does a Digital Computer Make Decisions with 0 and 1?</h2>
+<p>Logic gates operate on binary inputs. Larger digital circuits such as adders, multiplexers, registers and processors are built from combinations of gates.</p>
+<table><tr><th>Gate</th><th>Boolean idea</th><th>Output meaning</th></tr><tr><td>AND</td><td>A·B</td><td>1 only when both are 1</td></tr><tr><td>OR</td><td>A+B</td><td>1 when at least one is 1</td></tr><tr><td>NOT</td><td>Ā</td><td>Inverts the input</td></tr><tr><td>NAND</td><td>NOT(AND)</td><td>Inverse of AND</td></tr><tr><td>NOR</td><td>NOT(OR)</td><td>Inverse of OR</td></tr><tr><td>XOR</td><td>A⊕B</td><td>1 when inputs differ</td></tr><tr><td>XNOR</td><td>NOT(XOR)</td><td>1 when inputs are equal</td></tr></table>
+<table><tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>NAND</th><th>NOR</th><th>XOR</th><th>XNOR</th></tr><tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr></table>
+
+<h2>6. Why Are NAND and NOR Called Universal Gates?</h2>
+<p>A universal gate can implement NOT, AND and OR by itself. Therefore NAND alone, or NOR alone, can realize any Boolean function.</p>
+<div class="example">Using NAND only
+NOT A = A NAND A
+A AND B = (A NAND B) NAND (A NAND B)
+A OR B = (A NAND A) NAND (B NAND B)</div>
+<div class="example">Using NOR only
+NOT A = A NOR A
+A OR B = (A NOR B) NOR (A NOR B)
+A AND B = (A NOR A) NOR (B NOR B)</div>
+<div class="exam"><strong>Exam shortcut:</strong> to prove universality, show how NOT, AND and OR are constructed using only the selected gate.</div>
+
+<hr class="section-break">
+<h2>7. How Can We Simplify Logic Before Building Hardware?</h2>
+<p>Boolean algebra simplifies logic expressions, reducing gate count, wiring and delay.</p>
+<table><tr><th>Law</th><th>Useful form</th></tr><tr><td>Identity</td><td>A+0=A; A·1=A</td></tr><tr><td>Null / Dominance</td><td>A+1=1; A·0=0</td></tr><tr><td>Idempotent</td><td>A+A=A; A·A=A</td></tr><tr><td>Complement</td><td>A+Ā=1; A·Ā=0</td></tr><tr><td>Involution</td><td>double complement of A = A</td></tr><tr><td>Commutative</td><td>A+B=B+A; AB=BA</td></tr><tr><td>Associative</td><td>A+(B+C)=(A+B)+C</td></tr><tr><td>Distributive</td><td>A(B+C)=AB+AC</td></tr><tr><td>Absorption</td><td>A+AB=A; A(A+B)=A</td></tr><tr><td>De Morgan</td><td>NOT(A+B)=Ā·B̄; NOT(AB)=Ā+B̄</td></tr></table>
+<div class="example">Example: A + A·B
+By absorption: A + A·B = A</div>
+<div class="example">Example: A·B + A·B̄
+= A(B + B̄)
+= A(1)
+= A</div>
+
+<h2>8. Can We Simplify Logic Just by Grouping 1s?</h2>
+<p>A Karnaugh map is a visual simplification method. Adjacent cells differ in only one variable because row and column labels are arranged in Gray-code order.</p>
+<h3>Grouping rules</h3><ul><li>For Sum-of-Products simplification, group 1s.</li><li>Groups must contain 1, 2, 4, 8, ... cells.</li><li>Make groups as large as possible.</li><li>Every 1 must be covered at least once.</li><li>Groups may overlap.</li><li>Opposite edges are adjacent; the map wraps around.</li><li>A variable disappears from a group when its value changes inside that group.</li></ul>
+<div class="example">Example: F(A,B)=Σm(1,3)
+Cells m1 and m3 form a group of 2.
+A changes; B remains 1.
+Therefore F = B.</div>
+<div class="note"><strong>Best K-map habit:</strong> find the largest legal groups first. Only then write the simplified Boolean terms.</div>
+
+<hr class="section-break">
+<h2>9. Quick Revision Checklist</h2><ul><li>Octal carry/borrow is based on 8; hexadecimal on 16.</li><li>BCD stores each decimal digit separately in 4 bits.</li><li>BCD addition uses +0110 correction for an invalid digit sum or carry.</li><li>ASCII is a compact English-oriented code; EBCDIC is associated with IBM systems; Unicode covers a global character repertoire.</li><li>Parity detects errors but does not locate the wrong bit.</li><li>Hamming-style parity checks can identify a single-bit error.</li><li>NAND and NOR are universal gates.</li><li>Boolean algebra simplifies algebraically; K-maps simplify visually.</li><li>K-map groups are powers of two and should be as large as possible.</li></ul>
+<h2>10. Practice Questions</h2><ol><li>Add 67₈ and 25₈.</li><li>Subtract 3B₁₆ from 7A₁₆.</li><li>Perform BCD addition for 8 + 7 and show the correction step.</li><li>Write decimal 46 in pure binary and 8421 BCD.</li><li>Explain one difference between ASCII and Unicode.</li><li>Create an even-parity bit for 1101011.</li><li>Why is NAND called a universal gate?</li><li>Simplify A + A·B.</li><li>Use a 2-variable K-map to simplify F(A,B)=Σm(0,2).</li></ol>
+<div class="footer">CAIAS · Computer Architecture · Digital Foundations · Lecture Notes</div>
+</article>
+<script>document.getElementById('printBtn').addEventListener('click',()=>window.print());</script>
+</body>
+</html>

@@ -61,20 +61,16 @@ function downloadTextFile(text,filename){
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
-// Add Copy and Save to file actions to every code block automatically.
 function addCodeActions(){
   $$('pre').forEach((pre,index)=>{
     if(pre.parentElement?.classList.contains('code-block-wrap')) return;
-
     const wrap=document.createElement('div');
     wrap.className='code-block-wrap';
     pre.parentNode.insertBefore(wrap,pre);
     wrap.appendChild(pre);
-
     const actions=document.createElement('div');
     actions.className='code-actions';
     wrap.appendChild(actions);
-
     const copyBtn=document.createElement('button');
     copyBtn.className='code-action-btn copy-code-btn';
     copyBtn.type='button';
@@ -82,7 +78,6 @@ function addCodeActions(){
     copyBtn.title='Copy code';
     copyBtn.innerHTML='<span class="action-icon" aria-hidden="true">⧉</span><span class="action-label">Copy</span>';
     actions.appendChild(copyBtn);
-
     const saveBtn=document.createElement('button');
     saveBtn.className='code-action-btn save-code-btn';
     saveBtn.type='button';
@@ -90,43 +85,33 @@ function addCodeActions(){
     saveBtn.title='Save code to file';
     saveBtn.innerHTML='<span class="action-icon" aria-hidden="true">↓</span><span class="action-label">Save file</span>';
     actions.appendChild(saveBtn);
-
     copyBtn.addEventListener('click',async()=>{
       const code=getCode(pre);
-      try{
-        await navigator.clipboard.writeText(code);
-      }catch(err){
-        const area=document.createElement('textarea');
-        area.value=code;
-        area.style.position='fixed';
-        area.style.opacity='0';
-        document.body.appendChild(area);
-        area.select();
-        document.execCommand('copy');
-        area.remove();
-      }
-      copyBtn.classList.add('success');
-      copyBtn.querySelector('.action-icon').textContent='✓';
-      copyBtn.querySelector('.action-label').textContent='Copied';
-      setTimeout(()=>{
-        copyBtn.classList.remove('success');
-        copyBtn.querySelector('.action-icon').textContent='⧉';
-        copyBtn.querySelector('.action-label').textContent='Copy';
-      },1600);
+      try{await navigator.clipboard.writeText(code);}catch(err){const area=document.createElement('textarea');area.value=code;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();}
+      copyBtn.classList.add('success');copyBtn.querySelector('.action-icon').textContent='✓';copyBtn.querySelector('.action-label').textContent='Copied';setTimeout(()=>{copyBtn.classList.remove('success');copyBtn.querySelector('.action-icon').textContent='⧉';copyBtn.querySelector('.action-label').textContent='Copy';},1600);
     });
-
     saveBtn.addEventListener('click',()=>{
-      const filename=suggestedFilename(pre,index);
-      downloadTextFile(getCode(pre),filename);
-      saveBtn.classList.add('success');
-      saveBtn.querySelector('.action-icon').textContent='✓';
-      saveBtn.querySelector('.action-label').textContent=`Saved ${filename}`;
-      setTimeout(()=>{
-        saveBtn.classList.remove('success');
-        saveBtn.querySelector('.action-icon').textContent='↓';
-        saveBtn.querySelector('.action-label').textContent='Save file';
-      },1800);
+      const filename=suggestedFilename(pre,index);downloadTextFile(getCode(pre),filename);saveBtn.classList.add('success');saveBtn.querySelector('.action-icon').textContent='✓';saveBtn.querySelector('.action-label').textContent=`Saved ${filename}`;setTimeout(()=>{saveBtn.classList.remove('success');saveBtn.querySelector('.action-icon').textContent='↓';saveBtn.querySelector('.action-label').textContent='Save file';},1800);
     });
   });
 }
 addCodeActions();
+
+// Add a clearly visible link to the interactive line-by-line execution walkthrough.
+function addProgramFlowLinks(){
+  const hero=document.querySelector('.hero');
+  if(hero && !document.querySelector('.program-flow-link')){
+    const a=document.createElement('a');
+    a.href='program-flow.html';
+    a.className='primary-link program-flow-link';
+    a.style.marginLeft='10px';
+    a.textContent='▶ Program flow — line by line';
+    hero.appendChild(a);
+  }
+  ['p1','p2','p3'].forEach((id,i)=>{
+    const section=document.getElementById(id); if(!section)return;
+    const head=section.querySelector('.chapter-head > div'); if(!head||head.querySelector('.flow-detail-link'))return;
+    const a=document.createElement('a');a.href=`program-flow.html#${['prime','palindrome','sumloop'][i]}`;a.className='primary-link flow-detail-link';a.style.marginTop='12px';a.textContent='▶ See this program execute line by line';head.appendChild(a);
+  });
+}
+addProgramFlowLinks();

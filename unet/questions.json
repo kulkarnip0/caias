@@ -1,0 +1,29 @@
+[
+  {
+    "id": "cn-token-ring-bit-delay-001",
+    "title": "Token Ring: one-bit delay and equivalent cable length",
+    "domain": "Computer Networks",
+    "topic": "Data Communication",
+    "concepts": [
+      "Data Rate",
+      "Propagation Speed",
+      "Bit Time",
+      "Propagation Delay",
+      "Token Ring"
+    ],
+    "subconcepts": [
+      "bit length",
+      "unit conversion",
+      "distance = speed × time"
+    ],
+    "question_type": "Numerical / Conceptual",
+    "difficulty": "Foundation",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "User recalls that it may be from a 2024 paper; not yet verified.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/token-ring-bit-delay/",
+    "references": []
+  }
+]

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Token Ring — Understanding One-Bit Delay</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #637083;
+      --accent: #3157d5;
+      --accent-soft: #eef2ff;
+      --border: #dfe5ef;
+      --good: #147a55;
+      --shadow: 0 12px 36px rgba(25, 38, 70, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef3ff 0, var(--bg) 260px);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .wrap { width: min(920px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 70px; }
+    .eyebrow { color: var(--accent); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: .78rem; }
+    h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.08; margin: 8px 0 14px; }
+    .lead { color: var(--muted); font-size: 1.08rem; max-width: 760px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 26px; box-shadow: var(--shadow); margin-top: 24px; }
+    .question { font-size: 1.12rem; background: #fbfcff; border-left: 5px solid var(--accent); padding: 18px 20px; border-radius: 12px; }
+    .given { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+    .pill { background: var(--accent-soft); border: 1px solid #dfe5ff; border-radius: 14px; padding: 14px 16px; }
+    .pill strong { display: block; font-size: .86rem; color: var(--muted); margin-bottom: 3px; }
+    .ring { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; padding: 18px 0 2px; font-weight: 750; }
+    .node { min-width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: #fff; border: 2px solid #bcc8e6; }
+    .arrow { color: var(--accent); font-size: 1.3rem; }
+    .token { background: #fff7d6; border-color: #e7bd32; }
+    .analogy { margin-top: 18px; border-radius: 15px; background: #fffaf0; border: 1px solid #f1dfad; padding: 16px 18px; }
+    button { border: 0; border-radius: 12px; padding: 13px 18px; font: inherit; font-weight: 800; cursor: pointer; }
+    #nextBtn { background: var(--accent); color: #fff; margin-top: 20px; }
+    #nextBtn:hover { filter: brightness(.96); }
+    #resetBtn { background: #edf0f5; color: var(--text); margin-left: 8px; }
+    .steps { margin-top: 22px; display: grid; gap: 14px; }
+    .step { display: none; opacity: 0; transform: translateY(8px); background: #fcfdff; border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; }
+    .step.visible { display: block; animation: reveal .45s ease forwards; }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+    .step-no { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: white; font-weight: 800; margin-right: 8px; }
+    .formula { margin: 13px 0; background: #f3f6fb; border-radius: 12px; padding: 13px 16px; font-family: "Courier New", monospace; overflow-x: auto; }
+    .answer { border: 2px solid #b9e0cf; background: #f2fbf7; }
+    .answer strong { color: var(--good); font-size: 1.25rem; }
+    .progress { height: 8px; background: #e9edf4; border-radius: 999px; overflow: hidden; margin-top: 20px; }
+    .progress > div { width: 0%; height: 100%; background: var(--accent); transition: width .35s ease; }
+    .small { font-size: .92rem; color: var(--muted); }
+    @media (max-width: 650px) { .given { grid-template-columns: 1fr; } .card { padding: 20px; } #resetBtn { margin: 10px 0 0 0; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="eyebrow">Computer Networks • Token Ring</div>
+    <h1>What does “one-bit delay is equivalent to a length” actually mean?</h1>
+    <p class="lead">This lesson does not jump straight to the answer. First understand the physical meaning, then reveal the calculation one small step at a time.</p>
+
+    <section class="card">
+      <h2>First, understand the question</h2>
+      <div class="question">
+        In a Token Ring network, the transmission speed is <b>10<sup>7</sup> bits/s</b> and the propagation speed is <b>200 m/μs</b>. The one-bit delay in this network is equivalent to what cable length?
+      </div>
+      <div class="given">
+        <div class="pill"><strong>Transmission speed</strong>10<sup>7</sup> bits every second</div>
+        <div class="pill"><strong>Propagation speed</strong>200 metres travelled every microsecond</div>
+      </div>
+
+      <div class="analogy">
+        <b>Practical picture:</b> imagine bits as tiny railway coaches moving around the ring. A new coach enters the track after every one-bit time. The question is asking: <i>how far has the previous bit travelled by the time the next bit is put onto the cable?</i>
+      </div>
+
+      <div class="ring" aria-label="Token ring illustration">
+        <span class="node">A</span><span class="arrow">→</span>
+        <span class="node token">TOKEN</span><span class="arrow">→</span>
+        <span class="node">B</span><span class="arrow">→</span>
+        <span class="node">C</span><span class="arrow">→</span>
+        <span class="node">D</span><span class="arrow">↺</span>
+      </div>
+      <p class="small">The token is a special control frame that circulates around the ring. Only the station holding it gets permission to transmit.</p>
+
+      <div class="progress"><div id="bar"></div></div>
+      <button id="nextBtn">Start step-by-step explanation</button>
+      <button id="resetBtn" hidden>Start again</button>
+
+      <div class="steps">
+        <div class="step" id="step1">
+          <span class="step-no">1</span><b>What does 10<sup>7</sup> bits/s tell us?</b>
+          <p>It tells us how many bits the transmitter puts onto the cable in one second. We want the time taken for only <b>one</b> bit.</p>
+          <div class="formula">time for 1 bit = 1 / data rate</div>
+          <p>Do not calculate the cable length yet. First find this tiny time interval.</p>
+        </div>
+
+        <div class="step" id="step2">
+          <span class="step-no">2</span><b>Find the time for one bit</b>
+          <div class="formula">1 / 10⁷ s = 10⁻⁷ s</div>
+          <p>Now convert seconds to microseconds because the propagation speed is given in metres per microsecond.</p>
+        </div>
+
+        <div class="step" id="step3">
+          <span class="step-no">3</span><b>Convert that time to microseconds</b>
+          <p>Since 1 μs = 10<sup>−6</sup> s:</p>
+          <div class="formula">10⁻⁷ s = 0.1 μs</div>
+          <p>Meaning: the transmitter puts a new bit on the link every <b>0.1 μs</b>.</p>
+        </div>
+
+        <div class="step" id="step4">
+          <span class="step-no">4</span><b>Now ask how far a bit travels in 0.1 μs</b>
+          <p>The signal travels at 200 metres in every 1 μs.</p>
+          <div class="formula">distance = propagation speed × time</div>
+          <p>So use 200 m/μs and the one-bit time of 0.1 μs.</p>
+        </div>
+
+        <div class="step answer" id="step5">
+          <span class="step-no">5</span><b>Only now calculate the final length</b>
+          <div class="formula">200 m/μs × 0.1 μs = 20 m</div>
+          <p><strong>Therefore, one-bit delay is equivalent to 20 metres of cable.</strong></p>
+          <p>Physical meaning: when one bit has moved about 20 m along the ring, the transmitter is ready to place the next bit onto the cable.</p>
+        </div>
+
+        <div class="step" id="step6">
+          <span class="step-no">6</span><b>Why does Token Ring care about this length?</b>
+          <p>The ring has a physical propagation delay. Expressing that delay in “bits” tells us how many bits can physically be present on the ring at once.</p>
+          <div class="formula">longer ring → larger propagation delay → more bits can fit on the ring</div>
+          <p>That is why a networking question converts <b>one-bit time</b> into an equivalent <b>cable length</b>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const steps = [...document.querySelectorAll('.step')];
+    const nextBtn = document.getElementById('nextBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const bar = document.getElementById('bar');
+    let current = 0;
+
+    const labels = [
+      'Next: find one-bit time',
+      'Next: convert the unit',
+      'Next: connect time with distance',
+      'Next: calculate the length',
+      'Next: why length matters in Token Ring',
+      'Completed'
+    ];
+
+    nextBtn.addEventListener('click', () => {
+      if (current < steps.length) {
+        steps[current].classList.add('visible');
+        steps[current].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        current++;
+        bar.style.width = `${(current / steps.length) * 100}%`;
+        nextBtn.textContent = labels[current - 1];
+        resetBtn.hidden = false;
+      }
+      if (current === steps.length) {
+        nextBtn.disabled = true;
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      current = 0;
+      steps.forEach(step => step.classList.remove('visible'));
+      bar.style.width = '0%';
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'Start step-by-step explanation';
+      resetBtn.hidden = true;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

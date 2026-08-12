@@ -1,109 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Recurrence Relations — Increasing Order</title>
+<link rel="stylesheet" href="../../question-visual-template.css">
 <style>
-:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#667085;--accent:#3157d5;--soft:#eef2ff;--border:#dfe5ef;--good:#157347;--gold:#9a6700;--shadow:0 12px 34px rgba(25,38,70,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#edf2ff 0,var(--bg) 300px);color:var(--text);line-height:1.7}.wrap{width:min(1050px,calc(100% - 30px));margin:auto;padding:38px 0 75px}.back{color:var(--accent);font-weight:800;text-decoration:none}.eyebrow{margin-top:22px;color:var(--accent);font-weight:850;text-transform:uppercase;letter-spacing:.07em;font-size:.8rem}h1{font-size:clamp(2rem,5vw,3.35rem);line-height:1.08;margin:8px 0 12px}.lead{color:var(--muted);font-size:1.06rem;max-width:900px}.card{margin-top:22px;background:var(--card);border:1px solid var(--border);border-radius:21px;padding:24px;box-shadow:var(--shadow)}.q{background:#fafbff;border-left:5px solid var(--accent);border-radius:12px;padding:18px}.opts{display:grid;gap:9px;margin-top:14px}.opt{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fff}.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.tag{background:var(--soft);color:#2947a3;border:1px solid #dbe3ff;border-radius:999px;padding:4px 9px;font-size:.8rem;font-weight:750}.idea{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.idea div{background:#f9fafc;border:1px solid var(--border);border-radius:14px;padding:14px}.idea b{display:block;color:var(--accent);margin-bottom:4px}.example,.lawbox{background:#fffaf0;border:1px solid #efdfb1;border-radius:14px;padding:16px;margin-top:15px}.lawbox{background:#f7f9ff;border-color:#dbe3ff}.law{padding:9px 0;border-bottom:1px dashed #ccd5ec}.law:last-child{border-bottom:0}.controls{margin-top:20px}.btn{border:0;border-radius:11px;padding:12px 17px;font:inherit;font-weight:800;cursor:pointer}.next{background:var(--accent);color:#fff}.reset{background:#edf0f5;margin-left:8px}.steps{display:grid;gap:14px;margin-top:20px}.step{display:none;background:#fcfdff;border:1px solid var(--border);border-radius:16px;padding:20px}.step.show{display:block;animation:fade .35s ease}.step h3{margin:0 0 8px}.badge{display:inline-grid;place-items:center;width:31px;height:31px;border-radius:50%;background:var(--accent);color:#fff;margin-right:7px}.tree,.formula{font-family:"Courier New",monospace;white-space:pre-wrap;background:#f4f6fa;border-radius:12px;padding:14px;overflow:auto}.formula{margin:10px 0}.derive{border-left:4px solid #91a6ea;background:#f7f9ff;border-radius:10px;padding:12px 15px;margin:12px 0}.derive b{color:#2947a3}.result{font-weight:850;color:var(--good);font-size:1.08rem}.final{border:2px solid #b8dfcd;background:#f2fbf7}.compare{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}.compare div{text-align:center;border:1px solid var(--border);border-radius:12px;padding:10px;background:#fff}.small{font-size:.91rem;color:var(--muted)}.note{color:var(--gold);font-weight:750}.refs ul{margin-bottom:0}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@media(max-width:720px){.idea{grid-template-columns:1fr}.compare{grid-template-columns:1fr}.reset{margin:9px 0 0 0}}
+:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#667085;--accent:#3157d5;--border:#dfe5ef;--shadow:0 12px 34px rgba(25,38,70,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,#edf2ff,var(--bg) 300px);color:var(--text);line-height:1.7}.wrap{width:min(1050px,calc(100% - 32px));margin:auto;padding:38px 0 72px}.back{color:var(--accent);font-weight:800;text-decoration:none}.eyebrow{margin-top:22px;color:var(--accent);font-weight:850;text-transform:uppercase;font-size:.8rem}h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.08}.card{margin-top:22px;background:white;border:1px solid var(--border);border-radius:21px;padding:24px;box-shadow:var(--shadow)}.q,.formula,.tree{border-radius:12px;padding:14px}.q{background:#fafbff;border-left:5px solid var(--accent)}.formula,.tree{font-family:"Courier New",monospace;background:#f4f6fa;white-space:pre-wrap;overflow:auto}.opts{display:grid;gap:8px;margin-top:12px}.opt{padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:#fff}.step{display:none;margin-top:15px;border:1px solid var(--border);border-radius:16px;padding:18px}.step.show{display:block}.btn{border:0;border-radius:11px;padding:12px 17px;font:inherit;font-weight:800;cursor:pointer}.next{background:var(--accent);color:white}.reset{margin-left:8px}.rec-row{display:grid;grid-template-columns:1.1fr .9fr .9fr;gap:10px;margin:12px 0}.rec-box{padding:12px;border:2px solid var(--border);border-radius:14px;text-align:center;font-weight:800}.level-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:9px 0}.job{min-width:72px;padding:9px;border:2px solid var(--learn-blue);background:var(--learn-blue-soft);border-radius:12px;text-align:center;font-weight:850}.work{border-color:var(--learn-purple);background:var(--learn-purple-soft)}.result{font-weight:900;color:var(--learn-green)}.small{color:var(--muted);font-size:.92rem}.compare{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.compare>div{border:2px solid var(--border);border-radius:12px;padding:10px;text-align:center}@media(max-width:750px){.rec-row,.compare{grid-template-columns:1fr}.reset{margin:8px 0 0}}
 </style>
 </head><body><main class="wrap">
-<a class="back" href="../../">← Back to question bank</a>
-<div class="eyebrow">Algorithms • Recurrence Relations</div>
-<h1>Arrange the recurrences in increasing order of time complexity</h1>
-<p class="lead">The goal here is not to jump to Master Theorem. We derive each recurrence from the recursion tree: <b>number of jobs at a level × work done by one job × number of levels</b>. Every logarithm and exponent step is unpacked.</p>
-
-<section class="card"><h2>The question</h2><div class="q">Arrange the following recurrence relations in increasing order of their asymptotic running time.<div class="opts"><div class="opt"><b>A.</b> T(n) = T(n/2) + 1</div><div class="opt"><b>B.</b> T(n) = 2T(n/2) + n</div><div class="opt"><b>C.</b> T(n) = 3T(n/3) + n</div><div class="opt"><b>D.</b> T(n) = 2T(n/2) + √n</div><div class="opt"><b>E.</b> T(n) = T(n−1) + 1</div></div></div><div class="tags"><span class="tag">Algorithms</span><span class="tag">Recurrence Relations</span><span class="tag">Recursion Tree</span><span class="tag">Time Complexity</span><span class="tag">Logarithms</span><span class="tag">Exponent Laws</span><span class="tag">Divide and Conquer</span></div></section>
-
-<section class="card"><h2>Before solving: how to read a recurrence</h2><p>For <b>aT(n/b) + f(n)</b>, read each part separately.</p><div class="idea"><div><b>a → number of recursive jobs</b><code>2T(...)</code> means every job creates 2 child jobs. At level i there are 2<sup>i</sup> jobs.</div><div><b>n/b → size of each job</b><code>T(n/2)</code> means each child gets half the previous problem. At level i, size is n/2<sup>i</sup>.</div><div><b>f(n) → extra work per node</b><code>+n</code>, <code>+√n</code>, or <code>+1</code> is work done outside the recursive calls.</div></div>
-<div class="lawbox"><b>Small logarithm toolbox used below</b><div class="law"><b>Meaning of logarithm:</b> log<sub>a</sub>x = y means a<sup>y</sup> = x.</div><div class="law"><b>Why log<sub>a</sub>a = 1:</b> ask “to what power must a be raised to get a?” The answer is 1, because a<sup>1</sup> = a.</div><div class="law"><b>Inverse identity:</b> a<sup>log<sub>a</sub>x</sup> = x, because log<sub>a</sub>x is exactly the exponent that makes base a become x.</div><div class="law"><b>Power of a power:</b> (a<sup>p</sup>)<sup>q</sup> = a<sup>pq</sup>.</div><div class="law"><b>Change of base:</b> log<sub>b</sub>n = log<sub>a</sub>n / log<sub>a</sub>b. The denominator is a constant, so all fixed log bases have the same Θ-growth.</div></div>
-<div class="controls"><button class="btn next" id="next">Start detailed derivation of A</button><button class="btn reset" id="reset" hidden>Start again</button></div>
-
-<div class="steps">
-<div class="step" id="s1"><h3><span class="badge">A</span>T(n) = T(n/2) + 1</h3><p><b>Step 1 — branching.</b> There is no coefficient before T, so it means 1T. Every job creates only one child. The tree is a chain.</p><div class="tree">Level 0: n
-Level 1: n/2
-Level 2: n/4 = n/2²
-Level 3: n/8 = n/2³
-...
-Level k: n/2ᵏ</div><p><b>Step 2 — find the number of levels.</b> Recursion stops when the subproblem becomes 1.</p><div class="formula">n / 2ᵏ = 1
-n = 2ᵏ
-k = log₂ n</div><div class="derive"><b>Why does k = log₂n?</b><br>By definition, log₂n asks: “2 must be raised to what power to become n?” We already have 2ᵏ = n. Therefore that power is k, so k = log₂n.</div><p><b>Step 3 — work per level.</b> The extra term is +1, and there is only one node at each level.</p><div class="formula">work per level = 1
-number of levels ≈ log₂ n
-Total = 1 + 1 + ... (log₂ n times)
-      = Θ(log n)</div><p class="result">A = Θ(log n)</p></div>
-
-<div class="step" id="s2"><h3><span class="badge">B</span>T(n) = 2T(n/2) + n</h3><p><b>Step 1 — branching.</b> The 2 means each node creates two recursive jobs.</p><div class="tree">Level 0:              1 job  × size n
-                       n
-                     /   \
-Level 1:              2 jobs × size n/2
-                    n/2   n/2
-                   /  \   /  \
-Level 2:              4 jobs × size n/4
-                 n/4 n/4 n/4 n/4</div><p>At level i:</p><div class="formula">number of jobs = 2ⁱ
-size of each job = n / 2ⁱ</div><p><b>Step 2 — compute total +n work at one level.</b> For a subproblem of size n/2ⁱ, its local +n term becomes n/2ⁱ.</p><div class="formula">level-i work
-= (number of jobs) × (work per job)
-= 2ⁱ × (n / 2ⁱ)
-= n</div><p>So every level costs n: n, n, n, n, ...</p><p><b>Step 3 — find depth.</b></p><div class="formula">n / 2ᵏ = 1
-⇒ 2ᵏ = n
-⇒ k = log₂ n</div><p><b>Step 4 — total.</b></p><div class="formula">Total ≈ n × log₂ n
-      = Θ(n log n)</div><p class="result">B = Θ(n log n)</p></div>
-
-<div class="step" id="s3"><h3><span class="badge">C</span>T(n) = 3T(n/3) + n</h3><p><b>Step 1 — branching.</b> Each node creates 3 child jobs, each one-third the size.</p><div class="tree">Level 0: 1 job, size n
-Level 1: 3 jobs, each size n/3
-Level 2: 9 jobs, each size n/9
-Level i: 3ⁱ jobs, each size n/3ⁱ</div><p><b>Step 2 — work per level.</b></p><div class="formula">3ⁱ × (n / 3ⁱ) = n</div><p>Again, every complete level contributes n.</p><p><b>Step 3 — depth.</b></p><div class="formula">n / 3ᵏ = 1
-⇒ 3ᵏ = n
-⇒ k = log₃ n</div><p><b>Step 4 — total.</b></p><div class="formula">Total = n × log₃ n
-      = Θ(n log n)</div><div class="derive"><b>Why can log₃n be written as Θ(log n)?</b><br>Using change of base:<br><br>log₃n = log₂n / log₂3.<br><br>log₂3 is just a fixed number (about 1.585). Dividing by a fixed constant changes only the constant multiplier, not the asymptotic growth.</div><p class="result">C = Θ(n log n)</p></div>
-
-<div class="step" id="s4"><h3><span class="badge">D</span>T(n) = 2T(n/2) + √n</h3><p>This is the most important derivation. The tree branches exactly like B, but the local work is √n rather than n.</p><p><b>Step 1 — jobs and size at each level.</b></p><div class="formula">At level i:
-number of jobs = 2ⁱ
-size of each job = n / 2ⁱ</div><p><b>Step 2 — local work of one job.</b> Because the recurrence has +√n, a node whose input size is n/2ⁱ performs:</p><div class="formula">√(n / 2ⁱ)</div><p><b>Step 3 — multiply by all jobs at that level.</b></p><div class="formula">Wᵢ = 2ⁱ × √(n / 2ⁱ)
-
-   = 2ⁱ × √n / √(2ⁱ)
-
-   = 2ⁱ × √n / 2ⁱᐟ²
-
-   = √n × 2ⁱ⁻ⁱᐟ²
-
-   = √n × 2ⁱᐟ²
-
-   = √n × (√2)ⁱ</div><div class="derive"><b>So your √2 observation is exactly the key.</b><br>The work across levels grows by a factor of √2 each time:<br><br>Level 0: √n<br>Level 1: √2 · √n<br>Level 2: (√2)² · √n<br>Level 3: (√2)³ · √n<br>...<br><br>So the level-work sequence is geometric with scale factor √2.</div><p><b>Step 4 — how many levels?</b> Since the subproblem halves each time:</p><div class="formula">n / 2ᵏ = 1
-⇒ 2ᵏ = n
-⇒ k = log₂ n</div><p><b>Step 5 — evaluate the growth factor at the last level.</b> Put i = log₂n into (√2)ⁱ:</p><div class="formula">(√2)^(log₂ n)
-
-= (2^(1/2))^(log₂ n)        [because √2 = 2^(1/2)]
-
-= 2^((1/2) log₂ n)          [(a^p)^q = a^(pq)]
-
-= (2^(log₂ n))^(1/2)        [move 1/2 outside as a power]
-
-= n^(1/2)                   [2^(log₂ n) = n]
-
-= √n</div><div class="derive"><b>Why is 2<sup>log₂n</sup> = n?</b><br>Suppose log₂n = x. By the definition of logarithm, 2ˣ = n. Therefore replacing x with log₂n gives 2<sup>log₂n</sup> = n.<br><br><b>And why is log₂2 = 1?</b><br>log₂2 asks “2 raised to what exponent equals 2?” Since 2¹ = 2, the answer is 1. More generally, log<sub>a</sub>a = 1 because a¹ = a.</div><p><b>Step 6 — calculate the last-level extra work.</b></p><div class="formula">W_last = √n × (√2)^(log₂ n)
-       = √n × √n
-       = n</div><p class="note">Important: (√2)<sup>log₂n</sup> by itself is √n, not n. The full level work has another √n in front, so √n × √n = n.</p><p><b>Step 7 — sum all levels.</b></p><div class="formula">Total extra work
-= √n [1 + √2 + (√2)² + ... + (√2)^k]</div><p>This is a geometric series with ratio √2 &gt; 1. When the ratio is greater than 1, the final terms dominate. Since the last-level scale is Θ(n), the entire sum is Θ(n).</p><div class="formula">Total = Θ(n)</div><p class="result">D = Θ(n)</p></div>
-
-<div class="step" id="s5"><h3><span class="badge">E</span>T(n) = T(n−1) + 1</h3><p>E has only one recursive child, like A, but it shrinks much more slowly.</p><p><b>Step 1 — expand repeatedly.</b></p><div class="formula">T(n) = T(n−1) + 1
-
-T(n−1) = T(n−2) + 1
-
-Therefore:
-T(n) = T(n−2) + 2
-
-One more step:
-T(n) = T(n−3) + 3
-
-After k steps:
-T(n) = T(n−k) + k</div><p><b>Step 2 — stop when the input reaches 1.</b></p><div class="formula">n − k = 1
-⇒ k = n − 1</div><p>So there are approximately n recursive levels, not log n levels.</p><p><b>Step 3 — total.</b> Every level adds only 1, but we perform that constant work about n times.</p><div class="formula">Total = 1 + 1 + ... (n times)
-      = Θ(n)</div><div class="derive"><b>Compare A and E carefully.</b><br>A: n → n/2 → n/4 → ... reaches 1 in log₂n steps.<br>E: n → n−1 → n−2 → ... reaches 1 in n−1 steps.<br><br>Same one-child shape, completely different depth.</div><p class="result">E = Θ(n)</p></div>
-
-<div class="step final" id="s6"><h3>Now compare all five</h3><div class="compare"><div><b>A</b><br>Θ(log n)</div><div><b>D</b><br>Θ(n)</div><div><b>E</b><br>Θ(n)</div><div><b>B</b><br>Θ(n log n)</div><div><b>C</b><br>Θ(n log n)</div></div><p>Increasing order:</p><div class="formula"><b>A &lt; D = E &lt; B = C</b></div><p>The useful mental model is:</p><div class="formula">total cost ≈
-(number of jobs at a level)
-× (cost of one job)
-× (effect of number of levels)</div><p class="small">For D, the exact level costs form a geometric series, so we use the dominant final level rather than literally multiplying one fixed “work per level” by the number of levels.</p></div>
-</div></section>
-
-<section class="card refs"><h2>Additional reading & references</h2><p class="small">Source paper/year for this question is not yet verified. References can be added here later.</p><ul><li>Recursion-tree method</li><li>Master Theorem for divide-and-conquer recurrences</li><li>Logarithm and exponent identities used in algorithm analysis</li><li>Asymptotic notation: O, Ω and Θ</li></ul></section>
-</main><script>const steps=[...document.querySelectorAll('.step')],next=document.getElementById('next'),reset=document.getElementById('reset');let i=0;const labels=['Next: derive B','Next: derive C','Next: derive D in detail','Next: derive E','Now compare all five','Completed'];next.onclick=()=>{if(i<steps.length){steps[i].classList.add('show');steps[i].scrollIntoView({behavior:'smooth',block:'nearest'});i++;reset.hidden=false;next.textContent=labels[i-1]||'Completed'}if(i===steps.length)next.disabled=true};reset.onclick=()=>{i=0;steps.forEach(s=>s.classList.remove('show'));next.disabled=false;next.textContent='Start detailed derivation of A';reset.hidden=true;window.scrollTo({top:0,behavior:'smooth'})};</script></body></html>
+<a class="back" href="../../">← Back to question bank</a><div class="eyebrow">Algorithms • Recurrence Relations</div><h1>Arrange the recurrences in increasing order of time complexity</h1><section class="card"><h2>Question</h2><div class="q">Arrange in increasing order:<div class="opts"><div class="opt">A. T(n)=T(n/2)+1</div><div class="opt">B. T(n)=2T(n/2)+n</div><div class="opt">C. T(n)=3T(n/3)+n</div><div class="opt">D. T(n)=2T(n/2)+√n</div><div class="opt">E. T(n)=T(n−1)+1</div></div></div></section>
+<section class="card"><h2>Mental template for every recurrence</h2><div class="mental-model"><div class="mental-title">Read aT(n/b)+f(n) as three colored ideas</div><div class="color-legend"><span class="legend-chip legend-structure">blue = recursive jobs</span><span class="legend-chip legend-focus">yellow = shrinking problem size</span><span class="legend-chip legend-derived">purple = work at a level</span><span class="legend-chip legend-result">green = final complexity</span><span class="legend-chip legend-warning">red = common trap</span></div><div class="rec-row"><div class="rec-box focus-blue">a = how many child jobs?</div><div class="rec-box focus-yellow">n/b = how fast does each job shrink?</div><div class="rec-box focus-purple">f(n) = extra work outside recursion</div></div><div class="current-focus"><b>Always ask:</b> how many jobs are on level i, how large is each job, how much work is done by all jobs on that level, and how many levels exist?</div></div><button class="btn next" id="next">Start with A</button><button class="btn reset" id="reset" hidden>Start again</button><div id="steps">
+<div class="step"><h3>A. T(n)=T(n/2)+1</h3><div class="mental-rule"><div class="focus-blue"><b>Jobs</b>1 job per level</div><div class="focus-yellow"><b>Size</b>n,n/2,n/4,...</div><div class="focus-purple"><b>Work</b>+1 per level</div></div><div class="tree">n → n/2 → n/4 → ... → 1</div><div class="formula">n/2^k = 1
+2^k = n
+k = log₂ n</div><div class="key-insight">There are log₂n levels and each level costs 1, so <b>A = Θ(log n)</b>.</div></div>
+<div class="step"><h3>B. T(n)=2T(n/2)+n</h3><div class="mental-rule"><div class="focus-blue"><b>Jobs</b>1,2,4,8,...</div><div class="focus-yellow"><b>Size</b>n,n/2,n/4,...</div><div class="focus-purple"><b>Total level work</b>stays n</div></div><div class="level-row"><div class="job">n</div></div><div class="level-row"><div class="job">n/2</div><div class="job">n/2</div></div><div class="level-row"><div class="job">n/4</div><div class="job">n/4</div><div class="job">n/4</div><div class="job">n/4</div></div><div class="formula">level i work = 2^i × (n/2^i) = n
+levels = log₂ n
+Total = n log n</div><div class="key-insight"><b>B = Θ(n log n)</b>.</div></div>
+<div class="step"><h3>C. T(n)=3T(n/3)+n</h3><div class="mental-rule"><div class="focus-blue"><b>Jobs</b>1,3,9,...</div><div class="focus-yellow"><b>Size</b>n,n/3,n/9,...</div><div class="focus-purple"><b>Total level work</b>again n</div></div><div class="formula">level i work = 3^i × (n/3^i) = n
+levels = log₃ n
+Total = n log₃n = Θ(n log n)</div><div class="transform-step">Log base only changes a constant: log₃n = log₂n / log₂3.</div><div class="key-insight"><b>C = Θ(n log n)</b>.</div></div>
+<div class="step"><h3>D. T(n)=2T(n/2)+√n</h3><div class="mental-rule"><div class="focus-blue"><b>Jobs</b>2^i</div><div class="focus-yellow"><b>Size per job</b>n/2^i</div><div class="focus-purple"><b>Work per job</b>√(n/2^i)</div></div><div class="formula">Wᵢ = 2^i √(n/2^i)
+   = √n · 2^(i/2)
+   = √n · (√2)^i</div><div class="current-focus"><b>Mental picture:</b> every lower level has more jobs. The total purple “work mass” grows by a factor of √2 each level: √n, √2√n, (√2)²√n, ...</div><div class="formula">depth k = log₂ n</div><div class="transform-step"><b>Now simplify the last-level factor slowly:</b><br><br>(√2)^(log₂n)<br>= (2^(1/2))^(log₂n)<br>= 2^((1/2)log₂n)<br>= (2^(log₂n))^(1/2)<br>= n^(1/2)<br>= √n</div><div class="key-insight">So last-level extra work = √n × √n = n. The geometric series is dominated by its last level, hence <b>D = Θ(n)</b>.</div><div class="common-mistake"><b>Important:</b> (√2)^(log₂n) is only √n. It becomes n only after multiplying by the outside √n already present in Wᵢ.</div><div class="mental-model"><div class="mental-title">Why is logₐa = 1?</div><div class="visual-flow"><div class="visual-node focus-yellow">logₐa = ?</div><div class="visual-arrow">means</div><div class="visual-node focus-blue">a^? = a</div><div class="visual-arrow">→</div><div class="visual-node focus-green">? = 1</div></div><div class="visual-caption">Because a¹ = a. A logarithm is just asking for the exponent.</div></div></div>
+<div class="step"><h3>E. T(n)=T(n−1)+1</h3><div class="mental-rule"><div class="focus-blue"><b>Jobs</b>1 per level</div><div class="focus-yellow"><b>Size</b>n,n−1,n−2,...</div><div class="focus-purple"><b>Work</b>+1 each level</div></div><div class="tree">n → n−1 → n−2 → ... → 1</div><div class="key-insight">About n levels × 1 work each gives <b>E = Θ(n)</b>.</div></div>
+<div class="step"><h3>Compare all five</h3><div class="compare"><div class="focus-blue">A<br><b>Θ(log n)</b></div><div class="focus-yellow">D<br><b>Θ(n)</b></div><div class="focus-yellow">E<br><b>Θ(n)</b></div><div class="focus-purple">B<br><b>Θ(n log n)</b></div><div class="focus-purple">C<br><b>Θ(n log n)</b></div></div><div class="key-insight"><b>Increasing order: A &lt; D = E &lt; B = C</b></div></div>
+</div></section></main><script>const s=[...document.querySelectorAll('.step')],n=document.getElementById('next'),r=document.getElementById('reset');let i=0;const l=['Next: B','Next: C','Next: D','Next: E','Compare all','Completed'];n.addEventListener('click',()=>{if(i<s.length){s[i].classList.add('show');s[i].scrollIntoView({behavior:'smooth',block:'nearest'});i++;r.hidden=false;n.textContent=l[i-1]}if(i===s.length)n.disabled=true});r.addEventListener('click',()=>{i=0;s.forEach(e=>e.classList.remove('show'));n.disabled=false;n.textContent='Start with A';r.hidden=true})</script></body></html>

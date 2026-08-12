@@ -4,56 +4,33 @@
     "title": "Token Ring: one-bit delay and equivalent cable length",
     "domain": "Computer Networks",
     "topic": "Data Communication",
-    "concepts": [
-      "Data Rate",
-      "Propagation Speed",
-      "Bit Time",
-      "Propagation Delay",
-      "Token Ring"
-    ],
-    "subconcepts": [
-      "bit length",
-      "unit conversion",
-      "distance = speed × time"
-    ],
-    "question_type": "Numerical / Conceptual",
-    "difficulty": "Foundation",
-    "exam": "UGC-NET / Assistant Professor preparation",
-    "source_year": null,
-    "source_year_note": "User recalls that it may be from a 2024 paper; not yet verified.",
-    "source_verified": false,
-    "status": "Solved",
-    "path": "questions/token-ring-bit-delay/",
-    "references": []
+    "concepts": ["Data Rate", "Propagation Speed", "Bit Time", "Propagation Delay", "Token Ring"],
+    "subconcepts": ["bit length", "unit conversion", "distance = speed × time"],
+    "question_type": "Numerical / Conceptual", "difficulty": "Foundation", "exam": "UGC-NET / Assistant Professor preparation", "source_year": null, "source_year_note": "User recalls that it may be from a 2024 paper; not yet verified.", "source_verified": false, "status": "Solved", "path": "questions/token-ring-bit-delay/", "references": []
   },
   {
     "id": "algo-recurrence-order-002",
     "title": "Arrange recurrence relations in increasing order of time complexity",
-    "domain": "Algorithms",
-    "topic": "Analysis of Algorithms",
-    "concepts": [
-      "Recurrence Relations",
-      "Time Complexity",
-      "Recursion Tree",
-      "Divide and Conquer",
-      "Asymptotic Analysis"
-    ],
-    "subconcepts": [
-      "number of recursive subproblems",
-      "problem-size reduction",
-      "work per recursion level",
-      "recursion depth",
-      "Master Theorem",
-      "Big-Theta comparison"
-    ],
-    "question_type": "Ordering / Conceptual / Numerical Analysis",
+    "domain": "Algorithms", "topic": "Analysis of Algorithms",
+    "concepts": ["Recurrence Relations", "Time Complexity", "Recursion Tree", "Divide and Conquer", "Asymptotic Analysis"],
+    "subconcepts": ["number of recursive subproblems", "problem-size reduction", "work per recursion level", "recursion depth", "Master Theorem", "Big-Theta comparison"],
+    "question_type": "Ordering / Conceptual / Numerical Analysis", "difficulty": "Foundation to Intermediate", "exam": "UGC-NET / Assistant Professor preparation", "source_year": null, "source_year_note": "Paper/year not yet verified.", "source_verified": false, "status": "Solved", "path": "questions/recurrence-increasing-order/", "references": []
+  },
+  {
+    "id": "c-pointer-array-output-003",
+    "title": "C pointer arithmetic and array loop: determine the output",
+    "domain": "Programming Languages",
+    "topic": "C Programming",
+    "concepts": ["Pointers", "Arrays", "Pointer Arithmetic", "Dereferencing", "Loop Tracing"],
+    "subconcepts": ["array-to-pointer decay", "x + offset", "pointer subtraction by integer", "dereference operator", "iteration trace"],
+    "question_type": "Program Output / Tracing",
     "difficulty": "Foundation to Intermediate",
     "exam": "UGC-NET / Assistant Professor preparation",
     "source_year": null,
     "source_year_note": "Paper/year not yet verified.",
     "source_verified": false,
     "status": "Solved",
-    "path": "questions/recurrence-increasing-order/",
+    "path": "questions/c-pointer-array-output/",
     "references": []
   }
 ]

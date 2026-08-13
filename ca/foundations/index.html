@@ -15,7 +15,7 @@
   <section class="hero">
     <p class="eyebrow">INTERACTIVE MODULE</p>
     <h1>How does a computer turn numbers, codes and logic into useful work?</h1>
-    <p>Explore arithmetic, character codes, error control, logic gates, Boolean algebra and K-maps through small experiments instead of memorizing rules.</p>
+    <p>Explore arithmetic, binary and decimal codes, character encodings, error detection/correction, logic gates, Boolean algebra and K-maps through worked examples and small experiments.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
       <a href="lecture-notes.html" style="display:inline-block;text-decoration:none;background:#56c8ff;color:#04111e;border-radius:10px;padding:11px 15px;font-weight:800">📘 Open Lecture Notes</a>
       <a href="lecture-notes.html" download style="display:inline-block;text-decoration:none;color:#edf6ff;background:#11253b;border:1px solid #31506f;border-radius:10px;padding:10px 14px">↓ Download Notes</a>
@@ -24,12 +24,13 @@
 
   <nav class="chapter-nav" aria-label="Module chapters">
     <button data-target="arith">1 · Arithmetic</button>
-    <button data-target="codes">2 · Codes</button>
-    <button data-target="errors">3 · Errors</button>
-    <button data-target="gates">4 · Logic Gates</button>
-    <button data-target="universal">5 · Universal Gates</button>
-    <button data-target="boolean">6 · Boolean Algebra</button>
-    <button data-target="kmap">7 · K-Map</button>
+    <button data-target="codes">2 · Binary & Decimal Codes</button>
+    <button data-target="characters">3 · ASCII / EBCDIC / Unicode</button>
+    <button data-target="errors">4 · Error Control</button>
+    <button data-target="gates">5 · Logic Gates</button>
+    <button data-target="universal">6 · Universal Gates</button>
+    <button data-target="boolean">7 · Boolean Algebra</button>
+    <button data-target="kmap">8 · K-Map</button>
   </nav>
 
   <section id="arith" class="chapter">
@@ -47,55 +48,117 @@
   </section>
 
   <section id="codes" class="chapter">
-    <div class="chapter-head"><span>02</span><div><h2>How does a computer store numbers, letters and symbols?</h2><p>Compare binary, BCD, ASCII, EBCDIC and Unicode representations.</p></div></div>
-    <div class="lab-grid">
-      <div class="panel controls-panel"><label>Type one character or decimal number<input id="codeInput" value="A" maxlength="4" /></label><button class="primary" id="codeRun">Reveal the codes →</button></div>
+    <div class="chapter-head"><span>02</span><div><h2>Why do computers need different binary codes?</h2><p>A binary code is an agreed pattern of bits used to represent numbers, letters, symbols or control information. The important idea is that the same 0s and 1s can mean different things depending on the code being used.</p></div></div>
+
+    <div class="story-strip">
+      <div><b>Information</b><span>number / letter / symbol</span></div><i>→</i><div><b>Encoding rule</b><span>BCD, Gray, ASCII …</span></div><i>→</i><div><b>Bit pattern</b><span>0s and 1s</span></div><i>→</i><div><b>Storage / transmission</b><span>memory or communication</span></div>
+    </div>
+
+    <div class="concept-cards">
+      <article class="panel"><h3>Weighted code</h3><p>Every bit position has a fixed weight. In 8421 BCD the four weights are <b>8, 4, 2, 1</b>.</p><code>0101 → 0×8 + 1×4 + 0×2 + 1×1 = 5</code></article>
+      <article class="panel"><h3>Non-weighted code</h3><p>Bit positions do not have fixed arithmetic weights. <b>Excess-3</b> and <b>Gray code</b> are common examples.</p></article>
+      <article class="panel"><h3>Reflective / self-complementing</h3><p>Complementing the code word can produce the 9's-complement digit in codes such as 2421 and Excess-3. This is useful in decimal-complement arithmetic.</p></article>
+      <article class="panel"><h3>Sequential code</h3><p>Successive coded values progress in sequence. 8421 BCD and Excess-3 have useful sequential behavior.</p></article>
+      <article class="panel"><h3>Alphanumeric code</h3><p>Represents letters, digits, punctuation and control symbols. ASCII and EBCDIC belong here.</p></article>
+      <article class="panel"><h3>Error-control code</h3><p>Adds redundancy so the receiver can detect—and in some codes correct—bit errors.</p></article>
+    </div>
+
+    <div class="sublesson panel">
+      <p class="eyebrow">DECIMAL CODE · 8421 BCD</p>
+      <h3>BCD does not convert the whole decimal number at once</h3>
+      <p>Binary-Coded Decimal represents <b>each decimal digit separately</b> using four bits. Only the patterns for decimal 0–9 are valid; 1010–1111 are not decimal digits in 8421 BCD.</p>
+      <div class="compare-box"><div><span>Decimal 58 as pure binary</span><strong>111010</strong><small>Whole number 58 converted to base 2.</small></div><div><span>Decimal 58 as BCD</span><strong>0101&nbsp;&nbsp;1000</strong><small>5 → 0101, 8 → 1000.</small></div></div>
+      <div class="digit-table"><span>0<br><b>0000</b></span><span>1<br><b>0001</b></span><span>2<br><b>0010</b></span><span>3<br><b>0011</b></span><span>4<br><b>0100</b></span><span>5<br><b>0101</b></span><span>6<br><b>0110</b></span><span>7<br><b>0111</b></span><span>8<br><b>1000</b></span><span>9<br><b>1001</b></span></div>
+      <div class="callout"><b>Why BCD?</b> It is easy to convert between decimal displays and the internal code. The trade-off is that BCD generally uses more bits than pure binary and makes arithmetic more complicated.</div>
+    </div>
+
+    <div class="sublesson panel">
+      <p class="eyebrow">OTHER DECIMAL CODES</p>
+      <div class="two-col-wide">
+        <div><h3>2421 code</h3><p>A weighted 4-bit decimal code with weights 2-4-2-1. It is self-complementing: complementary code words correspond to decimal digits that add to 9.</p></div>
+        <div><h3>Excess-3 code</h3><p>A non-weighted decimal code obtained by adding 3 to each decimal digit and encoding the result in 4-bit binary.</p><code>Digit 5 → 5+3=8 → 1000</code></div>
+      </div>
+      <p>Because Excess-3 is self-complementing, complementing all four bits gives the code for the 9's-complement digit. This is why it is attractive for complement-based decimal arithmetic.</p>
+    </div>
+
+    <div class="sublesson panel">
+      <p class="eyebrow">GRAY CODE</p>
+      <h3>Why should two neighboring values differ by only one bit?</h3>
+      <p>Gray code is a non-weighted, unit-distance code: adjacent values differ in only one bit position. This reduces ambiguity in position-sensing applications where mechanical contacts may not switch at exactly the same instant.</p>
+      <div class="mini-grid"><span>Binary 3<br><b>011</b></span><span>Binary 4<br><b>100</b></span><span class="warn-card">Three bits change</span><span>Gray 3<br><b>010</b></span><span>Gray 4<br><b>110</b></span><span class="good-card">Only one bit changes</span></div>
+    </div>
+  </section>
+
+  <section id="characters" class="chapter">
+    <div class="chapter-head"><span>03</span><div><h2>How does the computer store the letter “A”?</h2><p>The character itself is not stored in memory. A character encoding assigns it a numeric code, and that number is stored as bits.</p></div></div>
+
+    <div class="encoding-flow panel">
+      <div class="big-char">A</div><i>→</i><div><b>Character encoding</b><span>ASCII / EBCDIC / Unicode</span></div><i>→</i><div><b>Numeric code</b><span>65, C1, U+0041 …</span></div><i>→</i><div><b>Bits / bytes</b></div>
+    </div>
+
+    <div class="encoding-cards">
+      <article class="panel"><p class="eyebrow">ASCII</p><h3>Small, simple character set</h3><p>ASCII is a <b>7-bit</b> character code, so it provides 128 possible code values. It covers English letters, decimal digits, punctuation and control characters.</p><p>Examples: uppercase <b>A</b> is hexadecimal <b>41</b> (decimal 65), and lowercase <b>a</b> is hexadecimal <b>61</b>.</p><code>A → 1000001₂</code></article>
+      <article class="panel"><p class="eyebrow">EBCDIC</p><h3>IBM-oriented 8-bit family</h3><p>EBCDIC stands for <b>Extended Binary Coded Decimal Interchange Code</b>. It is traditionally associated with IBM host systems. EBCDIC uses code pages, so some characters can vary between code pages.</p><p>In a common EBCDIC mapping, uppercase <b>A</b> is hexadecimal <b>C1</b> (decimal 193).</p><code>A → C1₁₆</code></article>
+      <article class="panel"><p class="eyebrow">UNICODE</p><h3>One character repertoire for the world's writing systems</h3><p>Unicode assigns a unique <b>code point</b> to each encoded character. Code points are normally written as <b>U+....</b>. For example, A is <b>U+0041</b>.</p><p>UTF-8, UTF-16 and UTF-32 are encoding forms that turn Unicode code points into code units/bytes. UTF-8 preserves ASCII byte values for ASCII characters.</p><code>A → U+0041 → UTF-8 byte 41₁₆</code></article>
+    </div>
+
+    <div class="callout"><b>Important distinction:</b> ASCII and EBCDIC are character encodings/code-page families. Unicode defines a much larger universal character repertoire and code-point system; UTF-8/UTF-16/UTF-32 define how those Unicode values are represented in computer storage.</div>
+
+    <div class="lab-grid character-lab">
+      <div class="panel controls-panel"><label>Type one character or decimal number<input id="codeInput" value="A" maxlength="4" /></label><button class="primary" id="codeRun">Reveal the codes →</button><p class="hint">Try: <b>A</b>, <b>a</b>, <b>9</b>, <b>₹</b>, <b>ಅ</b> or <b>😊</b>.</p></div>
       <div class="panel"><div id="codeResult" class="code-cards"></div></div>
     </div>
   </section>
 
   <section id="errors" class="chapter">
-    <div class="chapter-head"><span>03</span><div><h2>How can a computer notice that a bit changed?</h2><p>Build even parity, flip a bit during transmission, and see the receiver detect the error.</p></div></div>
+    <div class="chapter-head"><span>04</span><div><h2>What if one bit changes while data is travelling?</h2><p>Noise can change a transmitted 0 to 1 or 1 to 0. Error-control codes add extra bits so the receiver has evidence that something went wrong.</p></div></div>
+
+    <div class="transmission panel"><div><b>Sender</b><code>1011001</code></div><i>→</i><div class="noise">⚡ noise</div><i>→</i><div><b>Receiver</b><code>1010001</code></div></div>
+
+    <div class="error-theory">
+      <article class="panel"><p class="eyebrow">PARITY BIT</p><h3>Detect an odd number of bit errors</h3><p>An extra bit is chosen so the total number of 1s is either even (even parity) or odd (odd parity). The receiver performs the same parity check.</p><p><b>Limitation:</b> ordinary parity can miss an even number of flipped bits because the parity may remain unchanged.</p></article>
+      <article class="panel"><p class="eyebrow">BLOCK PARITY</p><h3>Check rows and columns</h3><p>Arrange several words in a block and add parity to rows and columns. If exactly one bit is wrong, the failing row and failing column intersect at the error position.</p></article>
+      <article class="panel"><p class="eyebrow">HAMMING CODE</p><h3>Locate and correct one bad bit</h3><p>Hamming code places several parity bits at positions 1, 2, 4, 8, ... . Each parity bit checks a different set of positions. The failed-check pattern forms a binary number called a syndrome, identifying the error position.</p><div class="formula">2<sup>P</sup> ≥ x + P + 1</div><small>x = information bits, P = parity bits.</small></article>
+    </div>
+
     <div class="panel error-lab">
+      <h3>Interactive 1 — Flip a bit and test even parity</h3>
       <div><label>Data bits<input id="parityData" value="1011001" /></label><button id="makeParity" class="primary">Add even parity</button></div>
       <div id="bitRow" class="bits"></div>
       <p id="parityMessage" class="callout">Create a parity bit first.</p>
     </div>
+
+    <div class="panel hamming-lab">
+      <p class="eyebrow">INTERACTIVE 2 · HAMMING (7,4)</p>
+      <h3>Encode four data bits, then deliberately introduce one error</h3>
+      <div class="hamming-controls"><label>4 information bits<input id="hammingData" value="1011" maxlength="4" /></label><button id="hammingEncode" class="primary">Build even-parity Hamming code</button></div>
+      <div id="hammingResult" class="steps"><div class="step"><strong>Start</strong>Enter four bits and build the code.</div></div>
+    </div>
+
+    <div class="memory-aid panel"><h3>Detection vs correction — mental picture</h3><div class="compare-box"><div><span>Parity</span><strong>“Something is wrong.”</strong><small>Usually detects, but does not tell you which bit.</small></div><div><span>Hamming</span><strong>“Bit 5 is wrong.”</strong><small>Syndrome identifies the single-bit error position.</small></div></div></div>
   </section>
 
   <section id="gates" class="chapter">
-    <div class="chapter-head"><span>04</span><div><h2>How does a computer make decisions using only 0 and 1?</h2><p>Toggle inputs and observe the output of each gate in real time.</p></div></div>
-    <div class="panel gate-lab">
-      <div class="switches"><button id="toggleA">A = 0</button><button id="toggleB">B = 0</button></div>
-      <div class="gate-grid" id="gateGrid"></div>
-    </div>
+    <div class="chapter-head"><span>05</span><div><h2>How does a computer make decisions using only 0 and 1?</h2><p>Toggle inputs and observe the output of each gate in real time.</p></div></div>
+    <div class="panel gate-lab"><div class="switches"><button id="toggleA">A = 0</button><button id="toggleB">B = 0</button></div><div class="gate-grid" id="gateGrid"></div></div>
   </section>
 
   <section id="universal" class="chapter">
-    <div class="chapter-head"><span>05</span><div><h2>Why are NAND and NOR called universal gates?</h2><p>See how familiar gates can be reconstructed using only one gate type.</p></div></div>
-    <div class="panel universal-grid">
-      <button data-univ="not">Build NOT using NAND</button><button data-univ="and">Build AND using NAND</button><button data-univ="or">Build OR using NAND</button>
-      <div id="universalResult" class="callout">Choose a challenge.</div>
-    </div>
+    <div class="chapter-head"><span>06</span><div><h2>Why are NAND and NOR called universal gates?</h2><p>See how familiar gates can be reconstructed using only one gate type.</p></div></div>
+    <div class="panel universal-grid"><button data-univ="not">Build NOT using NAND</button><button data-univ="and">Build AND using NAND</button><button data-univ="or">Build OR using NAND</button><div id="universalResult" class="callout">Choose a challenge.</div></div>
   </section>
 
   <section id="boolean" class="chapter">
-    <div class="chapter-head"><span>06</span><div><h2>Can we simplify logic before building hardware?</h2><p>Pick the correct Boolean law and watch the circuit idea become simpler.</p></div></div>
+    <div class="chapter-head"><span>07</span><div><h2>Can we simplify logic before building hardware?</h2><p>Pick the correct Boolean law and watch the circuit idea become simpler.</p></div></div>
     <div class="panel boolean-lab"><div class="expression">A + A·B</div><div class="choices"><button data-law="identity">Identity</button><button data-law="absorption">Absorption</button><button data-law="demorgan">De Morgan</button></div><div id="booleanResult" class="callout">Which law reduces this expression?</div></div>
   </section>
 
   <section id="kmap" class="chapter">
-    <div class="chapter-head"><span>07</span><div><h2>Can we simplify logic just by grouping 1s?</h2><p>Click cells in a 2-variable K-map, then let the lab derive the simplified expression.</p></div></div>
-    <div class="panel kmap-lab">
-      <div class="kmap" id="kmapGrid">
-        <button data-cell="00">0</button><button data-cell="01">0</button><button data-cell="10">0</button><button data-cell="11">0</button>
-      </div>
-      <button class="primary" id="solveKmap">Simplify map →</button>
-      <div id="kmapResult" class="callout">Turn on cells representing output 1.</div>
-    </div>
+    <div class="chapter-head"><span>08</span><div><h2>Can we simplify logic just by grouping 1s?</h2><p>Click cells in a 2-variable K-map, then let the lab derive the simplified expression.</p></div></div>
+    <div class="panel kmap-lab"><div class="kmap" id="kmapGrid"><button data-cell="00">0</button><button data-cell="01">0</button><button data-cell="10">0</button><button data-cell="11">0</button></div><button class="primary" id="solveKmap">Simplify map →</button><div id="kmapResult" class="callout">Turn on cells representing output 1.</div></div>
   </section>
 </main>
 <footer>CAIAS · Computer Architecture · Digital Foundations</footer>
-<script src="app.js"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>

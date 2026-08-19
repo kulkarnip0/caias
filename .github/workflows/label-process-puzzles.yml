@@ -1,0 +1,57 @@
+name: Label Process Management Puzzles
+
+on:
+  push:
+    paths:
+      - '.github/workflows/label-process-puzzles.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-page:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add topic labels to puzzles
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('os/unit1/process-management/index.html')
+          s = p.read_text(encoding='utf-8')
+
+          css = r'''
+.puzzle-topic{display:inline-block;margin:0 0 9px 0;padding:5px 9px;border-radius:999px;background:#0d2945;border:1px solid #67e8f9;color:#67e8f9;font-size:.76rem;font-weight:950;letter-spacing:.06em;text-transform:uppercase}.puzzle-topic.deadlock{border-color:#ff9aa8;color:#ffd0d6;background:#3c2432}.puzzle-topic.states{border-color:#ffd43b;color:#ffe27a}.puzzle-topic.cpuio{border-color:#d8b4fe;color:#ead7ff}.puzzle-topic.sync{border-color:#7bf1a8;color:#b7ffd0}.puzzle-topic.context{border-color:#8ab5d7;color:#dceeff}
+'''
+          if '.puzzle-topic{' not in s:
+              s = s.replace('</style>', css + '\n</style>')
+
+          topics = {
+            1:('Process States','states'), 2:('Process States','states'), 3:('Process States · Restaurant Analogy','states'),
+            4:('State Transitions','states'), 5:('CPU-bound vs I/O-bound','cpuio'), 6:('CPU-bound vs I/O-bound','cpuio'),
+            7:('Deadlock Handling','deadlock'), 8:('Context Switching','context'), 9:('PCB · Process Control Block','context'),
+            10:('CPU Scheduling','context'), 11:('Process Life Cycle','states'), 12:('Preemption · State Transition','states'),
+            13:('I/O Completion · State Transition','states'), 14:('Process Synchronization','sync'), 15:('Inter-process Communication (IPC)','sync'),
+            16:('Program vs Process','context'), 17:('Process Termination','context'), 18:('Context Switching · Overhead','context'),
+            19:('Suspend & Resume','states'), 20:('Scheduling · Dispatch','context'), 21:('Blocking','states'),
+            22:('Wake Up · I/O Completion','states'), 23:('CPU-bound vs I/O-bound','cpuio'), 24:('CPU Scheduling','context'),
+            25:('Process Management · Overall Review','sync')
+          }
+
+          for n,(label,cls) in topics.items():
+              marker = f'<div class="puzzle-body">'
+              # Work only inside puzzle n and avoid duplicate topic labels.
+              pat = re.compile(r'(<details class="puzzle"><summary><span class="puzzle-num">'+str(n)+r'</span>.*?</summary><div class="puzzle-body">)(?!<span class="puzzle-topic)', re.S)
+              s, count = pat.subn(r'\1<span class="puzzle-topic '+cls+r'">'+label+r'</span>', s, count=1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit page update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add os/unit1/process-management/index.html
+          git diff --cached --quiet || git commit -m "Label puzzles by process-management topic"
+          git push

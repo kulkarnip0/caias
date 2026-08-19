@@ -1,0 +1,69 @@
+name: Add Process Management Puzzles
+
+on:
+  push:
+    paths:
+      - '.github/workflows/add-process-puzzles.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-page:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add 25 interactive puzzles
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('os/unit1/process-management/index.html')
+          s = p.read_text(encoding='utf-8')
+
+          css = r'''
+.puzzles{margin-top:30px}.puzzle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.puzzle{border:2px solid var(--border);border-radius:16px;background:#12385b;overflow:hidden}.puzzle summary{cursor:pointer;list-style:none;padding:18px 20px;font-weight:900;font-size:1.08rem;color:#fff;display:flex;gap:12px;align-items:flex-start}.puzzle summary::-webkit-details-marker{display:none}.puzzle summary::after{content:'Reveal';margin-left:auto;background:var(--accent);color:#092039;padding:5px 9px;border-radius:999px;font-size:.78rem;white-space:nowrap}.puzzle[open] summary::after{content:'Hide'}.puzzle[open] summary{background:#17466f}.puzzle-body{padding:0 20px 20px}.puzzle-answer{border-left:4px solid var(--good);background:#154d34;border-radius:10px;padding:13px 15px;margin-top:8px;color:#f4fff7}.puzzle-answer b{color:#b7ffd0}.puzzle-explain{color:var(--muted);line-height:1.6;margin-top:8px}.puzzle-num{display:inline-grid;place-items:center;flex:0 0 32px;height:32px;border-radius:50%;background:#1c527e;color:var(--accent);font-weight:950}@media(max-width:800px){.puzzle-grid{grid-template-columns:1fr}}
+'''
+          if '.puzzle-grid{' not in s:
+              s = s.replace('</style>', css + '\n</style>')
+
+          puzzles = r'''
+<section class="chapter puzzles"><div class="chapter-num">10 · 25 PUZZLES & RIDDLES</div><h2>Can you think like the operating system?</h2><p>Try to solve each puzzle before opening it. Click a puzzle to reveal the answer and explanation.</p><div class="puzzle-grid">
+<details class="puzzle"><summary><span class="puzzle-num">1</span><span>I am ready to work and have everything I need except the CPU. Which process state am I in?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Ready state.</b></div><div class="puzzle-explain">A ready process can execute, but it is waiting for the scheduler to assign the CPU.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">2</span><span>I was running, then I asked the disk for data. The CPU moved to another process. Where am I now?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Waiting / Blocked state.</b></div><div class="puzzle-explain">A process that requests I/O cannot continue until that I/O operation or event completes.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">3</span><span>Restaurant puzzle: Order A is being cooked, Order B is waiting for the chef, and Order C is waiting for vegetables. Match them to process states.</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: A = Running, B = Ready, C = Waiting / Blocked.</b></div><div class="puzzle-explain">The chef represents the CPU. An order being cooked owns the CPU, an order waiting for the chef is ready, and an order waiting for ingredients is blocked.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">4</span><span>Spot the unusual direct transition: New→Ready, Ready→Running, Waiting→Ready, or Waiting→Running?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Waiting → Running.</b></div><div class="puzzle-explain">When I/O completes, the process normally returns to Ready. It runs only after the scheduler dispatches it.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">5</span><span>I do long calculations and rarely wait for files, keyboard, or network. What kind of process am I?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: CPU-bound process.</b></div><div class="puzzle-explain">CPU-bound processes spend most of their time in computation and usually have long CPU bursts.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">6</span><span>I compute briefly, then often wait for disk, keyboard, or network. What kind of process am I?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: I/O-bound process.</b></div><div class="puzzle-explain">I/O-bound processes typically have short CPU bursts separated by frequent I/O waits.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">7</span><span>P1 holds the printer and waits for the scanner. P2 holds the scanner and waits for the printer. What has happened?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Deadlock.</b></div><div class="puzzle-explain">Each process waits for a resource held by the other, so neither can make progress.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">8</span><span>The OS saves Process A's registers and program counter, then restores Process B's saved values. Name the operation.</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Context switch.</b></div><div class="puzzle-explain">The OS saves the execution state of one process and restores another so the CPU can switch between them.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">9</span><span>Which item does not belong in a PCB: Process ID, state, CPU registers, program counter, or student attendance?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Student attendance.</b></div><div class="puzzle-explain">A PCB stores information the OS needs to manage and later resume a process.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">10</span><span>I do not execute programs myself. I choose which ready process should receive the CPU next. Who am I?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: CPU scheduler.</b></div><div class="puzzle-explain">Scheduling selects a process from the ready set; the CPU then executes the selected process.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">11</span><span>Arrange the journey: Gets CPU, Created, Requests I/O, I/O completes, Waits for CPU, Completes.</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Created → Waits for CPU → Gets CPU → Requests I/O → I/O completes → Waits for CPU → Gets CPU → Completes.</b></div><div class="puzzle-explain">This corresponds to New → Ready → Running → Waiting → Ready → Running → Terminated.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">12</span><span>A running process uses up its time slice and has not finished. Which state should it normally return to?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Ready.</b></div><div class="puzzle-explain">Preemption removes the CPU from the process, but the process is still able to run, so it returns to the ready queue.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">13</span><span>A blocked process receives the disk data it was waiting for. Does it become Running immediately?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: No. It normally becomes Ready first.</b></div><div class="puzzle-explain">I/O completion removes the reason for blocking. The scheduler must still choose the process before it can run.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">14</span><span>Two processes both want to update the same shared data. Which process-management responsibility helps prevent them from interfering?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Synchronization.</b></div><div class="puzzle-explain">Synchronization coordinates access to shared resources so processes do not collide or corrupt shared data.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">15</span><span>Process A sends information to Process B. Which process-management mechanism is being used?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Inter-process communication (IPC).</b></div><div class="puzzle-explain">IPC provides mechanisms for processes to exchange information and coordinate work.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">16</span><span>I am a program stored on disk. Have I become a process yet?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: No.</b></div><div class="puzzle-explain">A program is passive instructions stored on disk. It becomes a process when it is loaded and begins execution.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">17</span><span>A process has completed its work. What should the OS do with the resources assigned to it?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Release / reclaim them.</b></div><div class="puzzle-explain">Termination ends execution and allows the OS to clean up the process and free its resources.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">18</span><span>Why can too many context switches make a system slower even though multitasking still works?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Context switching itself uses CPU time.</b></div><div class="puzzle-explain">Saving and restoring process state is overhead; during that work, the CPU is not progressing on the application task.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">19</span><span>A process is paused for a while and later allowed to continue. Which pair of operations describes this?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Suspend and Resume.</b></div><div class="puzzle-explain">Suspension temporarily stops progress, while resume allows the process to continue later.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">20</span><span>The OS moves a process from Ready to Running. What is this action called?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Dispatch.</b></div><div class="puzzle-explain">The scheduler selects the process and dispatching gives it control of the CPU.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">21</span><span>A process waits for a resource or event and cannot continue. Which OS operation best describes what happened to it?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Block.</b></div><div class="puzzle-explain">Blocking moves a process out of active CPU competition until the required event or resource becomes available.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">22</span><span>The event a blocked process was waiting for occurs. Which OS operation helps it return toward execution?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Wake up.</b></div><div class="puzzle-explain">Wake-up makes the process eligible to move back toward the Ready state after its waiting condition is satisfied.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">23</span><span>Video encoding and keyboard input are running together. Which one is more likely CPU-bound, and which one I/O-bound?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Video encoding = CPU-bound; keyboard input = I/O-bound.</b></div><div class="puzzle-explain">Encoding performs heavy computation, while keyboard-driven work spends much of its time waiting for input.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">24</span><span>If the CPU is idle while ready processes are waiting, which key responsibility is probably not doing its job properly?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: Scheduling / dispatching.</b></div><div class="puzzle-explain">A ready process should be selected and dispatched when the CPU is available.</div></div></details>
+<details class="puzzle"><summary><span class="puzzle-num">25</span><span>Final riddle: I create, schedule, pause, wake, coordinate, communicate, switch, terminate, and help handle deadlocks. Who am I?</span></summary><div class="puzzle-body"><div class="puzzle-answer"><b>Answer: The operating system's process-management function.</b></div><div class="puzzle-explain">Process management coordinates the life cycle and resource use of processes so multitasking remains organized and responsive.</div></div></details>
+</div></section>
+'''
+          if '25 PUZZLES & RIDDLES' not in s:
+              s = s.replace('</main>', puzzles + '\n</main>')
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit page update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add os/unit1/process-management/index.html
+          git diff --cached --quiet || git commit -m "Add 25 process management puzzles"
+          git push

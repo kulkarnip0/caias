@@ -67,3 +67,4 @@ jobs:
           git add os/unit1/process-management/index.html
           git diff --cached --quiet || git commit -m "Add 25 process management puzzles"
           git push
+# trigger after workflow exists

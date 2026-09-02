@@ -13,109 +13,125 @@
 </header>
 <main>
   <section class="hero">
-    <p class="eyebrow">BEGINNER LAB · WINDOWS + ORACLE VIRTUALBOX + LINUX</p>
-    <h1>From “What is Linux?” to using your first Linux terminal.</h1>
-    <p>Start from the beginning: understand Linux, the shell and why VirtualBox is called a virtual machine platform. Then create an Ubuntu virtual machine, open the terminal and practise basic Linux commands.</p>
-    <a class="primary-link" href="#journey">Start from the beginning →</a>
+    <p class="eyebrow">BEGINNER LAB · WINDOWS + WSL + UBUNTU + BASH</p>
+    <h1>From Windows to your first Linux shell script.</h1>
+    <p>In this lab we will use <strong>Windows Subsystem for Linux (WSL)</strong>. Start in Windows PowerShell, install WSL and Ubuntu, enter the Linux terminal, create a working folder, open a file with <code>nano</code>, save it, give it execute permission and run it.</p>
+    <a class="primary-link" href="#journey">Start Step 1 →</a>
   </section>
 
   <nav class="chapter-nav" aria-label="Lab chapters">
-    <button data-target="linux">1 · Meet Linux</button>
-    <button data-target="shell">2 · Meet the Shell</button>
-    <button data-target="virtualbox">3 · Why VirtualBox?</button>
-    <button data-target="setup">4 · Build the VM</button>
-    <button data-target="terminal">5 · First Terminal</button>
+    <button data-target="wsl">1 · Install WSL</button>
+    <button data-target="ubuntu">2 · Start Ubuntu</button>
+    <button data-target="terminal">3 · Linux Terminal</button>
+    <button data-target="folder">4 · Create Lab Folder</button>
+    <button data-target="nano">5 · Write with Nano</button>
+    <button data-target="save">6 · Save & Exit</button>
+    <button data-target="execute">7 · Execute Script</button>
   </nav>
 
   <section id="journey" class="journey panel">
-    <p class="eyebrow">YOUR JOURNEY</p>
+    <p class="eyebrow">TODAY'S COMPLETE JOURNEY</p>
     <div class="journey-line">
-      <div><b>Windows</b><span>Your real computer</span></div><i>→</i>
-      <div><b>VirtualBox</b><span>Creates a virtual computer</span></div><i>→</i>
-      <div><b>Ubuntu Linux</b><span>Runs inside that computer</span></div><i>→</i>
-      <div><b>Terminal</b><span>Talk to the shell</span></div><i>→</i>
-      <div><b>Linux Commands</b><span>Interact with the system</span></div>
+      <div><b>PowerShell</b><span>Install WSL</span></div><i>→</i>
+      <div><b>WSL</b><span>Runs Linux on Windows</span></div><i>→</i>
+      <div><b>Ubuntu</b><span>Linux distribution</span></div><i>→</i>
+      <div><b>Bash</b><span>Linux shell</span></div><i>→</i>
+      <div><b>Nano</b><span>Write a script</span></div><i>→</i>
+      <div><b>./hello.sh</b><span>Execute it</span></div>
     </div>
   </section>
 
-  <section id="linux" class="chapter">
-    <div class="chapter-head"><span>01</span><div><h2>What exactly is Linux?</h2><p>Think of Linux as the operating system environment that manages the computer's hardware and provides services to programs.</p></div></div>
-    <div class="concept-grid">
-      <article class="panel"><h3>Hardware</h3><p>CPU, RAM, disk, keyboard, display and network devices.</p></article>
-      <div class="arrow">↓</div>
-      <article class="panel accent"><h3>Linux Kernel</h3><p>The core of Linux. It manages CPU time, memory, files, devices and processes.</p></article>
-      <div class="arrow">↓</div>
-      <article class="panel"><h3>Shell + Programs</h3><p>The shell lets us give commands. Applications use operating-system services.</p></article>
-      <div class="arrow">↓</div>
-      <article class="panel"><h3>You</h3><p>You interact through graphical applications or the terminal.</p></article>
-    </div>
-    <div class="callout"><strong>Important:</strong> Linux is not “just the black terminal”. The terminal is only one way to interact with a Linux system.</div>
-  </section>
-
-  <section id="shell" class="chapter">
-    <div class="chapter-head"><span>02</span><div><h2>Then what is a shell?</h2><p>A shell is a command interpreter: it reads what you type, understands it and asks Linux to perform the requested operation.</p></div></div>
-    <div class="flow panel">
-      <div class="flowbox">You type<br><code>ls</code></div><div class="flowarrow">→</div>
-      <div class="flowbox hot">Shell<br><small>interprets command</small></div><div class="flowarrow">→</div>
-      <div class="flowbox">Linux<br><small>gets directory contents</small></div><div class="flowarrow">→</div>
-      <div class="flowbox">Output<br><code>Documents Downloads...</code></div>
-    </div>
-    <div class="two-col">
-      <article class="panel"><h3>Command</h3><pre>pwd
-ls
-mkdir lab</pre><p>One instruction typed at the prompt.</p></article>
-      <article class="panel"><h3>Shell script</h3><pre>#!/bin/bash
-echo "Hello"
-date
-pwd</pre><p>A file containing several shell commands that can be executed together.</p></article>
-    </div>
-  </section>
-
-  <section id="virtualbox" class="chapter">
-    <div class="chapter-head"><span>03</span><div><h2>Why is it called VirtualBox?</h2><p>Because it creates a software-based <em>virtual computer</em> inside your real computer. The “box” is the simulated machine.</p></div></div>
-    <div class="vm-diagram panel">
-      <div class="host"><strong>YOUR REAL COMPUTER</strong><span>Windows · Physical CPU · Physical RAM · Physical SSD</span>
-        <div class="vbox"><strong>ORACLE VIRTUALBOX</strong><span>borrows some CPU, RAM and disk for a virtual machine</span>
-          <div class="guest"><strong>VIRTUAL MACHINE</strong><span>Ubuntu thinks it has its own CPU, RAM, disk and network</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="compare-grid">
-      <article class="panel"><h3>Host OS</h3><p>Your actual Windows installation. It controls the real hardware.</p></article>
-      <article class="panel"><h3>VirtualBox</h3><p>The virtualization software running on Windows.</p></article>
-      <article class="panel"><h3>Guest OS</h3><p>Ubuntu Linux running inside the virtual machine.</p></article>
-      <article class="panel"><h3>Why use it in a lab?</h3><p>Students can experiment with Linux without replacing or repartitioning Windows.</p></article>
-    </div>
-    <div class="callout"><strong>Analogy:</strong> Windows is the apartment building. VirtualBox creates a furnished room inside it. Ubuntu lives in that room and behaves as though the room is its own computer.</div>
-  </section>
-
-  <section id="setup" class="chapter">
-    <div class="chapter-head"><span>04</span><div><h2>How do I get Linux running inside Windows?</h2><p>Follow these in order. The wording in VirtualBox may vary slightly by version, but the idea remains the same.</p></div></div>
+  <section id="wsl" class="chapter">
+    <div class="chapter-head"><span>01</span><div><h2>Install WSL from Windows PowerShell</h2><p>WSL lets us use Linux command-line tools directly on Windows. We do not need to create a separate VirtualBox virtual machine for this lab.</p></div></div>
     <div class="steps-list">
-      <article class="step-card"><b>1</b><div><h3>Install Oracle VirtualBox on Windows</h3><p>Download and install VirtualBox on the Windows host machine. Accept the required networking/device-driver prompts during installation.</p></div></article>
-      <article class="step-card"><b>2</b><div><h3>Download an Ubuntu Desktop ISO</h3><p>An ISO is an image of the installation disc. Keep the <code>.iso</code> file somewhere easy to find, such as Downloads.</p></div></article>
-      <article class="step-card"><b>3</b><div><h3>Create a new virtual machine</h3><p>Open VirtualBox → New. Give it a name such as <code>Ubuntu-Linux-Lab</code>, select Linux/Ubuntu where requested, and attach the Ubuntu ISO.</p></div></article>
-      <article class="step-card"><b>4</b><div><h3>Give the VM some resources</h3><p>Allocate a reasonable portion of RAM and CPU, not all of the host resources. Create a virtual hard disk for Ubuntu.</p></div></article>
-      <article class="step-card"><b>5</b><div><h3>Start the virtual machine</h3><p>VirtualBox boots the VM from the Ubuntu ISO. Choose the normal Ubuntu installation and follow the installation screens.</p></div></article>
-      <article class="step-card"><b>6</b><div><h3>Create your Ubuntu user account</h3><p>Choose a username and password you can remember. After installation, restart the VM when requested.</p></div></article>
-      <article class="step-card"><b>7</b><div><h3>You are now inside Linux</h3><p>The Ubuntu desktop is the guest operating system. Open the Terminal application to begin the shell lab.</p></div></article>
+      <article class="step-card"><b>1</b><div><h3>Open PowerShell as Administrator</h3><p>Press the Windows key and search for <strong>PowerShell</strong>. Right-click <strong>Windows PowerShell</strong> or <strong>Terminal</strong> and choose <strong>Run as administrator</strong>.</p></div></article>
+      <article class="step-card"><b>2</b><div><h3>Install WSL</h3><p>At the PowerShell prompt type:</p><pre><code>wsl --install</code></pre><p>This enables WSL and, on the standard installation path, installs Ubuntu as the default Linux distribution.</p></div></article>
+      <article class="step-card"><b>3</b><div><h3>Restart Windows</h3><p>When installation finishes, restart the computer if Windows asks you to do so. The required WSL components can then finish initialization.</p></div></article>
     </div>
+    <div class="callout"><strong>If WSL is already installed:</strong> that is fine. In PowerShell, <code>wsl --status</code> shows its status and <code>wsl -l -v</code> lists installed Linux distributions.</div>
+  </section>
+
+  <section id="ubuntu" class="chapter">
+    <div class="chapter-head"><span>02</span><div><h2>Start Ubuntu for the first time</h2><p>After WSL is installed, we need a Linux distribution. The normal <code>wsl --install</code> installation uses Ubuntu by default.</p></div></div>
+    <div class="two-col">
+      <article class="panel"><h3>Open Ubuntu</h3><p>Open the Windows Start menu, search for <strong>Ubuntu</strong> and launch it. You can also open PowerShell and type:</p><pre><code>wsl</code></pre><p>The first launch may take a little longer while Ubuntu finishes setting itself up.</p></article>
+      <article class="panel accent"><h3>Create your Linux account</h3><p>On first setup, Ubuntu may ask you to create a Linux username and password. These belong to your Linux environment.</p><pre><code>Enter new UNIX username: student
+New password:
+Retype new password:</code></pre><p><strong>Important:</strong> while typing a Linux password, the terminal normally shows no characters or stars. Type it and press Enter.</p></article>
+    </div>
+    <div class="callout"><strong>How do I know I am in Linux?</strong> The prompt will look similar to <code>student@computer:~$</code>. The <code>$</code> prompt is where you type Linux commands.</div>
   </section>
 
   <section id="terminal" class="chapter">
-    <div class="chapter-head"><span>05</span><div><h2>Get a feel for Linux using the terminal.</h2><p>Do these commands yourself. The simulated terminal below lets you rehearse the basic idea before using the real Ubuntu terminal.</p></div></div>
+    <div class="chapter-head"><span>03</span><div><h2>Meet the Linux terminal and Bash shell</h2><p>The terminal is the window. Bash is the shell that reads commands and asks Linux to perform them. Before programming, learn to move around the Linux file system.</p></div></div>
+    <div class="flow panel">
+      <div class="flowbox">You type<br><code>pwd</code></div><div class="flowarrow">→</div>
+      <div class="flowbox hot">Bash shell<br><small>interprets it</small></div><div class="flowarrow">→</div>
+      <div class="flowbox">Linux<br><small>performs operation</small></div><div class="flowarrow">→</div>
+      <div class="flowbox">Terminal<br><small>shows result</small></div>
+    </div>
     <div class="lab-grid">
-      <div class="panel"><h3>First commands</h3><table><tr><td><code>pwd</code></td><td>Where am I?</td></tr><tr><td><code>ls</code></td><td>What files are here?</td></tr><tr><td><code>mkdir linux_lab</code></td><td>Create a directory.</td></tr><tr><td><code>cd linux_lab</code></td><td>Enter the directory.</td></tr><tr><td><code>touch test.txt</code></td><td>Create an empty file.</td></tr><tr><td><code>ls -l</code></td><td>See detailed file information.</td></tr><tr><td><code>clear</code></td><td>Clear the terminal.</td></tr></table></div>
+      <div class="panel"><h3>Try these first</h3><table><tr><td><code>whoami</code></td><td>Show my Linux username.</td></tr><tr><td><code>pwd</code></td><td>Show my current directory.</td></tr><tr><td><code>ls</code></td><td>List files and folders here.</td></tr><tr><td><code>date</code></td><td>Show date and time.</td></tr><tr><td><code>clear</code></td><td>Clear the terminal screen.</td></tr></table></div>
       <div class="terminal panel"><div class="terminal-top">student@ubuntu:~$</div><div id="termOutput" class="term-output">Try: <span>pwd</span>, <span>ls</span>, <span>whoami</span>, <span>date</span>, <span>mkdir linux_lab</span>, <span>cd linux_lab</span></div><div class="prompt"><span id="promptText">student@ubuntu:~$</span><input id="termInput" autocomplete="off" spellcheck="false" /></div></div>
+    </div>
+    <div class="callout"><strong>Do not type the prompt.</strong> If the screen shows <code>student@ubuntu:~$</code>, you type only the command after the <code>$</code>.</div>
+  </section>
+
+  <section id="folder" class="chapter">
+    <div class="chapter-head"><span>04</span><div><h2>Create a folder for your shell-programming work</h2><p>Keeping the lab files in one directory makes them easier to find and manage.</p></div></div>
+    <div class="program-grid">
+      <article class="panel"><h3>Step A — Check where you are</h3><pre><code>pwd</code></pre><p>You will normally start in your Linux home directory, represented by <code>~</code>.</p><h3>Step B — Create the folder</h3><pre><code>mkdir linux_lab</code></pre><h3>Step C — Enter it</h3><pre><code>cd linux_lab</code></pre><h3>Step D — Confirm</h3><pre><code>pwd</code></pre></article>
+      <article class="panel explain"><h3>What just happened?</h3><div class="logic"><b><code>mkdir linux_lab</code></b><span>mkdir = make directory</span><i>↓</i><b><code>cd linux_lab</code></b><span>cd = change directory</span><i>↓</i><b><code>pwd</code></b><span>print working directory</span></div><p>Your prompt may now look similar to:</p><pre><code>student@ubuntu:~/linux_lab$</code></pre></article>
     </div>
   </section>
 
+  <section id="nano" class="chapter">
+    <div class="chapter-head"><span>05</span><div><h2>Create your first shell script using Nano</h2><p><code>nano</code> is a terminal text editor. We will use it to create a very small Bash script.</p></div></div>
+    <div class="steps-list">
+      <article class="step-card"><b>1</b><div><h3>Open a new file</h3><pre><code>nano hello.sh</code></pre><p>If <code>hello.sh</code> does not exist, Nano opens an empty file with that name.</p></div></article>
+      <article class="step-card"><b>2</b><div><h3>Type the program</h3><pre class="code"><code>#!/bin/bash
+
+echo "Hello from Linux"
+echo "My first shell script is running"
+date
+pwd</code></pre></div></article>
+    </div>
+    <div class="two-col">
+      <article class="panel"><h3>What is <code>#!/bin/bash</code>?</h3><p>This first line tells the system that the script should be interpreted using the Bash shell.</p></article>
+      <article class="panel"><h3>What does <code>echo</code> do?</h3><p><code>echo</code> prints text to the terminal. For example, <code>echo "Hello"</code> displays <strong>Hello</strong>.</p></article>
+    </div>
+  </section>
+
+  <section id="save" class="chapter">
+    <div class="chapter-head"><span>06</span><div><h2>Save the file and exit Nano</h2><p>This is the part beginners often forget. Writing text in Nano does not help unless the file is saved.</p></div></div>
+    <div class="steps-list">
+      <article class="step-card"><b>1</b><div><h3>Save: Ctrl + O</h3><p>Hold <strong>Ctrl</strong> and press <strong>O</strong>. Nano calls this <em>Write Out</em>.</p><pre><code>Ctrl + O</code></pre></div></article>
+      <article class="step-card"><b>2</b><div><h3>Confirm the filename: Enter</h3><p>Nano shows the filename at the bottom. Keep <code>hello.sh</code> and press:</p><pre><code>Enter</code></pre></div></article>
+      <article class="step-card"><b>3</b><div><h3>Exit: Ctrl + X</h3><p>After saving, leave Nano:</p><pre><code>Ctrl + X</code></pre></div></article>
+      <article class="step-card"><b>4</b><div><h3>Check that the file exists</h3><pre><code>ls -l</code></pre><p>You should see <code>hello.sh</code> in the directory.</p></div></article>
+    </div>
+    <div class="callout"><strong>Remember:</strong> <code>Ctrl+O → Enter → Ctrl+X</code> means <strong>save → confirm filename → exit</strong>.</div>
+  </section>
+
+  <section id="execute" class="chapter">
+    <div class="chapter-head"><span>07</span><div><h2>Give permission and execute your script</h2><p>The file now contains Bash commands. Next, make it executable and run it.</p></div></div>
+    <div class="program-grid">
+      <article class="panel"><h3>1. Give execute permission</h3><pre><code>chmod +x hello.sh</code></pre><p><code>chmod</code> changes file permissions. <code>+x</code> adds execute permission.</p><h3>2. Run the file</h3><pre><code>./hello.sh</code></pre><p><code>./</code> means: run the file named <code>hello.sh</code> from the <strong>current directory</strong>.</p></article>
+      <article class="panel explain"><h3>Expected idea</h3><pre><code>student@ubuntu:~/linux_lab$ ./hello.sh
+Hello from Linux
+My first shell script is running
+Tue Sep 2 ...
+/home/student/linux_lab</code></pre><p>The exact date, computer name, username and path can differ on each machine.</p></article>
+    </div>
+    <div class="mini-flow panel"><strong>The complete workflow to remember:</strong><div><code>mkdir linux_lab</code><i>→</i><code>cd linux_lab</code><i>→</i><code>nano hello.sh</code><i>→</i><code>Ctrl+O</code><i>→</i><code>Enter</code><i>→</i><code>Ctrl+X</code><i>→</i><code>chmod +x hello.sh</code><i>→</i><code>./hello.sh</code></div></div>
+  </section>
+
   <section class="chapter finish">
-    <div class="chapter-head"><span>✓</span><div><h2>What should you understand after this lab?</h2><p>The goal is to understand the Linux environment before moving on to shell-programming exercises.</p></div></div>
-    <div class="check-grid"><div>✓ Windows is the <strong>host</strong></div><div>✓ VirtualBox creates a <strong>virtual machine</strong></div><div>✓ Ubuntu is the <strong>guest OS</strong></div><div>✓ Terminal gives access to the <strong>shell</strong></div><div>✓ <code>pwd</code> shows the current directory</div><div>✓ <code>ls</code> lists files and directories</div><div>✓ <code>mkdir</code> creates a directory</div><div>✓ Basic commands help you navigate and work in Linux</div></div>
+    <div class="chapter-head"><span>✓</span><div><h2>What should you be able to do now?</h2><p>You have gone from a Windows machine to writing and executing a Linux shell script.</p></div></div>
+    <div class="check-grid"><div>✓ Open <strong>PowerShell as Administrator</strong></div><div>✓ Install WSL with <code>wsl --install</code></div><div>✓ Start <strong>Ubuntu</strong></div><div>✓ Recognize the Linux <strong>shell prompt</strong></div><div>✓ Use <code>pwd</code>, <code>ls</code>, <code>mkdir</code> and <code>cd</code></div><div>✓ Create a script with <code>nano</code></div><div>✓ Save using <strong>Ctrl+O → Enter</strong> and exit with <strong>Ctrl+X</strong></div><div>✓ Execute using <code>chmod +x</code> and <code>./file.sh</code></div></div>
   </section>
 </main>
-<footer>CAIAS · Linux & Shell Programming Lab</footer>
+<footer>CAIAS · Linux & Shell Programming Lab · Windows + WSL + Ubuntu</footer>
 <script src="app.js"></script>
 </body>
 </html>

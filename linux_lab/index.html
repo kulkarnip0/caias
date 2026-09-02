@@ -14,8 +14,8 @@
 <main>
   <section class="hero">
     <p class="eyebrow">BEGINNER LAB · WINDOWS + ORACLE VIRTUALBOX + LINUX</p>
-    <h1>From “What is Linux?” to running your first shell programs.</h1>
-    <p>Start from the beginning: understand Linux, the shell and why VirtualBox is called a virtual machine platform. Then create an Ubuntu virtual machine, open the terminal, write scripts, give them permission and run all three lab programs.</p>
+    <h1>From “What is Linux?” to using your first Linux terminal.</h1>
+    <p>Start from the beginning: understand Linux, the shell and why VirtualBox is called a virtual machine platform. Then create an Ubuntu virtual machine, open the terminal and practise basic Linux commands.</p>
     <a class="primary-link" href="#journey">Start from the beginning →</a>
   </section>
 
@@ -25,9 +25,6 @@
     <button data-target="virtualbox">3 · Why VirtualBox?</button>
     <button data-target="setup">4 · Build the VM</button>
     <button data-target="terminal">5 · First Terminal</button>
-    <button data-target="p1">6 · Prime Numbers</button>
-    <button data-target="p2">7 · Palindrome</button>
-    <button data-target="p3">8 · Sum of Digits</button>
   </nav>
 
   <section id="journey" class="journey panel">
@@ -37,7 +34,7 @@
       <div><b>VirtualBox</b><span>Creates a virtual computer</span></div><i>→</i>
       <div><b>Ubuntu Linux</b><span>Runs inside that computer</span></div><i>→</i>
       <div><b>Terminal</b><span>Talk to the shell</span></div><i>→</i>
-      <div><b>Shell Script</b><span>Automate commands</span></div>
+      <div><b>Linux Commands</b><span>Interact with the system</span></div>
     </div>
   </section>
 
@@ -106,127 +103,16 @@ pwd</pre><p>A file containing several shell commands that can be executed togeth
   </section>
 
   <section id="terminal" class="chapter">
-    <div class="chapter-head"><span>05</span><div><h2>Get a feel for Linux before writing a program.</h2><p>Do these commands yourself. The simulated terminal below lets you rehearse the basic idea before using the real Ubuntu terminal.</p></div></div>
+    <div class="chapter-head"><span>05</span><div><h2>Get a feel for Linux using the terminal.</h2><p>Do these commands yourself. The simulated terminal below lets you rehearse the basic idea before using the real Ubuntu terminal.</p></div></div>
     <div class="lab-grid">
       <div class="panel"><h3>First commands</h3><table><tr><td><code>pwd</code></td><td>Where am I?</td></tr><tr><td><code>ls</code></td><td>What files are here?</td></tr><tr><td><code>mkdir linux_lab</code></td><td>Create a directory.</td></tr><tr><td><code>cd linux_lab</code></td><td>Enter the directory.</td></tr><tr><td><code>touch test.txt</code></td><td>Create an empty file.</td></tr><tr><td><code>ls -l</code></td><td>See detailed file information.</td></tr><tr><td><code>clear</code></td><td>Clear the terminal.</td></tr></table></div>
       <div class="terminal panel"><div class="terminal-top">student@ubuntu:~$</div><div id="termOutput" class="term-output">Try: <span>pwd</span>, <span>ls</span>, <span>whoami</span>, <span>date</span>, <span>mkdir linux_lab</span>, <span>cd linux_lab</span></div><div class="prompt"><span id="promptText">student@ubuntu:~$</span><input id="termInput" autocomplete="off" spellcheck="false" /></div></div>
     </div>
-    <div class="mini-flow panel"><strong>Every shell program follows this practical pattern:</strong><div><code>nano file.sh</code><i>→</i><code>type program</code><i>→</i><code>Ctrl+O, Enter</code><i>→</i><code>Ctrl+X</code><i>→</i><code>chmod +x file.sh</code><i>→</i><code>./file.sh</code></div></div>
-  </section>
-
-  <section id="p1" class="chapter program">
-    <div class="chapter-head"><span>06</span><div><h2>Lab 1 — Which numbers between M and N are prime?</h2><p>A prime number has exactly two positive factors: 1 and itself. We test every candidate from M to N.</p></div></div>
-    <div class="program-grid">
-      <article class="panel"><h3>1. Create the script</h3><pre><code>nano prime.sh</code></pre><h3>2. Enter this program</h3><pre class="code"><code>#!/bin/bash
-
-echo "Enter M:"
-read m
-echo "Enter N:"
-read n
-
-for ((num=m; num&lt;=n; num++))
-do
-    if (( num &lt; 2 )); then
-        continue
-    fi
-
-    prime=1
-    for ((i=2; i*i&lt;=num; i++))
-    do
-        if (( num % i == 0 )); then
-            prime=0
-            break
-        fi
-    done
-
-    if (( prime == 1 )); then
-        echo -n "$num "
-    fi
-done
-
-echo</code></pre></article>
-      <article class="panel explain"><h3>Understand the logic</h3><div class="logic"><b>Candidate number</b><span>num = M, M+1, ... N</span><i>↓</i><b>Try divisors</b><span>2, 3, 4 ... up to √num</span><i>↓</i><b>Divides exactly?</b><span>Yes → not prime<br>No divisor found → prime</span></div><h3>Run it</h3><pre><code>chmod +x prime.sh
-./prime.sh</code></pre><h3>Example</h3><pre><code>Enter M:
-10
-Enter N:
-30
-11 13 17 19 23 29</code></pre></article>
-    </div>
-  </section>
-
-  <section id="p2" class="chapter program">
-    <div class="chapter-head"><span>07</span><div><h2>Lab 2 — Can a number read the same backwards?</h2><p>Reverse the number digit by digit, then compare the reversed value with the original.</p></div></div>
-    <div class="program-grid">
-      <article class="panel"><h3>Create <code>palindrome.sh</code></h3><pre class="code"><code>#!/bin/bash
-
-echo "Enter a number:"
-read num
-
-original=$num
-reverse=0
-
-while (( num &gt; 0 ))
-do
-    digit=$(( num % 10 ))
-    reverse=$(( reverse * 10 + digit ))
-    num=$(( num / 10 ))
-done
-
-echo "Reversed number: $reverse"
-
-if (( original == reverse )); then
-    echo "$original is a palindrome"
-else
-    echo "$original is not a palindrome"
-fi</code></pre></article>
-      <article class="panel explain"><h3>Watch 121 reverse</h3><div class="digit-demo"><span>121</span><i>→ take last digit 1</i><span>12 | reverse=1</span><i>→ take last digit 2</i><span>1 | reverse=12</span><i>→ take last digit 1</i><span>0 | reverse=121</span></div><h3>Run</h3><pre><code>chmod +x palindrome.sh
-./palindrome.sh</code></pre><h3>Output</h3><pre><code>Enter a number:
-121
-Reversed number: 121
-121 is a palindrome</code></pre></article>
-    </div>
-  </section>
-
-  <section id="p3" class="chapter program">
-    <div class="chapter-head"><span>08</span><div><h2>Lab 3 — What is the sum of all digits?</h2><p>Do it once with a shell loop, then again without writing an explicit shell loop.</p></div></div>
-    <div class="program-grid">
-      <article class="panel"><h3>A. Using a loop</h3><pre class="code"><code>#!/bin/bash
-
-echo "Enter a number:"
-read num
-
-sum=0
-n=$num
-
-while (( n &gt; 0 ))
-do
-    digit=$(( n % 10 ))
-    sum=$(( sum + digit ))
-    n=$(( n / 10 ))
-done
-
-echo "Sum of digits = $sum"</code></pre><p>For 583: <code>5 + 8 + 3 = 16</code>.</p></article>
-      <article class="panel"><h3>B. Without an explicit shell loop</h3><pre class="code"><code>#!/bin/bash
-
-echo "Enter a number:"
-read num
-
-sum=$(echo "$num" | grep -o . | paste -sd+ - | bc)
-
-echo "Sum of digits = $sum"</code></pre><p>This forms an expression such as <code>5+8+3</code> and lets <code>bc</code> evaluate it. If <code>bc</code> is missing, install it once using <code>sudo apt install bc</code>.</p></article>
-    </div>
-    <div class="panel"><h3>Run both versions</h3><pre><code>nano sum_loop.sh
-chmod +x sum_loop.sh
-./sum_loop.sh
-
-nano sum_no_loop.sh
-chmod +x sum_no_loop.sh
-./sum_no_loop.sh</code></pre></div>
   </section>
 
   <section class="chapter finish">
-    <div class="chapter-head"><span>✓</span><div><h2>What should you understand after this lab?</h2><p>Not just how to copy three programs, but what environment is actually executing them.</p></div></div>
-    <div class="check-grid"><div>✓ Windows is the <strong>host</strong></div><div>✓ VirtualBox creates a <strong>virtual machine</strong></div><div>✓ Ubuntu is the <strong>guest OS</strong></div><div>✓ Terminal gives access to the <strong>shell</strong></div><div>✓ <code>nano</code> creates/edits the script</div><div>✓ <code>chmod +x</code> makes it executable</div><div>✓ <code>./file.sh</code> runs it</div><div>✓ Shell scripts automate commands and logic</div></div>
+    <div class="chapter-head"><span>✓</span><div><h2>What should you understand after this lab?</h2><p>The goal is to understand the Linux environment before moving on to shell-programming exercises.</p></div></div>
+    <div class="check-grid"><div>✓ Windows is the <strong>host</strong></div><div>✓ VirtualBox creates a <strong>virtual machine</strong></div><div>✓ Ubuntu is the <strong>guest OS</strong></div><div>✓ Terminal gives access to the <strong>shell</strong></div><div>✓ <code>pwd</code> shows the current directory</div><div>✓ <code>ls</code> lists files and directories</div><div>✓ <code>mkdir</code> creates a directory</div><div>✓ Basic commands help you navigate and work in Linux</div></div>
   </section>
 </main>
 <footer>CAIAS · Linux & Shell Programming Lab</footer>

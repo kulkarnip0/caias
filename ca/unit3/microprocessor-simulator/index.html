@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>4-bit Microprocessor Simulator · CAIAS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="sitebar"><a class="brand" href="../../../">CS <span>Visual</span></a><nav><a href="../../">Computer Architecture</a><a href="../">Unit III</a></nav></header>
+<main>
+  <section class="hero">
+    <div><div class="kicker">Build the CPU from first principles</div><h1>4-bit Microprocessor Simulator</h1><p>Watch data move on the bus, choose control signals, pulse the clock, and see every flip-flop change.</p></div>
+    <div class="clock-card"><div class="clock-title">CLOCK</div><div id="clockLamp" class="clock-lamp low">0</div><div class="clock-actions"><button id="stepClock">Pulse clock</button><button id="runClock" class="secondary">Run</button></div><label>Speed <input id="speed" type="range" min="200" max="1600" step="100" value="800"></label><div id="edgeCount" class="edge-count">Rising edges: 0</div></div>
+  </section>
+
+  <section class="control-panel">
+    <div class="panel-head"><div><span class="eyebrow">1 · Put data on the bus</span><h2>External 4-bit Data Bus</h2></div><div id="busValue" class="big-binary">0000</div></div>
+    <div id="dataBits" class="bit-switches"></div>
+    <div class="bus-line"><span>DATA BUS</span><strong id="busWireValue">0000</strong></div>
+  </section>
+
+  <section class="control-panel">
+    <div class="panel-head"><div><span class="eyebrow">2 · Choose the instruction</span><h2>Control Unit</h2></div><div id="instructionBadge" class="instruction-badge">NOP · 00</div></div>
+    <div class="instruction-buttons">
+      <button data-op="NOP" class="instruction active">00 · NOP</button>
+      <button data-op="LDA" class="instruction">01 · LOAD A</button>
+      <button data-op="LDB" class="instruction">10 · LOAD B</button>
+      <button data-op="ADD" class="instruction">11 · ADD</button>
+    </div>
+    <div class="signals">
+      <div><span>LOAD_A</span><b id="sigLoadA">0</b></div>
+      <div><span>LOAD_B</span><b id="sigLoadB">0</b></div>
+      <div><span>SEL_A</span><b id="sigSelA">0</b></div>
+    </div>
+    <p id="microExplain" class="micro-explain">NOP: no register will change on the next rising edge.</p>
+  </section>
+
+  <section class="cpu-stage">
+    <div class="stage-title"><span class="eyebrow">3 · Watch the datapath</span><h2>Inside the processor</h2></div>
+    <div class="cpu-grid">
+      <div class="register-card accumulator" id="regACard">
+        <div class="register-head"><span>REGISTER A</span><em>Accumulator</em></div>
+        <div id="regAValue" class="register-value">0000</div>
+        <div id="regAFlops" class="flipflops"></div>
+        <div class="register-note">4 D flip-flops · Q3 Q2 Q1 Q0</div>
+      </div>
+
+      <div class="mux-card" id="muxCard">
+        <span>MUX</span><div class="mux-body">2→1</div><small>SEL_A = <b id="muxSel">0</b></small>
+        <div class="mux-source" id="muxSource">External bus selected</div>
+        <div class="wire-value">MUX OUT: <b id="muxOut">0000</b></div>
+      </div>
+
+      <div class="adder-card" id="adderCard">
+        <span>4-BIT ADDER</span><div class="adder-symbol">A + B</div>
+        <div class="adder-row"><span>A</span><b id="adderA">0000</b></div>
+        <div class="adder-row"><span>B</span><b id="adderB">0000</b></div>
+        <div class="adder-row result"><span>SUM</span><b id="adderSum">0000</b></div>
+        <div class="carry">Carry out: <b id="carryOut">0</b></div>
+      </div>
+
+      <div class="register-card" id="regBCard">
+        <div class="register-head"><span>REGISTER B</span><em>Operand</em></div>
+        <div id="regBValue" class="register-value">0000</div>
+        <div id="regBFlops" class="flipflops"></div>
+        <div class="register-note">4 D flip-flops · Q3 Q2 Q1 Q0</div>
+      </div>
+    </div>
+
+    <div class="flow-diagram">
+      <div class="flow-node">External Bus <b id="flowBus">0000</b></div><div class="arrow">→</div>
+      <div class="flow-node">MUX <b id="flowMux">0000</b></div><div class="arrow">→</div>
+      <div class="flow-node">Register A <b id="flowA">0000</b></div>
+      <div class="loop">A + B → Adder → back to MUX</div>
+    </div>
+  </section>
+
+  <section class="timeline-panel">
+    <div class="panel-head"><div><span class="eyebrow">4 · Follow time</span><h2>Clock & State History</h2></div><button id="reset" class="secondary">Reset</button></div>
+    <div id="waveform" class="waveform"></div>
+    <div class="history-wrap"><table><thead><tr><th>Edge</th><th>Instruction</th><th>Bus</th><th>A before</th><th>B before</th><th>A after</th><th>B after</th><th>What happened?</th></tr></thead><tbody id="history"></tbody></table></div>
+  </section>
+
+  <section class="lesson-panel"><h2>Try this program manually</h2><ol><li>Put <code>0101</code> on the data bus. Select <b>LOAD A</b>. Pulse the clock.</li><li>Put <code>0011</code> on the data bus. Select <b>LOAD B</b>. Pulse the clock.</li><li>Select <b>ADD</b>. Notice the adder already shows <code>1000</code>. Pulse the clock.</li><li>Register A becomes <code>1000</code>. The accumulator now stores the result.</li></ol></section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

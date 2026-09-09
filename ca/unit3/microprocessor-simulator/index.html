@@ -32,23 +32,35 @@
   </section>
 
   <section class="cpu-stage">
-    <div class="stage-title"><span class="eyebrow">3 · Watch controller + datapath</span><h2>Inside the processor</h2><p>Thick lines are 4-bit data paths. Dashed lines are control signals. Data enters blocks from the side; control signals enter from the bottom.</p></div>
+    <div class="stage-title"><span class="eyebrow">3 · Watch controller + datapath</span><h2>Inside the processor</h2><p>Each block has its own space. Thick lines carry 4-bit data. Dashed lines are 1-bit control signals entering MUX and registers from below.</p></div>
     <div class="board-scroll"><div class="datapath-board">
-      <svg class="wires" viewBox="0 0 1100 650" preserveAspectRatio="none" aria-hidden="true">
+      <svg class="wires" viewBox="0 0 1250 760" preserveAspectRatio="none" aria-hidden="true">
         <defs><marker id="arrowData" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z"/></marker><marker id="arrowCtrl" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z"/></marker></defs>
 
-        <!-- DATA PATHS -->
-        <g id="wireBusMux" class="data-wire"><path d="M410 82 L410 220 L515 220"/><text id="wireBusMuxLabel" x="430" y="208">0000</text></g>
-        <g id="wireAdderMux" class="data-wire"><path d="M770 380 L455 380 L455 270 L515 270"/><text id="wireAdderMuxLabel" x="470" y="292">0000</text></g>
-        <g id="wireMuxA" class="data-wire"><path d="M635 245 L760 245 L760 150 L805 150"/><text id="wireMuxALabel" x="655" y="232">0000</text></g>
-        <g id="wireBusB" class="data-wire"><path d="M410 82 L410 520 L780 520"/><text id="wireBusBLabel" x="430" y="505">0000</text></g>
-        <g id="wireAAdder" class="data-wire"><path d="M925 225 L925 300 L850 300 L850 345"/><text id="wireAAdderLabel" x="875" y="286">0000</text></g>
-        <g id="wireBAdder" class="data-wire"><path d="M900 465 L900 440 L850 440 L850 420"/><text id="wireBAdderLabel" x="910" y="455">0000</text></g>
+        <!-- DATA: external bus to MUX input 0 -->
+        <g id="wireBusMux" class="data-wire"><path d="M430 80 L430 205 L520 205"/><text id="wireBusMuxLabel" x="445" y="192">0000</text></g>
 
-        <!-- CONTROL PATHS: each enters its target from BELOW -->
-        <g id="wireCtrlA" class="control-wire"><path d="M255 255 L700 255 L700 305 L870 305 L870 225"/><text x="715" y="296">LOAD_A</text></g>
-        <g id="wireCtrlB" class="control-wire"><path d="M255 300 L650 300 L650 610 L880 610 L880 575"/><text x="700" y="602">LOAD_B</text></g>
-        <g id="wireCtrlMux" class="control-wire"><path d="M255 345 L575 345 L575 305"/><text x="465" y="336">SEL_A</text></g>
+        <!-- DATA: adder SUM loops back to MUX input 1 -->
+        <g id="wireAdderMux" class="data-wire"><path d="M780 420 L655 420 L655 265 L520 265"/><text id="wireAdderMuxLabel" x="670" y="405">0000</text></g>
+
+        <!-- DATA: MUX output to A -->
+        <g id="wireMuxA" class="data-wire"><path d="M650 235 L780 235 L780 170 L860 170"/><text id="wireMuxALabel" x="675" y="222">0000</text></g>
+
+        <!-- DATA: bus directly to B -->
+        <g id="wireBusB" class="data-wire"><path d="M430 80 L430 610 L860 610"/><text id="wireBusBLabel" x="455" y="596">0000</text></g>
+
+        <!-- DATA: A and B to adder -->
+        <g id="wireAAdder" class="data-wire"><path d="M995 245 L995 315 L900 315 L900 350"/><text id="wireAAdderLabel" x="920" y="301">0000</text></g>
+        <g id="wireBAdder" class="data-wire"><path d="M995 535 L995 505 L900 505 L900 475"/><text id="wireBAdderLabel" x="1010" y="522">0000</text></g>
+
+        <!-- CONTROL: SEL_A enters MUX from bottom -->
+        <g id="wireCtrlMux" class="control-wire"><path d="M265 360 L585 360 L585 320"/><text x="465" y="350">SEL_A</text></g>
+
+        <!-- CONTROL: LOAD_A enters A from bottom -->
+        <g id="wireCtrlA" class="control-wire"><path d="M265 285 L345 285 L345 305 L930 305 L930 245"/><text x="725" y="295">LOAD_A</text></g>
+
+        <!-- CONTROL: LOAD_B enters B from bottom -->
+        <g id="wireCtrlB" class="control-wire"><path d="M265 325 L320 325 L320 710 L930 710 L930 685"/><text x="725" y="700">LOAD_B</text></g>
       </svg>
 
       <div class="board-bus"><span>4-BIT DATA BUS</span><b id="wireBusValue">0000</b></div>
@@ -105,7 +117,7 @@
     <div class="history-wrap"><table><thead><tr><th>Edge</th><th>Instruction</th><th>Bus</th><th>A before</th><th>B before</th><th>A after</th><th>B after</th><th>What happened?</th></tr></thead><tbody id="history"></tbody></table></div>
   </section>
 
-  <section class="lesson-panel"><h2>Try the physical-control view</h2><ol><li>Bus = <code>0101</code>. Press and HOLD <b>LOAD A</b>. Observe LOAD_A entering Register A from below, while bus→MUX→A carries the 4-bit data.</li><li>RELEASE <b>LOAD A</b>. One clock edge appears and A latches <code>0101</code>.</li><li>Bus = <code>0011</code>. Hold <b>LOAD B</b>. LOAD_B enters Register B from below while the data bus enters from the side.</li><li>Hold <b>ADD</b>. SEL_A enters the MUX from below and LOAD_A enters A from below; the selected SUM travels through the normal data path.</li></ol></section>
+  <section class="lesson-panel"><h2>Try the physical-control view</h2><ol><li>Bus = <code>0101</code>. Hold <b>LOAD A</b>. Data follows bus→MUX→A; LOAD_A comes into A from below.</li><li>Release <b>LOAD A</b>. One rising edge latches A.</li><li>Bus = <code>0011</code>. Hold <b>LOAD B</b>. The bus enters B from the side and LOAD_B enters from below.</li><li>Hold <b>ADD</b>. A and B feed the adder, SUM returns to the second MUX input, SEL_A comes from below, and LOAD_A prepares A to latch the result.</li></ol></section>
 </main>
 <script src="app.js"></script>
 </body>

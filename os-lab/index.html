@@ -1,309 +1,174 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>OS Lab · CAIAS</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif; background:#f6f8fb; color:#1f2937; }
-    main { width:min(1180px,calc(100% - 32px)); margin:48px auto; display:grid; gap:28px; }
-    section { background:#fff; border:1px solid #e5e7eb; border-radius:18px; padding:34px; box-shadow:0 8px 24px rgba(15,23,42,.06); }
-    h2 { margin:0 0 10px; font-size:34px; color:#0f172a; }
-    .intro { margin:0 0 28px; font-size:20px; line-height:1.6; color:#475569; }
-    .command-grid { display:grid; gap:24px; }
-    .command-card { border:2px solid #dbe4ee; border-radius:18px; overflow:hidden; background:#fbfdff; }
-    .command-text { padding:22px 24px 18px; }
-    .step { display:inline-flex; width:40px; height:40px; align-items:center; justify-content:center; border-radius:50%; background:#0f172a; color:#fff; font-size:19px; font-weight:800; margin-right:10px; }
-    .command-name { font-family:"Courier New",monospace; font-size:27px; font-weight:800; color:#0f172a; }
-    .command-text p { margin:12px 0 0; font-size:19px; line-height:1.6; color:#475569; }
-    .shot { margin:0 24px 24px; background:#1e1e1e; border-radius:14px; overflow:hidden; box-shadow:0 14px 30px rgba(15,23,42,.18); border:1px solid #111827; }
-    .titlebar { height:40px; background:#303030; display:flex; align-items:center; gap:8px; padding:0 14px; color:#d1d5db; font-size:14px; }
-    .dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
-    .dot.red { background:#ef4444; } .dot.yellow { background:#f59e0b; } .dot.green { background:#22c55e; }
-    .terminal { min-height:120px; padding:20px; color:#f8fafc; font-family:"Courier New",monospace; font-size:20px; line-height:1.6; white-space:pre-wrap; }
-    .prompt { color:#86efac; } .cmd { color:#fde68a; } .file { color:#93c5fd; }
-    .hint { margin:0 24px 24px; padding:16px 18px; border-left:5px solid #2563eb; background:#eff6ff; border-radius:10px; color:#1e3a8a; font-size:18px; line-height:1.5; }
-    kbd { display:inline-block; padding:4px 8px; border:1px solid #94a3b8; border-bottom-width:3px; border-radius:7px; background:#fff; color:#0f172a; font-family:inherit; font-size:.95em; font-weight:700; }
-
-    .lab-workspace { display:grid; grid-template-columns:360px 1fr; gap:24px; align-items:start; margin-top:24px; }
-    .lab-left { border:2px solid #dbe4ee; border-radius:18px; background:#f8fafc; padding:20px; position:sticky; top:18px; }
-    .lab-left label { display:block; font-size:20px; font-weight:800; color:#0f172a; margin-bottom:10px; }
-    .lab-select { width:100%; padding:14px; border:2px solid #94a3b8; border-radius:12px; background:#fff; color:#0f172a; font-size:17px; line-height:1.4; }
-    .question-card { margin-top:18px; padding:18px; background:#fff; border:1px solid #dbe4ee; border-radius:14px; }
-    .question-card .qno { display:inline-block; background:#0f172a; color:#fff; border-radius:9px; padding:6px 10px; font-weight:800; margin-bottom:10px; }
-    .question-card p { margin:0; font-size:18px; line-height:1.55; color:#334155; }
-
-    .simulator { border:2px solid #cbd5e1; border-radius:18px; overflow:hidden; background:#fff; }
-    .sim-head { background:#0f172a; color:#fff; padding:22px 24px; }
-    .sim-head .eyebrow { color:#93c5fd; font-size:14px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-    .sim-head h3 { margin:6px 0 0; font-size:27px; line-height:1.3; }
-    .sim-body { padding:24px; }
-    .example-box { background:#eff6ff; border-left:6px solid #2563eb; border-radius:12px; padding:18px; margin-bottom:20px; }
-    .example-box b { display:block; color:#1e3a8a; font-size:18px; margin-bottom:6px; }
-    .example-box div { font-size:20px; line-height:1.55; color:#0f172a; }
-    .core-box { background:#f0fdf4; border-left:6px solid #16a34a; border-radius:12px; padding:17px 18px; margin:18px 0; font-size:18px; line-height:1.55; color:#14532d; }
-    .trace-title { margin:20px 0 10px; font-size:21px; color:#0f172a; }
-    .trace-screen { min-height:270px; background:#0b1220; border-radius:14px; padding:18px; color:#e2e8f0; font-family:"Courier New",monospace; font-size:18px; line-height:1.6; overflow:auto; }
-    .trace-line { padding:9px 10px; margin:5px 0; border-left:4px solid #475569; background:#111c2f; border-radius:7px; opacity:.45; }
-    .trace-line.done { opacity:1; border-left-color:#22c55e; }
-    .trace-line.current { opacity:1; border-left-color:#facc15; background:#263047; }
-    .sim-buttons { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
-    .sim-btn { border:0; border-radius:10px; padding:12px 17px; font-size:17px; font-weight:800; cursor:pointer; background:#0f172a; color:#fff; }
-    .sim-btn.secondary { background:#e2e8f0; color:#0f172a; }
-    .result-box { margin-top:18px; padding:18px; border-radius:12px; background:#fff7ed; border:2px solid #fdba74; color:#7c2d12; font-size:19px; line-height:1.55; }
-    .result-box b { color:#9a3412; }
-
-    @media(max-width:850px){
-      main{width:min(100% - 18px,1180px);margin:20px auto} section{padding:20px} h2{font-size:29px}.intro{font-size:18px}.command-name{font-size:23px}.command-text p,.terminal{font-size:17px}.shot,.hint{margin-left:16px;margin-right:16px}.lab-workspace{grid-template-columns:1fr}.lab-left{position:static}.trace-screen{font-size:16px}.sim-head h3{font-size:23px}
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <section id="commands-used">
-      <h2>Commands Used</h2>
-      <p class="intro">Most used commands for this lab</p>
-      <div class="command-grid">
-        <article class="command-card"><div class="command-text"><span class="step">1</span><span class="command-name">Ctrl + Alt + T</span><p>Open a new Terminal window in Ubuntu.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">▌</span></div></div><div class="hint">Press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> together.</div></article>
-        <article class="command-card"><div class="command-text"><span class="step">2</span><span class="command-name">ls</span><p>List the files and folders in the current location.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">ls</span>
-Desktop   Documents   Downloads   Music   Pictures</div></div></article>
-        <article class="command-card"><div class="command-text"><span class="step">3</span><span class="command-name">nano prime.sh</span><p>Open or create the file <strong>prime.sh</strong> in the Nano text editor and type the shell program.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">nano prime.sh</span>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OS Lab · CAIAS</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:#f6f8fb;color:#1f2937}main{width:min(1180px,calc(100% - 32px));margin:48px auto;display:grid;gap:28px}section{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:34px;box-shadow:0 8px 24px rgba(15,23,42,.06)}h2{margin:0 0 10px;font-size:34px;color:#0f172a}.intro{margin:0 0 28px;font-size:20px;line-height:1.6;color:#475569}.command-grid{display:grid;gap:24px}.command-card{border:2px solid #dbe4ee;border-radius:18px;overflow:hidden;background:#fbfdff}.command-text{padding:22px 24px 18px}.step{display:inline-flex;width:40px;height:40px;align-items:center;justify-content:center;border-radius:50%;background:#0f172a;color:#fff;font-size:19px;font-weight:800;margin-right:10px}.command-name{font-family:"Courier New",monospace;font-size:27px;font-weight:800;color:#0f172a}.command-text p{margin:12px 0 0;font-size:19px;line-height:1.6;color:#475569}.shot{margin:0 24px 24px;background:#1e1e1e;border-radius:14px;overflow:hidden;box-shadow:0 14px 30px rgba(15,23,42,.18);border:1px solid #111827}.titlebar{height:40px;background:#303030;display:flex;align-items:center;gap:8px;padding:0 14px;color:#d1d5db;font-size:14px}.dot{width:12px;height:12px;border-radius:50%;display:inline-block}.dot.red{background:#ef4444}.dot.yellow{background:#f59e0b}.dot.green{background:#22c55e}.terminal{min-height:120px;padding:20px;color:#f8fafc;font-family:"Courier New",monospace;font-size:20px;line-height:1.6;white-space:pre-wrap}.prompt{color:#86efac}.cmd{color:#fde68a}.file{color:#93c5fd}.hint{margin:0 24px 24px;padding:16px 18px;border-left:5px solid #2563eb;background:#eff6ff;border-radius:10px;color:#1e3a8a;font-size:18px;line-height:1.5}kbd{display:inline-block;padding:4px 8px;border:1px solid #94a3b8;border-bottom-width:3px;border-radius:7px;background:#fff;color:#0f172a;font-family:inherit;font-size:.95em;font-weight:700}.lab-workspace{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start;margin-top:24px}.lab-left{border:2px solid #dbe4ee;border-radius:18px;background:#f8fafc;padding:20px;position:sticky;top:18px}.lab-left label{display:block;font-size:20px;font-weight:800;color:#0f172a;margin-bottom:10px}.lab-select{width:100%;padding:14px;border:2px solid #94a3b8;border-radius:12px;background:#fff;color:#0f172a;font-size:17px;line-height:1.4}.question-card{margin-top:18px;padding:18px;background:#fff;border:1px solid #dbe4ee;border-radius:14px}.question-card .qno{display:inline-block;background:#0f172a;color:#fff;border-radius:9px;padding:6px 10px;font-weight:800;margin-bottom:10px}.question-card p{margin:0;font-size:18px;line-height:1.55;color:#334155}.code-card{margin-top:18px;border-radius:14px;overflow:hidden;border:1px solid #334155;background:#07111f}.code-title{padding:11px 14px;background:#172033;color:#93c5fd;font-weight:800;font-size:16px}.shell-code{margin:0;padding:16px;color:#f8fafc;font-family:"Courier New",monospace;font-size:15px;line-height:1.55;white-space:pre;overflow:auto;max-height:440px}.simulator{border:2px solid #cbd5e1;border-radius:18px;overflow:hidden;background:#fff}.sim-head{background:#0f172a;color:#fff;padding:22px 24px}.sim-head .eyebrow{color:#93c5fd;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.sim-head h3{margin:6px 0 0;font-size:27px;line-height:1.3}.sim-body{padding:24px}.example-box{background:#eff6ff;border-left:6px solid #2563eb;border-radius:12px;padding:18px;margin-bottom:20px}.example-box b{display:block;color:#1e3a8a;font-size:18px;margin-bottom:6px}.example-box div{font-size:20px;line-height:1.55;color:#0f172a}.core-box{background:#f0fdf4;border-left:6px solid #16a34a;border-radius:12px;padding:17px 18px;margin:18px 0;font-size:18px;line-height:1.55;color:#14532d}.trace-title{margin:20px 0 10px;font-size:21px;color:#0f172a}.trace-screen{min-height:270px;background:#0b1220;border-radius:14px;padding:18px;color:#e2e8f0;font-family:"Courier New",monospace;font-size:18px;line-height:1.6;overflow:auto}.trace-line{padding:9px 10px;margin:5px 0;border-left:4px solid #475569;background:#111c2f;border-radius:7px;opacity:.45}.trace-line.done{opacity:1;border-left-color:#22c55e}.trace-line.current{opacity:1;border-left-color:#facc15;background:#263047}.sim-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.sim-btn{border:0;border-radius:10px;padding:12px 17px;font-size:17px;font-weight:800;cursor:pointer;background:#0f172a;color:#fff}.sim-btn.secondary{background:#e2e8f0;color:#0f172a}.result-box{margin-top:18px;padding:18px;border-radius:12px;background:#fff7ed;border:2px solid #fdba74;color:#7c2d12;font-size:19px;line-height:1.55}.result-box b{color:#9a3412}@media(max-width:850px){main{width:min(100% - 18px,1180px);margin:20px auto}section{padding:20px}h2{font-size:29px}.intro{font-size:18px}.command-name{font-size:23px}.command-text p,.terminal{font-size:17px}.shot,.hint{margin-left:16px;margin-right:16px}.lab-workspace{grid-template-columns:1fr}.lab-left{position:static}.trace-screen{font-size:16px}.sim-head h3{font-size:23px}.shell-code{font-size:14px}}</style></head><body><main><section id="commands-used"><h2>Commands Used</h2><p class="intro">Most used commands for this lab</p><div class="command-grid"><article class="command-card"><div class="command-text"><span class="step">1</span><span class="command-name">Ctrl + Alt + T</span><p>Open a new Terminal window in Ubuntu.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">▌</span></div></div><div class="hint">Press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> together.</div></article><article class="command-card"><div class="command-text"><span class="step">2</span><span class="command-name">ls</span><p>List the files and folders in the current location.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">ls</span>
+Desktop   Documents   Downloads   Music   Pictures</div></div></article><article class="command-card"><div class="command-text"><span class="step">3</span><span class="command-name">nano prime.sh</span><p>Open or create the file <strong>prime.sh</strong> in the Nano text editor and type the shell program.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">nano prime.sh</span>
 
 <span class="file">GNU nano                  prime.sh</span>
 
-# Type the shell program here</div></div></article>
-        <article class="command-card"><div class="command-text"><span class="step">4</span><span class="command-name">bash prime.sh</span><p>Run the shell program stored in <strong>prime.sh</strong>.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">bash prime.sh</span>
+# Type the shell program here</div></div></article><article class="command-card"><div class="command-text"><span class="step">4</span><span class="command-name">bash prime.sh</span><p>Run the shell program stored in <strong>prime.sh</strong>.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">bash prime.sh</span>
 Enter M: 5
 Enter N: 10
-5 7</div></div></article>
-        <article class="command-card"><div class="command-text"><span class="step">5</span><span class="command-name">Ctrl + C</span><p>Stop a command or running program when you want to interrupt it.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">bash prime.sh</span>
+5 7</div></div></article><article class="command-card"><div class="command-text"><span class="step">5</span><span class="command-name">Ctrl + C</span><p>Stop a command or running program when you want to interrupt it.</p></div><div class="shot"><div class="titlebar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span> Terminal</div><div class="terminal"><span class="prompt">student@ubuntu:~$</span> <span class="cmd">bash prime.sh</span>
 Enter a number: <span class="file">^C</span>
-<span class="prompt">student@ubuntu:~$</span> ▌</div></div><div class="hint">Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to interrupt the current process and return to the terminal prompt.</div></article>
-      </div>
-    </section>
-
-    <section id="lab-programs">
-      <h2>Lab Programs</h2>
-      <p class="intro">Choose a program on the left. The simulator on the right explains the logic using one very simple example, one step at a time.</p>
-      <div class="lab-workspace">
-        <aside class="lab-left">
-          <label for="programSelect">Select Lab Program</label>
-          <select id="programSelect" class="lab-select" onchange="loadProgram()"></select>
-          <div class="question-card"><span id="qno" class="qno">Program 1</span><p id="questionText"></p></div>
-        </aside>
-
-        <div class="simulator">
-          <div class="sim-head"><div class="eyebrow">Simple Learning Simulator</div><h3 id="simTitle"></h3></div>
-          <div class="sim-body">
-            <div class="example-box"><b>Example</b><div id="exampleText"></div></div>
-            <div id="coreIdea" class="core-box"></div>
-            <h4 class="trace-title">Step-by-step execution</h4>
-            <div id="traceScreen" class="trace-screen"></div>
-            <div class="sim-buttons"><button class="sim-btn" onclick="nextStep()">▶ Next Step</button><button class="sim-btn secondary" onclick="runAll()">Run All</button><button class="sim-btn secondary" onclick="resetTrace()">↺ Reset</button></div>
-            <div id="resultBox" class="result-box"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-<script>
+<span class="prompt">student@ubuntu:~$</span> ▌</div></div><div class="hint">Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to interrupt the current process and return to the terminal prompt.</div></article></div></section><section id="lab-programs"><h2>Lab Programs</h2><p class="intro">Choose a program on the left. The complete shell script is shown below the question, and the simulator on the right explains it with a simple example.</p><div class="lab-workspace"><aside class="lab-left"><label for="programSelect">Select Lab Program</label><select id="programSelect" class="lab-select" onchange="loadProgram()"></select><div class="question-card"><span id="qno" class="qno">Program 1</span><p id="questionText"></p></div><div class="code-card"><div class="code-title">Shell Program Code</div><pre id="shellCode" class="shell-code"></pre></div></aside><div class="simulator"><div class="sim-head"><div class="eyebrow">Simple Learning Simulator</div><h3 id="simTitle"></h3></div><div class="sim-body"><div class="example-box"><b>Example</b><div id="exampleText"></div></div><div id="coreIdea" class="core-box"></div><h4 class="trace-title">Step-by-step execution</h4><div id="traceScreen" class="trace-screen"></div><div class="sim-buttons"><button class="sim-btn" onclick="nextStep()">▶ Next Step</button><button class="sim-btn secondary" onclick="runAll()">Run All</button><button class="sim-btn secondary" onclick="resetTrace()">↺ Reset</button></div><div id="resultBox" class="result-box"></div></div></div></div></section></main><script>
 const programs=[
-{
- title:'Prime Numbers Between M and N',
- q:'Write a shell script to print all the prime numbers between M to N (M < N).',
- example:'M = 5, N = 10. We test every number: 5, 6, 7, 8, 9 and 10.',
- core:'Main idea: the outer loop picks one number. The inner checking logic tries divisors. If no divisor divides the number exactly, it is prime.',
- steps:[
-  'Start: M=5, N=10. Set i=5.',
-  'i=5 → try divisors smaller than 5. No divisor divides 5 exactly → PRIME → print 5.',
-  'i=6 → 6 % 2 = 0 → divisible by 2 → NOT prime → do not print.',
-  'i=7 → 7 is not divisible by 2, 3, 4, 5 or 6 → PRIME → print 7.',
-  'i=8 → 8 % 2 = 0 → NOT prime.',
-  'i=9 → 9 % 3 = 0 → NOT prime.',
-  'i=10 → 10 % 2 = 0 → NOT prime.',
-  'Loop ends because i reached N=10.'
- ], result:'Output: 5 7'
-},
-{
- title:'Reverse a Number and Check Palindrome',
- q:'Write a shell script to reverse a given number and check whether it is a palindrome.',
- example:'Number = 121.',
- core:'Main idea: repeatedly take the last digit using % 10, attach it to reverse, then remove the last digit using / 10.',
- steps:[
-  'Original number = 121. reverse = 0.',
-  'Iteration 1: digit = 121 % 10 = 1. reverse = 0×10+1 = 1. number becomes 12.',
-  'Iteration 2: digit = 12 % 10 = 2. reverse = 1×10+2 = 12. number becomes 1.',
-  'Iteration 3: digit = 1 % 10 = 1. reverse = 12×10+1 = 121. number becomes 0.',
-  'Compare original 121 with reverse 121.',
-  'They are equal → it is a palindrome.'
- ], result:'Reverse = 121. Palindrome = YES.'
-},
-{
- title:'Sum of Digits — With and Without Loop',
- q:'Write a shell script to find the sum of digits of a given number using loops and without using loops.',
- example:'Number = 352.',
- core:'With a loop, take one digit at a time. Without a shell loop, split the digits and combine them as an addition expression.',
- steps:[
-  'WITH LOOP: n=352, sum=0.',
-  'Iteration 1: digit=2 → sum=0+2=2 → n becomes 35.',
-  'Iteration 2: digit=5 → sum=2+5=7 → n becomes 3.',
-  'Iteration 3: digit=3 → sum=7+3=10 → n becomes 0.',
-  'WITHOUT LOOP idea: view 352 as 3 + 5 + 2.',
-  'Evaluate 3+5+2 = 10.'
- ], result:'Sum of digits = 10 in both methods.'
-},
-{
- title:'10 Linux Commands Using case',
- q:'Write a shell script to implement 10 Linux commands using case.',
- example:'Menu has 10 choices. Suppose the user enters choice 2 for pwd.',
- core:'Main idea: case matches the entered choice and runs only the command belonging to that choice.',
- steps:[
-  'Display menu: 1) ls  2) pwd  3) date  4) whoami  5) cal  6) uname  7) df  8) ps  9) who  10) wc.',
-  'User enters choice = 2.',
-  'case checks choice against 1 → no match.',
-  'case checks choice against 2 → MATCH.',
-  'Run pwd.',
-  'pwd prints the present working directory.',
-  'case ends.'
- ], result:'Example output: /home/student'
-},
-{
- title:'Files Having Read, Write and Execute Permissions',
- q:'Write a shell script that displays a list of all the files in the current directory to which the user has read, write and execute permissions.',
- example:'Current folder contains script.sh, notes.txt and runme.',
- core:'Main idea: visit each file and test three permissions: readable (-r), writable (-w) and executable (-x). Print only when all three are true.',
- steps:[
-  'Check script.sh: read=YES, write=YES, execute=YES → print script.sh.',
-  'Check notes.txt: read=YES, write=YES, execute=NO → do not print.',
-  'Check runme: read=YES, write=YES, execute=YES → print runme.',
-  'No more files → loop ends.'
- ], result:'Displayed files: script.sh  runme'
-},
-{
- title:'Copy a File Within the Current Directory',
- q:'Write a shell script to copy a file within the current directory.',
- example:'Copy notes.txt to notes_backup.txt in the same folder.',
- core:'Main idea: both source and destination names are in the current directory, so cp can copy directly from one filename to another.',
- steps:[
-  'Source file = notes.txt.',
-  'Destination file = notes_backup.txt.',
-  'Check that notes.txt exists.',
-  'Run: cp notes.txt notes_backup.txt',
-  'A second file with the same contents is created.'
- ], result:'notes.txt remains, and notes_backup.txt is created.'
-},
-{
- title:'Copy a File Between Two Directories',
- q:'Write a shell script to copy a file between two directories.',
- example:'Copy report.txt from /home/student/docs to /home/student/backup.',
- core:'Main idea: give cp the source path and destination directory path.',
- steps:[
-  'Source = /home/student/docs/report.txt.',
-  'Destination = /home/student/backup/.',
-  'Check source file exists.',
-  'Run cp with the source path and destination path.',
-  'report.txt is copied into the backup directory.'
- ], result:'New copy: /home/student/backup/report.txt'
-},
-{
- title:'Compare Two Data Files — Unique and Common Entries',
- q:'Write a shell script to create two data files and compare them to display unique and common entries.',
- example:'file1: apple, mango, orange. file2: mango, orange, banana.',
- core:'Main idea: compare the two sets of lines. Lines present in both are common; lines found in only one file are unique.',
- steps:[
-  'file1 contains: apple, mango, orange.',
-  'file2 contains: mango, orange, banana.',
-  'Compare apple → only in file1 → unique.',
-  'Compare mango → appears in both → common.',
-  'Compare orange → appears in both → common.',
-  'Compare banana → only in file2 → unique.'
- ], result:'Common: mango, orange. Unique: apple, banana.'
-},
-{
- title:'Count Vowels in a String',
- q:'Write a shell script to count the number of vowels in a string.',
- example:'String = hello.',
- core:'Main idea: inspect one character at a time. Increase count only when the character is a, e, i, o or u (upper or lower case).',
- steps:[
-  'Start count=0.',
-  'Character h → not a vowel → count=0.',
-  'Character e → vowel → count=1.',
-  'Character l → not a vowel → count=1.',
-  'Character l → not a vowel → count=1.',
-  'Character o → vowel → count=2.',
-  'End of string.'
- ], result:'Number of vowels = 2.'
-},
-{
- title:'Convert Uppercase to Lowercase and Vice Versa',
- q:'Write a shell script to convert uppercase characters to lowercase and vice versa.',
- example:'Input = AbCde.',
- core:'Main idea: each uppercase letter becomes lowercase, and each lowercase letter becomes uppercase.',
- steps:[
-  'A is uppercase → convert to a.',
-  'b is lowercase → convert to B.',
-  'C is uppercase → convert to c.',
-  'd is lowercase → convert to D.',
-  'e is lowercase → convert to E.',
-  'Join converted characters.'
- ], result:'Converted string = aBcDE.'
-},
-{
- title:'Pattern Matching in a File',
- q:'Write a shell script to accept a word and perform pattern matching in a given file.',
- example:'Word = error. File contains: “Login successful”, “Network error”, “Try again”.',
- core:'Main idea: search every line for the given word and display only the matching line(s).',
- steps:[
-  'Search word = error.',
-  'Line 1: Login successful → no match.',
-  'Line 2: Network error → MATCH → display this line.',
-  'Line 3: Try again → no match.',
-  'Search ends.'
- ], result:'Matched line: Network error'
-},
-{
- title:'Factorial of a Number',
- q:'Write a shell script to find the factorial of a number.',
- example:'Number = 5.',
- core:'Main idea: start factorial at 1 and multiply it by every integer from 1 up to n.',
- steps:[
-  'Start: fact=1.',
-  'i=1 → fact=1×1=1.',
-  'i=2 → fact=1×2=2.',
-  'i=3 → fact=2×3=6.',
-  'i=4 → fact=6×4=24.',
-  'i=5 → fact=24×5=120.',
-  'Loop ends.'
- ], result:'5! = 120.'
-},
-{
- title:'Zombie Process and Orphan Process — Menu Demo',
- q:'Write a menu-driven program to demonstrate the zombie process and orphan process.',
- example:'Menu: 1) Zombie process  2) Orphan process. We first choose 1, then imagine choosing 2.',
- core:'Main idea: a zombie is a child that has finished but whose exit status has not yet been collected by its parent. An orphan is a child whose parent terminates while the child is still running. The simulator shows the process-state idea rather than creating real system processes in this webpage.',
- steps:[
-  'Choose 1 — Zombie demo.',
-  'Parent creates child P2.',
-  'Child P2 finishes first.',
-  'Parent P1 is still alive and has not yet collected the child status → P2 is temporarily a zombie.',
-  'When parent collects the status, the zombie entry disappears.',
-  'Choose 2 — Orphan demo.',
-  'Parent P1 creates child P2.',
-  'Parent P1 terminates while P2 is still running.',
-  'P2 continues without its original parent → P2 is an orphan and is adopted/re-parented by the system.'
- ], result:'Zombie: child finished, parent alive but status not yet collected. Orphan: parent finished while child is still running.'
-}
+{title:'Prime Numbers Between M and N',q:'Write a shell script to print all the prime numbers between M to N (M < N).',code:`#!/bin/bash
+read -p "Enter M: " m
+read -p "Enter N: " n
+for ((i=m; i<=n; i++)); do
+  if (( i < 2 )); then continue; fi
+  prime=1
+  for ((j=2; j*j<=i; j++)); do
+    if (( i % j == 0 )); then
+      prime=0
+      break
+    fi
+  done
+  if (( prime == 1 )); then
+    echo -n "$i "
+  fi
+done
+echo`,example:'M = 5, N = 10. We test every number: 5, 6, 7, 8, 9 and 10.',core:'The outer loop picks one number at a time. The inner loop checks whether a smaller number divides it exactly. If a divisor is found, it is not prime.',steps:['Start: M=5, N=10. i=5.','i=5 → j=2. 5%2 is not 0. No divisor found → print 5.','i=6 → j=2. 6%2=0 → divisor found → do not print 6.','i=7 → j=2. 7%2 is not 0. No divisor up to √7 → print 7.','i=8 → 8%2=0 → not prime.','i=9 → 9%2≠0, then 9%3=0 → not prime.','i=10 → 10%2=0 → not prime.','Loop finishes.'],result:'Output: 5 7'},
+{title:'Reverse a Number and Check Palindrome',q:'Write a shell script to reverse a given number and check whether it is a palindrome.',code:`#!/bin/bash
+read -p "Enter a number: " n
+original=$n
+reverse=0
+while (( n > 0 )); do
+  digit=$((n % 10))
+  reverse=$((reverse * 10 + digit))
+  n=$((n / 10))
+done
+echo "Reverse = $reverse"
+if (( original == reverse )); then
+  echo "Palindrome"
+else
+  echo "Not a palindrome"
+fi`,example:'Number = 121.',core:'Take the last digit with %10, add it to the reverse, then remove that digit with /10.',steps:['original=121, reverse=0.','digit=1 → reverse=1 → n=12.','digit=2 → reverse=12 → n=1.','digit=1 → reverse=121 → n=0.','Compare original 121 and reverse 121.','They are equal → palindrome.'],result:'Reverse = 121. Palindrome.'},
+{title:'Sum of Digits — With and Without Loop',q:'Write a shell script to find the sum of digits of a given number using loops and without using loops.',code:`#!/bin/bash
+read -p "Enter a number: " n
+
+# Method 1: using loop
+temp=$n
+sum=0
+while (( temp > 0 )); do
+  digit=$((temp % 10))
+  sum=$((sum + digit))
+  temp=$((temp / 10))
+done
+echo "Using loop: $sum"
+
+# Method 2: without a shell loop
+sum2=$(echo "$n" | grep -o . | paste -sd+ | bc)
+echo "Without loop: $sum2"`,example:'Number = 352.',core:'Loop method removes one digit at a time. The second method turns the digits into an addition expression such as 3+5+2.',steps:['Loop: n=352, sum=0.','digit=2 → sum=2 → n=35.','digit=5 → sum=7 → n=3.','digit=3 → sum=10 → n=0.','Without loop: 352 becomes 3+5+2.','3+5+2 = 10.'],result:'Sum of digits = 10.'},
+{title:'10 Linux Commands Using case',q:'Write a shell script to implement 10 Linux commands using case.',code:`#!/bin/bash
+echo "1.ls 2.pwd 3.date 4.whoami 5.cal"
+echo "6.uname 7.df 8.ps 9.who 10.wc"
+read -p "Enter choice: " ch
+case $ch in
+  1) ls ;;
+  2) pwd ;;
+  3) date ;;
+  4) whoami ;;
+  5) cal ;;
+  6) uname -a ;;
+  7) df -h ;;
+  8) ps ;;
+  9) who ;;
+  10) read -p "Enter file name: " f; wc "$f" ;;
+  *) echo "Invalid choice" ;;
+esac`,example:'Suppose the user enters choice 2.',core:'case compares the choice with each menu option and runs only the matching command.',steps:['Display the 10 choices.','User enters 2.','case checks 1 → no match.','case checks 2 → match.','Run pwd.','pwd prints the current directory.'],result:'Example output: /home/student'},
+{title:'Files Having Read, Write and Execute Permissions',q:'Write a shell script that displays all files in the current directory for which the user has read, write and execute permissions.',code:`#!/bin/bash
+for f in *; do
+  if [ -f "$f" ] && [ -r "$f" ] && [ -w "$f" ] && [ -x "$f" ]; then
+    echo "$f"
+  fi
+done`,example:'Files: script.sh, notes.txt and runme.',core:'For each regular file, test -r, -w and -x. Print it only when all three tests are true.',steps:['Check script.sh → R=yes, W=yes, X=yes → print.','Check notes.txt → execute=no → skip.','Check runme → R=yes, W=yes, X=yes → print.','No more files.'],result:'Displayed: script.sh and runme.'},
+{title:'Copy a File Within the Current Directory',q:'Write a shell script to copy a file within the current directory.',code:`#!/bin/bash
+read -p "Enter source file: " src
+read -p "Enter new file name: " dest
+if [ -f "$src" ]; then
+  cp "$src" "$dest"
+  echo "File copied"
+else
+  echo "Source file not found"
+fi`,example:'Copy notes.txt to notes_backup.txt.',core:'cp receives the source filename and the new filename in the same current directory.',steps:['src=notes.txt.','dest=notes_backup.txt.','Check notes.txt exists.','Run cp notes.txt notes_backup.txt.','A new copy is created.'],result:'notes_backup.txt is created.'},
+{title:'Copy a File Between Two Directories',q:'Write a shell script to copy a file between two directories.',code:`#!/bin/bash
+read -p "Enter source file path: " src
+read -p "Enter destination directory: " dest
+if [ -f "$src" ] && [ -d "$dest" ]; then
+  cp "$src" "$dest/"
+  echo "File copied"
+else
+  echo "Check source and destination"
+fi`,example:'Copy /home/student/docs/report.txt to /home/student/backup.',core:'Use the complete source path and destination directory with cp.',steps:['Read source path.','Read destination directory.','Check source file and destination directory exist.','Run cp source destination/.','report.txt appears in backup.'],result:'Copy created in /home/student/backup/report.txt.'},
+{title:'Compare Two Data Files — Unique and Common Entries',q:'Write a shell script to create two data files and compare them to display unique and common entries.',code:`#!/bin/bash
+printf "apple\nmango\norange\n" > file1.txt
+printf "mango\norange\nbanana\n" > file2.txt
+sort file1.txt > f1
+sort file2.txt > f2
+echo "Common entries:"
+comm -12 f1 f2
+echo "Unique to file1:"
+comm -23 f1 f2
+echo "Unique to file2:"
+comm -13 f1 f2
+rm f1 f2`,example:'file1: apple, mango, orange. file2: mango, orange, banana.',core:'comm compares sorted files. -12 shows common lines; -23 and -13 show lines unique to each file.',steps:['Create file1.','Create file2.','Sort both files.','mango appears in both → common.','orange appears in both → common.','apple only in file1; banana only in file2.'],result:'Common: mango, orange. Unique: apple, banana.'},
+{title:'Count Vowels in a String',q:'Write a shell script to count the number of vowels in a string.',code:`#!/bin/bash
+read -p "Enter a string: " str
+count=0
+for ((i=0; i<${#str}; i++)); do
+  ch=${str:i:1}
+  case $ch in
+    [aeiouAEIOU]) count=$((count + 1)) ;;
+  esac
+done
+echo "Number of vowels = $count"`,example:'String = hello.',core:'Look at one character at a time and increase count when it matches a vowel.',steps:['count=0.','h → not vowel → 0.','e → vowel → 1.','l → not vowel → 1.','l → not vowel → 1.','o → vowel → 2.'],result:'Number of vowels = 2.'},
+{title:'Convert Uppercase to Lowercase and Vice Versa',q:'Write a shell script to convert uppercase characters to lowercase and vice versa.',code:`#!/bin/bash
+read -p "Enter a string: " str
+result=""
+for ((i=0; i<${#str}; i++)); do
+  ch=${str:i:1}
+  case $ch in
+    [A-Z]) result+=$(echo "$ch" | tr 'A-Z' 'a-z') ;;
+    [a-z]) result+=$(echo "$ch" | tr 'a-z' 'A-Z') ;;
+    *) result+="$ch" ;;
+  esac
+done
+echo "$result"`,example:'Input = AbCde.',core:'Uppercase letters are changed to lowercase; lowercase letters are changed to uppercase.',steps:['A → a.','b → B.','C → c.','d → D.','e → E.','Join the converted characters.'],result:'aBcDE'},
+{title:'Pattern Matching in a File',q:'Write a shell script to accept a word and perform pattern matching in a given file.',code:`#!/bin/bash
+read -p "Enter file name: " file
+read -p "Enter word to search: " word
+if [ -f "$file" ]; then
+  grep -n "$word" "$file"
+else
+  echo "File not found"
+fi`,example:'Search word = error in a file containing “Network error”.',core:'grep searches the file and prints lines containing the requested word.',steps:['Read file name.','Read word: error.','Line 1 has no error → skip.','Line 2 contains Network error → print it.','Line 3 has no error → skip.'],result:'Matched line: Network error'},
+{title:'Factorial of a Number',q:'Write a shell script to find the factorial of a number.',code:`#!/bin/bash
+read -p "Enter a number: " n
+fact=1
+for ((i=1; i<=n; i++)); do
+  fact=$((fact * i))
+done
+echo "Factorial = $fact"`,example:'Number = 5.',core:'Start at 1 and multiply by every integer from 1 through n.',steps:['fact=1.','i=1 → fact=1.','i=2 → fact=2.','i=3 → fact=6.','i=4 → fact=24.','i=5 → fact=120.'],result:'5! = 120.'},
+{title:'Zombie Process and Orphan Process — Menu Demo',q:'Write a menu-driven program to demonstrate the zombie process and orphan process.',code:`#!/bin/bash
+echo "1. Zombie process"
+echo "2. Orphan process"
+read -p "Enter choice: " ch
+case $ch in
+  1)
+    echo "Zombie concept: child exits before parent collects status"
+    (exit 0) &
+    child=$!
+    echo "Child PID: $child"
+    echo "Parent waits before collecting child status"
+    sleep 5
+    wait $child
+    ;;
+  2)
+    echo "Starting child in background..."
+    (sleep 10; echo "Child is still running") &
+    echo "Child PID: $!"
+    echo "Parent shell script now ends"
+    ;;
+  *) echo "Invalid choice" ;;
+esac`,example:'Menu: choose 1 for zombie concept or 2 for orphan concept.',core:'Zombie means a child has finished but its exit status has not yet been collected. Orphan means the parent terminates while the child is still running. Note: Bash may automatically reap background children, so the zombie option demonstrates the lifecycle idea rather than guaranteeing a visible Z state in ps.',steps:['Choice 1: parent starts child.','Child finishes first.','Parent has not yet collected status.','Parent later calls wait to collect it.','Choice 2: parent starts a sleeping child.','Parent script ends while child is still running.','Child continues and is re-parented by the system.'],result:'Shows the difference between zombie and orphan process lifecycles.'}
 ];
-let current=0, stepIndex=0;
-function fillSelect(){const s=document.getElementById('programSelect');programs.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+p.title;s.appendChild(o)});}
-function loadProgram(){current=Number(document.getElementById('programSelect').value);stepIndex=0;const p=programs[current];document.getElementById('qno').textContent='Program '+(current+1);document.getElementById('questionText').textContent=p.q;document.getElementById('simTitle').textContent=p.title;document.getElementById('exampleText').textContent=p.example;document.getElementById('coreIdea').textContent=p.core;document.getElementById('resultBox').innerHTML='<b>Final result:</b> '+p.result;renderTrace();}
-function renderTrace(){const p=programs[current];const box=document.getElementById('traceScreen');box.innerHTML='';p.steps.forEach((t,i)=>{const d=document.createElement('div');d.className='trace-line'+(i<stepIndex?' done':i===stepIndex?' current':'');d.textContent=(i+1)+'. '+t;box.appendChild(d)});}
-function nextStep(){const p=programs[current];if(stepIndex<p.steps.length){stepIndex++;renderTrace();}}
-function runAll(){stepIndex=programs[current].steps.length;renderTrace();}
-function resetTrace(){stepIndex=0;renderTrace();}
-fillSelect();loadProgram();
-</script>
-</body>
-</html>
+let current=0,stepIndex=0;function fillSelect(){const s=document.getElementById('programSelect');programs.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+p.title;s.appendChild(o)})}function loadProgram(){current=Number(document.getElementById('programSelect').value);stepIndex=0;const p=programs[current];document.getElementById('qno').textContent='Program '+(current+1);document.getElementById('questionText').textContent=p.q;document.getElementById('shellCode').textContent=p.code;document.getElementById('simTitle').textContent=p.title;document.getElementById('exampleText').textContent=p.example;document.getElementById('coreIdea').textContent=p.core;document.getElementById('resultBox').innerHTML='<b>Final result:</b> '+p.result;renderTrace()}function renderTrace(){const p=programs[current],box=document.getElementById('traceScreen');box.innerHTML='';p.steps.forEach((t,i)=>{const d=document.createElement('div');d.className='trace-line'+(i<stepIndex?' done':i===stepIndex?' current':'');d.textContent=(i+1)+'. '+t;box.appendChild(d)})}function nextStep(){if(stepIndex<programs[current].steps.length){stepIndex++;renderTrace()}}function runAll(){stepIndex=programs[current].steps.length;renderTrace()}function resetTrace(){stepIndex=0;renderTrace()}fillSelect();loadProgram();</script></body></html>

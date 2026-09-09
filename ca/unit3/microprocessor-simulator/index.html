@@ -36,15 +36,18 @@
     <div class="board-scroll"><div class="datapath-board">
       <svg class="wires" viewBox="0 0 1100 650" preserveAspectRatio="none" aria-hidden="true">
         <defs><marker id="arrowData" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z"/></marker><marker id="arrowCtrl" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z"/></marker></defs>
-        <g id="wireBusMux" class="data-wire"><path d="M410 82 L410 220 L515 220"/><text id="wireBusMuxLabel" x="425" y="205">0000</text></g>
+        <!-- MUX data inputs enter horizontally from the left -->
+        <g id="wireBusMux" class="data-wire"><path d="M410 82 L410 220 L515 220"/><text id="wireBusMuxLabel" x="430" y="208">0000</text></g>
+        <g id="wireAdderMux" class="data-wire"><path d="M770 380 L455 380 L455 270 L515 270"/><text id="wireAdderMuxLabel" x="470" y="292">0000</text></g>
+        <!-- MUX output leaves horizontally to the right, then goes to A -->
+        <g id="wireMuxA" class="data-wire"><path d="M635 245 L760 245 L760 150 L805 150"/><text id="wireMuxALabel" x="655" y="232">0000</text></g>
         <g id="wireBusB" class="data-wire"><path d="M410 82 L410 520 L780 520"/><text id="wireBusBLabel" x="430" y="505">0000</text></g>
-        <g id="wireMuxA" class="data-wire"><path d="M635 220 L760 220 L760 150 L805 150"/><text id="wireMuxALabel" x="655" y="205">0000</text></g>
         <g id="wireAAdder" class="data-wire"><path d="M925 225 L925 300 L850 300 L850 345"/><text id="wireAAdderLabel" x="875" y="286">0000</text></g>
         <g id="wireBAdder" class="data-wire"><path d="M900 465 L900 440 L850 440 L850 420"/><text id="wireBAdderLabel" x="910" y="455">0000</text></g>
-        <g id="wireAdderMux" class="data-wire"><path d="M770 380 L690 380 L690 270 L575 270"/><text id="wireAdderMuxLabel" x="700" y="365">0000</text></g>
         <g id="wireCtrlA" class="control-wire"><path d="M255 255 L340 255 L340 125 L805 125"/><text x="360" y="116">LOAD_A</text></g>
         <g id="wireCtrlB" class="control-wire"><path d="M255 300 L315 300 L315 550 L780 550"/><text x="335" y="567">LOAD_B</text></g>
-        <g id="wireCtrlMux" class="control-wire"><path d="M255 345 L500 345 L500 250 L515 250"/><text x="370" y="335">SEL_A</text></g>
+        <!-- SEL_A enters the MUX from the bottom -->
+        <g id="wireCtrlMux" class="control-wire"><path d="M255 345 L575 345 L575 305"/><text x="465" y="336">SEL_A</text></g>
       </svg>
 
       <div class="board-bus"><span>4-BIT DATA BUS</span><b id="wireBusValue">0000</b></div>

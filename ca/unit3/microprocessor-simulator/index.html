@@ -10,7 +10,7 @@
 <header class="sitebar"><a class="brand" href="../../../">CS <span>Visual</span></a><nav><a href="../../">Computer Architecture</a><a href="../">Unit III</a></nav></header>
 <main>
   <section class="hero">
-    <div><div class="kicker">Build the CPU from first principles</div><h1>4-bit Microprocessor Simulator</h1><p>Put a value on the data bus, arm one instruction, and watch the controller, datapath wires, clock and individual flip-flops.</p></div>
+    <div><div class="kicker">Build the CPU from first principles</div><h1>4-bit Microprocessor Simulator</h1><p>Press and hold an instruction to inspect the controller and active wiring. Release it to create one rising clock edge and latch the new register state.</p></div>
     <div class="clock-card"><div class="clock-title">CLOCK</div><div id="clockLamp" class="clock-lamp low">0</div><div class="clock-actions"><button id="stepClock">Pulse clock</button><button id="runClock" class="secondary">Run</button></div><label>Speed <input id="speed" type="range" min="200" max="1600" step="100" value="800"></label><div id="edgeCount" class="edge-count">Rising edges: 0</div></div>
   </section>
 
@@ -21,18 +21,18 @@
   </section>
 
   <section class="control-panel">
-    <div class="panel-head"><div><span class="eyebrow">2 · Arm one instruction</span><h2>Instruction Input</h2></div><div id="instructionBadge" class="instruction-badge">NOP · 00</div></div>
+    <div class="panel-head"><div><span class="eyebrow">2 · Press and hold an instruction</span><h2>Instruction Input</h2></div><div id="instructionBadge" class="instruction-badge">IDLE · 00</div></div>
     <div class="instruction-buttons">
       <button data-op="NOP" class="instruction">00 · NOP</button>
       <button data-op="LDA" class="instruction">01 · LOAD A</button>
       <button data-op="LDB" class="instruction">10 · LOAD B</button>
       <button data-op="ADD" class="instruction">11 · ADD</button>
     </div>
-    <p id="microExplain" class="micro-explain">Select an instruction. It executes exactly once on the next rising edge.</p>
+    <p id="microExplain" class="micro-explain">Press and HOLD an instruction to see which control signals and wires become active. RELEASE it to generate one rising edge and latch the result.</p>
   </section>
 
   <section class="cpu-stage">
-    <div class="stage-title"><span class="eyebrow">3 · Watch controller + datapath</span><h2>Inside the processor</h2><p>The thick lines are 4-bit data paths. Thin dashed lines are 1-bit control signals. Active paths glow.</p></div>
+    <div class="stage-title"><span class="eyebrow">3 · Watch controller + datapath</span><h2>Inside the processor</h2><p>The thick lines are 4-bit data paths. Thin dashed lines are 1-bit control signals. Active paths glow while the instruction button is held.</p></div>
     <div class="board-scroll"><div class="datapath-board">
       <svg class="wires" viewBox="0 0 1100 650" preserveAspectRatio="none" aria-hidden="true">
         <defs><marker id="arrowData" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z"/></marker><marker id="arrowCtrl" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z"/></marker></defs>
@@ -58,7 +58,7 @@
         <div class="ctrl-output"><span>LOAD_A</span><b id="sigLoadA">0</b></div>
         <div class="ctrl-output"><span>LOAD_B</span><b id="sigLoadB">0</b></div>
         <div class="ctrl-output"><span>SEL_A</span><b id="sigSelA">0</b></div>
-        <div class="ctrl-note" id="ctrlMeaning">No instruction armed</div>
+        <div class="ctrl-note" id="ctrlMeaning">Controller outputs are 0</div>
       </aside>
 
       <div class="mux-card board-mux" id="muxCard">
@@ -101,7 +101,7 @@
     <div class="history-wrap"><table><thead><tr><th>Edge</th><th>Instruction</th><th>Bus</th><th>A before</th><th>B before</th><th>A after</th><th>B after</th><th>What happened?</th></tr></thead><tbody id="history"></tbody></table></div>
   </section>
 
-  <section class="lesson-panel"><h2>Try this</h2><ol><li>Bus = <code>0101</code>, select <b>LOAD A</b>. Watch the controller assert LOAD_A and the bus→MUX→A path glow. Pulse clock.</li><li>Bus = <code>0011</code>, select <b>LOAD B</b>. Watch LOAD_B and bus→B. Pulse clock.</li><li>Select <b>ADD</b>. A and B feed the adder continuously; SUM returns through the MUX. Pulse once.</li><li>A becomes <code>1000</code>, and ADD automatically clears to NOP so it does not keep adding every clock.</li></ol></section>
+  <section class="lesson-panel"><h2>Try the physical-control view</h2><ol><li>Bus = <code>0101</code>. Press and HOLD <b>LOAD A</b>. Observe <code>01</code>, LOAD_A=1, SEL_A=0 and bus→MUX→A glowing. A must still show its old value.</li><li>RELEASE <b>LOAD A</b>. One clock edge appears and A latches <code>0101</code>.</li><li>Bus = <code>0011</code>. Hold <b>LOAD B</b>, inspect LOAD_B and bus→B, then release to latch B.</li><li>Hold <b>ADD</b>. The controller shows <code>11</code>; A→Adder, B→Adder, SUM→MUX→A glow while A itself stays unchanged. Release ADD and A latches <code>1000</code>.</li></ol></section>
 </main>
 <script src="app.js"></script>
 </body>

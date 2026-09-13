@@ -32,5 +32,22 @@
     "status": "Solved",
     "path": "questions/c-pointer-array-output/",
     "references": []
+  },
+  {
+    "id": "c-char-pointer-endian-output-004",
+    "title": "C char pointer cast and byte order: determine the output",
+    "domain": "Programming Languages",
+    "topic": "C Programming",
+    "concepts": ["Pointers", "Type Casting", "Memory Representation", "Bytes", "Endianness", "Dereferencing"],
+    "subconcepts": ["int byte representation", "char pointer aliasing", "least-significant byte", "little-endian memory order", "hexadecimal conversion"],
+    "question_type": "Program Output / Conceptual",
+    "difficulty": "Foundation to Intermediate",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "Paper/year not yet verified.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/c-char-pointer-endian-output/",
+    "references": []
   }
 ]

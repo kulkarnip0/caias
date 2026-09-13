@@ -5,65 +5,247 @@
 <title>Page Fault — Effective Memory Access Time</title>
 <link rel="stylesheet" href="../../question-visual-template.css">
 <style>
-:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#667085;--accent:#3157d5;--border:#dfe5ef;--shadow:0 12px 34px rgba(25,38,70,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,#edf2ff,var(--bg) 300px);color:var(--text);line-height:1.68}.wrap{width:min(1000px,calc(100% - 32px));margin:auto;padding:38px 0 72px}.back{color:var(--accent);font-weight:800;text-decoration:none}.eyebrow{margin-top:22px;color:var(--accent);font-weight:850;text-transform:uppercase;font-size:.8rem}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.08}.card{margin-top:22px;background:#fff;border:1px solid var(--border);border-radius:21px;padding:24px;box-shadow:var(--shadow)}.question{background:#fafbff;border-left:5px solid var(--accent);border-radius:12px;padding:18px}.step{display:none;margin-top:14px;border:1px solid var(--border);border-radius:16px;padding:18px}.step.show{display:block}.btn{border:0;border-radius:11px;padding:12px 17px;font:inherit;font-weight:800;cursor:pointer}.next{background:var(--accent);color:#fff}.reset{margin-left:8px}.formula{font-family:"Courier New",monospace;background:#f4f6fa;border-radius:12px;padding:14px;overflow:auto}.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{background:#eef2ff;color:#2947a3;border-radius:999px;padding:4px 9px;font-size:.8rem;font-weight:750}.truth{background:#eefbf3;border:1px solid #bfe8cc;border-radius:14px;padding:14px;margin-top:14px}.warn{background:#fff7ed;border:1px solid #f4cf9e;border-radius:14px;padding:14px;margin-top:14px}.story{background:#fffdf2;border:2px solid #f0dda1;border-radius:18px;padding:18px;margin-top:14px}.story h3{margin-top:0}.timeline{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:14px 0;min-width:650px}.slot{border:2px solid #ccd5e5;border-radius:9px;padding:10px 2px;text-align:center;font-weight:800}.fault{background:var(--learn-yellow-soft);border-color:var(--learn-yellow)}.scroll{overflow-x:auto}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini{border:2px solid var(--border);border-radius:14px;padding:16px}.big{font-size:1.35rem;font-weight:900;color:var(--accent)}.kidflow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin-top:16px}.kidbox{border:2px solid var(--border);border-radius:14px;padding:14px;text-align:center;background:#fff}.arrow{font-size:1.5rem;font-weight:900;color:var(--accent)}.hundred{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:14px;min-width:620px}.dot{height:30px;border:2px solid #d3dbe9;border-radius:7px;display:grid;place-items:center;font-size:.72rem;font-weight:800}.dot.bad{background:var(--learn-yellow-soft);border-color:var(--learn-yellow)}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--border);padding:10px;text-align:center}th{background:#f4f6fa}@media(max-width:700px){.two,.kidflow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);text-align:center}.reset{margin:8px 0 0}}
+:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#667085;--accent:#3157d5;--border:#dfe5ef;--shadow:0 12px 34px rgba(25,38,70,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,#edf2ff,var(--bg) 300px);color:var(--text);line-height:1.68}.wrap{width:min(1050px,calc(100% - 32px));margin:auto;padding:38px 0 72px}.back{color:var(--accent);font-weight:800;text-decoration:none}.eyebrow{margin-top:22px;color:var(--accent);font-weight:850;text-transform:uppercase;font-size:.8rem}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.08}.card{margin-top:22px;background:#fff;border:1px solid var(--border);border-radius:21px;padding:24px;box-shadow:var(--shadow)}.question{background:#fafbff;border-left:5px solid var(--accent);border-radius:12px;padding:18px}.step{display:none;margin-top:14px;border:1px solid var(--border);border-radius:16px;padding:18px}.step.show{display:block}.btn{border:0;border-radius:11px;padding:12px 17px;font:inherit;font-weight:800;cursor:pointer}.next{background:var(--accent);color:#fff}.reset{margin-left:8px}.formula{font-family:"Courier New",monospace;background:#f4f6fa;border-radius:12px;padding:14px;overflow:auto;white-space:pre-wrap}.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{background:#eef2ff;color:#2947a3;border-radius:999px;padding:4px 9px;font-size:.8rem;font-weight:750}.truth{background:#eefbf3;border:1px solid #bfe8cc;border-radius:14px;padding:14px;margin-top:14px}.warn{background:#fff7ed;border:1px solid #f4cf9e;border-radius:14px;padding:14px;margin-top:14px}.story{background:#fffdf2;border:2px solid #f0dda1;border-radius:18px;padding:18px;margin-top:14px}.story h3{margin-top:0}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mini{border:2px solid var(--border);border-radius:14px;padding:16px}.big{font-size:1.35rem;font-weight:900;color:var(--accent)}.kidflow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin-top:16px}.kidbox{border:2px solid var(--border);border-radius:14px;padding:14px;text-align:center;background:#fff}.arrow{font-size:1.5rem;font-weight:900;color:var(--accent)}.scroll{overflow-x:auto}.hundred{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:14px;min-width:620px}.dot{height:30px;border:2px solid #d3dbe9;border-radius:7px;display:grid;place-items:center;font-size:.72rem;font-weight:800}.dot.bad{background:var(--learn-yellow-soft);border-color:var(--learn-yellow)}.timeline{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:14px 0;min-width:650px}.slot{border:2px solid #ccd5e5;border-radius:9px;padding:10px 2px;text-align:center;font-weight:800}.fault{background:var(--learn-yellow-soft);border-color:var(--learn-yellow)}.equation{font-size:1.18rem;font-weight:850;text-align:center;margin:14px 0}.flowline{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0}.pill{border:2px solid var(--border);border-radius:999px;padding:8px 13px;font-weight:850;background:#fff}.pill.good{background:#eefbf3;border-color:#bfe8cc}.pill.bad{background:#fff7ed;border-color:#f4cf9e}.why{border-left:5px solid var(--accent);background:#f7f9ff;padding:14px 16px;border-radius:10px;margin-top:14px}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--border);padding:10px;text-align:center}th{background:#f4f6fa}@media(max-width:700px){.two,.three,.kidflow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);text-align:center}.reset{margin:8px 0 0}}
 </style>
-</head><body><main class="wrap">
+</head>
+<body><main class="wrap">
 <a class="back" href="../../">← Back to question bank</a>
 <div class="eyebrow">Operating Systems • Virtual Memory • Page Faults</div>
 <h1>Effective memory access time when a page fault occurs once in 100 instructions</h1>
-<section class="card"><h2>Question</h2><div class="question">Given memory access time as <b>p nanoseconds</b> and additional <b>q nanoseconds</b> for handling the page fault. What is the effective memory access time if a page fault occurs once for every 100 instructions?</div><p><b>Options:</b> A) p + q/100 &nbsp;&nbsp; B) (p + q)/100 &nbsp;&nbsp; C) p + q &nbsp;&nbsp; D) p/100 + q</p><div class="tags"><span class="tag">Operating Systems</span><span class="tag">Virtual Memory</span><span class="tag">Page Fault</span><span class="tag">Effective Access Time</span><span class="tag">Probability</span></div></section>
 
-<section class="card"><h2>First understand it like a small kid</h2>
-<div class="story"><h3>Imagine a child fetching a toy from a cupboard</h3><p>Every time the child goes to the cupboard and gets the toy normally, it takes <b>p</b> seconds.</p><p>But once in a while, the toy is <b>not in the cupboard</b>. The child must go to the store room, bring it back, and then continue. That extra trouble takes <b>q</b> seconds.</p><div class="kidflow"><div class="kidbox"><b>Normal trip</b><br>cupboard has toy<br><strong>time = p</strong></div><div class="arrow">→</div><div class="kidbox"><b>Rare bad trip</b><br>toy missing<br><strong>extra = q</strong></div><div class="arrow">→</div><div class="kidbox"><b>Bad trip total</b><br>normal work + extra work<br><strong>p + q</strong></div></div></div>
-<div class="truth"><b>Computer version:</b> RAM is like the cupboard. If the needed page is not in RAM, that is a <b>page fault</b>. The computer spends the normal memory time <b>p</b>, plus an extra page-fault handling time <b>q</b>.</div>
-<div class="story"><h3>Now imagine exactly 100 trips</h3><p>Suppose the child makes 100 trips. The question says only <b>1 out of 100</b> trips has the problem.</p><div class="scroll"><div class="hundred"><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot bad">p+q</div></div></div><p>So there are <b>99 normal trips</b> and <b>1 troublesome trip</b>.</p></div>
+<section class="card">
+<h2>Question</h2>
+<div class="question">Given memory access time as <b>p nanoseconds</b> and additional <b>q nanoseconds</b> for handling the page fault. What is the effective memory access time if a page fault occurs once for every 100 instructions?</div>
+<p><b>Options:</b> A) p + q/100 &nbsp;&nbsp; B) (p + q)/100 &nbsp;&nbsp; C) p + q &nbsp;&nbsp; D) p/100 + q</p>
+<div class="tags"><span class="tag">Operating Systems</span><span class="tag">Virtual Memory</span><span class="tag">Page Fault</span><span class="tag">Effective Access Time</span><span class="tag">Probability</span></div>
+</section>
 
-<div class="truth"><b>The whole trick:</b> <code>p</code> happens on every one of the 100 accesses. <code>q</code> happens only once. So after averaging, all the p's remain as <b>p</b>, while the single q gets spread across 100 accesses and becomes <b>q/100</b>.</div>
+<section class="card">
+<h2>First understand the story — no formula yet</h2>
+<div class="story">
+<h3>Imagine a child fetching a toy from a cupboard</h3>
+<p>Every time the child needs a toy, the child first looks in the nearby cupboard. If the toy is there, the job is easy. Suppose that normal trip takes <b>p seconds</b>.</p>
+<p>Sometimes the toy is not in the cupboard. Then the child has to go to a far-away store room, bring the toy back, put it in the cupboard, and continue. Suppose that extra trouble takes <b>q seconds</b>.</p>
+<div class="kidflow">
+<div class="kidbox"><b>Normal trip</b><br>toy is in cupboard<br><strong>time = p</strong></div>
+<div class="arrow">→</div>
+<div class="kidbox"><b>Toy missing</b><br>must fetch from store room<br><strong>extra = q</strong></div>
+<div class="arrow">→</div>
+<div class="kidbox"><b>Faulting trip</b><br>normal work + extra work<br><strong>time = p + q</strong></div>
+</div>
+</div>
+<div class="truth"><b>Computer version:</b> RAM is like the nearby cupboard. A needed page that is not in RAM causes a <b>page fault</b>. The normal memory-access time is <b>p</b>. Handling the fault adds another <b>q</b>.</div>
 
-<h2>Mental picture first</h2><div class="truth"><b>Do not start with a formula.</b> Imagine 100 instructions. Every instruction normally costs <b>p</b>. Only one of those 100 instructions pays one extra penalty <b>q</b>.</div><div class="scroll"><div class="timeline"><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot fault">p + q</div></div></div><p>The ten boxes are only a visual shortcut; the actual question says one fault in every <b>100</b> instructions.</p><button class="btn next" id="next">Start reasoning</button><button class="btn reset" id="reset" hidden>Start again</button><div id="steps">
+<div class="story">
+<h3>Now imagine exactly 100 trips</h3>
+<p>The question says the problem happens only <b>once for every 100 instructions</b>. So imagine 100 accesses. Ninety-nine are normal, and exactly one gets the extra <b>+q</b>.</p>
+<div class="scroll"><div class="hundred">
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div>
+<div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot">p</div><div class="dot bad">p+q</div>
+</div></div>
+<p>So the picture is: <b>99 × p</b> and <b>1 × (p+q)</b>.</p>
+</div>
 
-<div class="step"><h3>1. What does p mean?</h3><div class="formula">normal memory access time = p ns</div><p>For an instruction with no page fault, memory access simply takes <b>p nanoseconds</b>.</p><div class="story"><b>Kid picture:</b> every normal cupboard trip takes p seconds. Even when nothing goes wrong, this p time is always paid.</div></div>
+<div class="truth"><b>The whole trick:</b> p happens on all 100 accesses. q happens only once. So when we average, the 100 copies of p become just p, while the single q gets spread over 100 accesses and becomes q/100.</div>
 
-<div class="step"><h3>2. What does “additional q” mean?</h3><p>The word <b>additional</b> is very important. If a page fault happens, we still have the normal memory access cost <b>p</b>, and then we pay another <b>q</b> for handling the fault.</p><div class="formula">faulting access time = p + q</div><div class="warn"><b>Common mistake:</b> treating the faulting access as only q. The question says q is additional.</div><div class="story"><b>Kid picture:</b> the child still made the normal cupboard trip. The store-room trip is extra. So the bad trip is not q; it is <b>p + q</b>.</div></div>
+<h2>Now reveal the reasoning one small step at a time</h2>
+<button class="btn next" id="next">Start with what p means</button><button class="btn reset" id="reset" hidden>Start again</button>
+<div id="steps">
 
-<div class="step"><h3>3. What does “once for every 100 instructions” mean?</h3><p>Out of 100 instructions:</p><div class="two"><div class="mini"><div class="big">99 instructions</div><p>normal access</p><div class="formula">cost = p each</div></div><div class="mini"><div class="big">1 instruction</div><p>page fault</p><div class="formula">cost = p + q</div></div></div><p>Equivalently, the page-fault probability is:</p><div class="formula">page-fault rate = 1/100 = 0.01</div><div class="truth">Think literally: if you draw 100 boxes, only one box gets the extra +q.</div></div>
+<div class="step">
+<h3>1. What does memory access mean?</h3>
+<p>The CPU often needs something from memory: an instruction, a number, a variable, or some data. Asking RAM for that item is a <b>memory access</b>.</p>
+<div class="flowline"><span class="pill">CPU asks for data</span><span class="arrow">→</span><span class="pill">RAM gives data</span></div>
+<p>The question tells us one normal memory access takes:</p>
+<div class="formula">p nanoseconds</div>
+<div class="truth">So every normal access pays p.</div>
+</div>
 
-<div class="step"><h3>4. Why do we get 100p?</h3><p>This is the step that makes the whole question easy.</p><div class="formula">99 normal accesses = 99p
-1 faulting access   = p + q</div><p>Add them:</p><div class="formula">99p + (p + q)
+<div class="step">
+<h3>2. What is a page, and what is a page fault?</h3>
+<p>Programs are divided into chunks called <b>pages</b>. The CPU wants the needed page to be in fast main memory (RAM).</p>
+<div class="three">
+<div class="mini"><div class="big">Program page</div><p>A chunk of the program/data.</p></div>
+<div class="mini"><div class="big">RAM</div><p>Fast place where active pages should be.</p></div>
+<div class="mini"><div class="big">Page fault</div><p>The needed page is not currently in RAM.</p></div>
+</div>
+<div class="story"><b>Kid picture:</b> the toy exists, but it is not in the nearby cupboard. You must fetch it from somewhere farther away.</div>
+</div>
+
+<div class="step">
+<h3>3. What exactly does p mean?</h3>
+<div class="formula">normal memory access time = p ns</div>
+<p>If there is no page fault, the computer simply spends p nanoseconds.</p>
+<div class="why"><b>Important:</b> p is not a rare cost. p is the normal cost that happens every time.</div>
+</div>
+
+<div class="step">
+<h3>4. What exactly does “additional q” mean?</h3>
+<p>This one word — <b>additional</b> — is very important.</p>
+<p>If a page fault occurs, the computer does not magically skip the normal memory work. The fault creates <b>extra</b> work.</p>
+<div class="formula">normal part = p
+extra page-fault handling = q
+
+faulting access = p + q</div>
+<div class="story"><b>Kid picture:</b> you still went to the cupboard first. Only after discovering the toy was missing did you make the extra store-room trip.</div>
+<div class="warn"><b>Common mistake:</b> saying the faulting access costs only q. That would ignore the word “additional.”</div>
+</div>
+
+<div class="step">
+<h3>5. What does “once for every 100 instructions” mean?</h3>
+<p>Take a group of 100 instructions. In the simplified model intended by the question:</p>
+<div class="two">
+<div class="mini"><div class="big">99</div><p>do not suffer a page fault</p><div class="formula">time = p each</div></div>
+<div class="mini"><div class="big">1</div><p>suffers a page fault</p><div class="formula">time = p + q</div></div>
+</div>
+<p>The page-fault rate is therefore:</p>
+<div class="formula">1 / 100 = 0.01 = 1%</div>
+<div class="truth">If you draw 100 boxes, only one box gets the extra +q.</div>
+</div>
+
+<div class="step">
+<h3>6. Count the p's before doing any algebra</h3>
+<p>This is the easiest way to avoid confusion.</p>
+<div class="formula">Instruction 1  → p
+Instruction 2  → p
+Instruction 3  → p
+...
+Instruction 99 → p
+Instruction 100 → p + q</div>
+<p>How many copies of p are there?</p>
+<div class="equation">99 copies of p + 1 more copy of p = 100 copies of p</div>
+<div class="truth">The page fault adds q. It does not remove the p from that instruction.</div>
+</div>
+
+<div class="step">
+<h3>7. Total time for the 99 normal instructions</h3>
+<p>Each normal instruction costs p, and there are 99 of them:</p>
+<div class="formula">99 × p = 99p</div>
+</div>
+
+<div class="step">
+<h3>8. Time for the one faulting instruction</h3>
+<p>The one unlucky instruction pays the normal cost plus the extra fault cost:</p>
+<div class="formula">p + q</div>
+</div>
+
+<div class="step">
+<h3>9. Add all 100 instructions</h3>
+<p>Now combine the 99 normal instructions and the one faulting instruction:</p>
+<div class="formula">total time
+= 99p + (p + q)
 = 99p + p + q
-= 100p + q</div><div class="truth"><b>Why 100p?</b> Because every one of the 100 instructions performs the normal memory access. The fault does not remove p; it adds q.</div></div>
+= 100p + q</div>
+<div class="truth"><b>Pause here:</b> this is the total for all 100 instructions, not yet the average for one instruction.</div>
+</div>
 
-<div class="step"><h3>5. Calculate total time for 100 instructions</h3><p>The 99 normal instructions cost:</p><div class="formula">99p</div><p>The one faulting instruction costs:</p><div class="formula">p + q</div><p>So total time is:</p><div class="formula">99p + (p + q)
-= 100p + q</div></div>
+<div class="step">
+<h3>10. Why do we divide by 100?</h3>
+<p>The question asks for the <b>effective</b> or average access time. We just found the total time of a batch containing 100 accesses.</p>
+<div class="story"><p>If 100 children together use 1,100 seconds, and you want the average time per child, you divide the total by 100.</p></div>
+<div class="formula">average = total time / number of accesses
 
-<div class="step"><h3>6. Why do we divide by 100?</h3><p>We currently know the <b>total</b> time for 100 instructions. But the question asks for the <b>effective time of one typical instruction</b>.</p><div class="story"><p>Imagine 100 children together spent 1,100 seconds. If you want to know the average time for one child, you divide by 100.</p></div><div class="formula">average = total / number of accesses
+EAT = (100p + q) / 100</div>
+</div>
 
-EAT = (100p + q) / 100</div></div>
+<div class="step">
+<h3>11. Simplify very slowly</h3>
+<div class="formula">EAT = (100p + q) / 100</div>
+<p>Split the numerator into two pieces:</p>
+<div class="formula">EAT = 100p/100 + q/100</div>
+<p>Now simplify the first part:</p>
+<div class="formula">100p/100 = p</div>
+<p>So:</p>
+<div class="formula">EAT = p + q/100</div>
+<div class="truth"><b>Correct answer: A) p + q/100</b></div>
+</div>
 
-<div class="step"><h3>7. Now simplify very slowly</h3><div class="formula">EAT = (100p + q) / 100</div><p>Split the two parts:</p><div class="formula">EAT = 100p/100 + q/100</div><p>And:</p><div class="formula">100p/100 = p</div><p>Therefore:</p><div class="formula">EAT = p + q/100</div><div class="truth"><b>Answer: A) p + q/100</b></div></div>
+<div class="step">
+<h3>12. Why does p remain p, but q becomes q/100?</h3>
+<p>This is the most important idea in the whole question.</p>
+<div class="two">
+<div class="mini"><div class="big">p</div><p>p happens on <b>all 100</b> accesses.</p><div class="formula">100p / 100 = p</div><p>So averaging does not shrink the normal cost away.</p></div>
+<div class="mini"><div class="big">q</div><p>q happens on only <b>1 of the 100</b> accesses.</p><div class="formula">q / 100</div><p>So the rare extra cost is spread across all 100 accesses.</p></div>
+</div>
+<div class="flowline"><span class="pill good">normal cost every time = p</span><span class="arrow">+</span><span class="pill bad">rare extra cost = q/100</span></div>
+</div>
 
-<div class="step"><h3>8. Why only q gets divided by 100 in the final answer</h3><p>This is the most important intuition.</p><div class="two"><div class="mini"><div class="big">p</div><p>happens 100 times out of 100</p><div class="formula">100p / 100 = p</div></div><div class="mini"><div class="big">q</div><p>happens only 1 time out of 100</p><div class="formula">q / 100</div></div></div><div class="truth">So the average is simply <b>normal cost every time + tiny share of the rare penalty</b>.</div></div>
+<div class="step">
+<h3>13. Same answer using probability</h3>
+<p>Once the 100-access picture is clear, the probability formula becomes easy.</p>
+<table><tr><th>Case</th><th>Probability</th><th>Time</th></tr><tr><td>No page fault</td><td>99/100</td><td>p</td></tr><tr><td>Page fault</td><td>1/100</td><td>p + q</td></tr></table>
+<div class="formula">EAT
+= (99/100)p + (1/100)(p + q)
+= 99p/100 + p/100 + q/100
+= 100p/100 + q/100
+= p + q/100</div>
+<div class="truth">This is exactly the same reasoning as the 100-box method, just written using probabilities.</div>
+</div>
 
-<div class="step"><h3>9. Same answer using probability</h3><table><tr><th>Case</th><th>Probability</th><th>Time</th></tr><tr><td>No page fault</td><td>99/100</td><td>p</td></tr><tr><td>Page fault</td><td>1/100</td><td>p + q</td></tr></table><div class="formula">EAT = (99/100)p + (1/100)(p + q)
-    = 99p/100 + p/100 + q/100
-    = p + q/100</div></div>
+<div class="step">
+<h3>14. Tiny numerical example</h3>
+<p>Use easy numbers so you can feel what the formula is doing.</p>
+<div class="formula">p = 10 ns
+q = 100 ns</div>
+<p>For 99 normal accesses:</p>
+<div class="formula">99 × 10 = 990 ns</div>
+<p>For the one faulting access:</p>
+<div class="formula">10 + 100 = 110 ns</div>
+<p>Total for 100 accesses:</p>
+<div class="formula">990 + 110 = 1100 ns</div>
+<p>Average per access:</p>
+<div class="formula">1100 / 100 = 11 ns</div>
+<p>Now check the formula:</p>
+<div class="formula">p + q/100
+= 10 + 100/100
+= 10 + 1
+= 11 ns</div>
+<div class="truth">The extra 100 ns fault penalty happens only once in 100 accesses, so it adds only 1 ns to the average.</div>
+</div>
 
-<div class="step"><h3>10. Why is option B wrong?</h3><div class="formula">(p + q)/100   ← WRONG</div><p>This divides the normal memory cost <b>p</b> by 100. But memory access happens for every instruction, not once per 100 instructions. Only the <b>extra page-fault penalty q</b> is spread over 100 instructions.</p><div class="truth">That is the intuition to remember: <b>normal cost p every time + rare penalty q/100</b>.</div></div>
+<div class="step">
+<h3>15. Why are the other options wrong?</h3>
+<table>
+<tr><th>Option</th><th>Why</th></tr>
+<tr><td><b>A) p + q/100</b></td><td>Correct: p happens every time; q happens once in 100.</td></tr>
+<tr><td>B) (p + q)/100</td><td>Wrong because it divides the normal p by 100, even though p happens on every access.</td></tr>
+<tr><td>C) p + q</td><td>Wrong because it acts as though a page fault happens on every access.</td></tr>
+<tr><td>D) p/100 + q</td><td>Wrong for both reasons: it makes p rare and q happen every time, exactly opposite to the question.</td></tr>
+</table>
+</div>
 
-<div class="step"><h3>11. Tiny numerical example</h3><p>Suppose:</p><div class="formula">p = 10 ns
-q = 1000 ns</div><p>99 normal accesses:</p><div class="formula">99 × 10 = 990 ns</div><p>One faulting access:</p><div class="formula">10 + 1000 = 1010 ns</div><p>Total for 100:</p><div class="formula">990 + 1010 = 2000 ns</div><p>Average:</p><div class="formula">2000 / 100 = 20 ns</div><p>Our formula gives the same:</p><div class="formula">p + q/100
-= 10 + 1000/100
-= 10 + 10
-= 20 ns</div></div>
+<div class="step">
+<h3>16. One picture to remember for the exam</h3>
+<div class="formula">100 accesses:
 
-<div class="step"><h3>12. One line to remember</h3><div class="formula">100 accesses:
-99 × p
-+ 1 × (p + q)
-= 100p + q
+99 normal:       99p
+1 page fault:    p + q
+                 -----
+total:           100p + q
 
-average = (100p + q)/100
-        = p + q/100</div><div class="key-insight"><b>Final answer: (a) p + q/100.</b></div><div class="story"><b>Memory sentence:</b> “p happens every time; q happens only once in 100.”</div></div>
+average:
+(100p + q)/100
+= p + q/100</div>
+<div class="key-insight"><b>Memory sentence:</b> “Normal cost p every time, rare extra cost q only once in 100.”</div>
+<div class="warn"><b>Exam-model note:</b> the question is using the simplified interpretation that the stated page-fault frequency applies to the accesses/instructions being averaged. Under that intended model, the answer is unambiguously <b>A</b>.</div>
+</div>
 
-</div></section></main>
-<script>const s=[...document.querySelectorAll('.step')],n=document.getElementById('next'),r=document.getElementById('reset');let i=0;const l=['Next: what does additional q mean?','Next: interpret 1 in 100','Next: why 100p?','Next: total for 100','Next: why divide by 100?','Next: simplify slowly','Next: why only q/100?','Next: probability method','Next: why B is wrong','Next: numerical example','Final memory rule','Completed'];n.addEventListener('click',()=>{if(i<s.length){s[i].classList.add('show');s[i].scrollIntoView({behavior:'smooth',block:'nearest'});i++;r.hidden=false;n.textContent=l[i-1]}if(i===s.length)n.disabled=true});r.addEventListener('click',()=>{i=0;s.forEach(e=>e.classList.remove('show'));n.disabled=false;n.textContent='Start reasoning';r.hidden=true})</script>
+</div>
+</section>
+</main>
+<script>
+const s=[...document.querySelectorAll('.step')],n=document.getElementById('next'),r=document.getElementById('reset');let i=0;
+const l=['Next: what is a page fault?','Next: what does p mean?','Next: understand additional q','Next: interpret 1 in 100','Next: count the p values','Next: 99 normal accesses','Next: one faulting access','Next: add all 100','Next: why divide by 100?','Next: simplify slowly','Next: why p but q/100?','Next: probability method','Next: numerical example','Next: check wrong options','Final memory picture','Completed'];
+n.addEventListener('click',()=>{if(i<s.length){s[i].classList.add('show');s[i].scrollIntoView({behavior:'smooth',block:'nearest'});i++;r.hidden=false;n.textContent=l[i-1]}if(i===s.length)n.disabled=true});
+r.addEventListener('click',()=>{i=0;s.forEach(e=>e.classList.remove('show'));n.disabled=false;n.textContent='Start with what p means';r.hidden=true});
+</script>
 </body></html>

@@ -49,5 +49,22 @@
     "status": "Solved",
     "path": "questions/c-char-pointer-endian-output/",
     "references": []
+  },
+  {
+    "id": "os-page-fault-effective-access-005",
+    "title": "Page fault frequency and effective memory access time",
+    "domain": "Operating Systems",
+    "topic": "Virtual Memory",
+    "concepts": ["Page Fault", "Effective Access Time", "Virtual Memory", "Probability", "Average Cost"],
+    "subconcepts": ["page-fault rate", "additional page-fault penalty", "weighted average", "amortized overhead"],
+    "question_type": "Numerical / Conceptual",
+    "difficulty": "Foundation",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "Paper/year not yet verified.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/page-fault-effective-access-time/",
+    "references": []
   }
 ]

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Page Fault — Effective Memory Access Time</title>
+<link rel="stylesheet" href="../../question-visual-template.css">
+<style>
+:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#667085;--accent:#3157d5;--border:#dfe5ef;--shadow:0 12px 34px rgba(25,38,70,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,#edf2ff,var(--bg) 300px);color:var(--text);line-height:1.68}.wrap{width:min(1000px,calc(100% - 32px));margin:auto;padding:38px 0 72px}.back{color:var(--accent);font-weight:800;text-decoration:none}.eyebrow{margin-top:22px;color:var(--accent);font-weight:850;text-transform:uppercase;font-size:.8rem}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.08}.card{margin-top:22px;background:#fff;border:1px solid var(--border);border-radius:21px;padding:24px;box-shadow:var(--shadow)}.question{background:#fafbff;border-left:5px solid var(--accent);border-radius:12px;padding:18px}.step{display:none;margin-top:14px;border:1px solid var(--border);border-radius:16px;padding:18px}.step.show{display:block}.btn{border:0;border-radius:11px;padding:12px 17px;font:inherit;font-weight:800;cursor:pointer}.next{background:var(--accent);color:#fff}.reset{margin-left:8px}.formula{font-family:"Courier New",monospace;background:#f4f6fa;border-radius:12px;padding:14px;overflow:auto}.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{background:#eef2ff;color:#2947a3;border-radius:999px;padding:4px 9px;font-size:.8rem;font-weight:750}.truth{background:#eefbf3;border:1px solid #bfe8cc;border-radius:14px;padding:14px;margin-top:14px}.warn{background:#fff7ed;border:1px solid #f4cf9e;border-radius:14px;padding:14px;margin-top:14px}.timeline{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:14px 0;min-width:650px}.slot{border:2px solid #ccd5e5;border-radius:9px;padding:10px 2px;text-align:center;font-weight:800}.fault{background:var(--learn-yellow-soft);border-color:var(--learn-yellow)}.scroll{overflow-x:auto}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini{border:2px solid var(--border);border-radius:14px;padding:16px}.big{font-size:1.35rem;font-weight:900;color:var(--accent)}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--border);padding:10px;text-align:center}th{background:#f4f6fa}@media(max-width:700px){.two{grid-template-columns:1fr}.reset{margin:8px 0 0}}
+</style>
+</head><body><main class="wrap">
+<a class="back" href="../../">← Back to question bank</a>
+<div class="eyebrow">Operating Systems • Virtual Memory • Page Faults</div>
+<h1>Effective memory access time when a page fault occurs once in 100 instructions</h1>
+<section class="card"><h2>Question</h2><div class="question">Given memory access time as <b>p nanoseconds</b> and additional <b>q nanoseconds</b> for handling the page fault. What is the effective memory access time if a page fault occurs once for every 100 instructions?</div><p><b>Options:</b> A) p + q/100 &nbsp;&nbsp; B) (p + q)/100 &nbsp;&nbsp; C) p + q &nbsp;&nbsp; D) p/100 + q</p><div class="tags"><span class="tag">Operating Systems</span><span class="tag">Virtual Memory</span><span class="tag">Page Fault</span><span class="tag">Effective Access Time</span><span class="tag">Probability</span></div></section>
+
+<section class="card"><h2>Mental picture first</h2><div class="truth"><b>Do not start with a formula.</b> Imagine 100 instructions. Every instruction normally costs <b>p</b>. Only one of those 100 instructions pays one extra penalty <b>q</b>.</div><div class="scroll"><div class="timeline"><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot">p</div><div class="slot fault">p + q</div></div></div><p>The ten boxes are only a visual shortcut; the actual question says one fault in every <b>100</b> instructions.</p><button class="btn next" id="next">Start reasoning</button><button class="btn reset" id="reset" hidden>Start again</button><div id="steps">
+
+<div class="step"><h3>1. What does p mean?</h3><div class="formula">normal memory access time = p ns</div><p>For an instruction with no page fault, memory access simply takes <b>p nanoseconds</b>.</p></div>
+
+<div class="step"><h3>2. What does “additional q” mean?</h3><p>The word <b>additional</b> is very important. If a page fault happens, we still have the normal memory access cost <b>p</b>, and then we pay another <b>q</b> for handling the fault.</p><div class="formula">faulting access time = p + q</div><div class="warn"><b>Common mistake:</b> treating the faulting access as only q. The question says q is additional.</div></div>
+
+<div class="step"><h3>3. What does “once for every 100 instructions” mean?</h3><p>Out of 100 instructions:</p><div class="two"><div class="mini"><div class="big">99 instructions</div><p>normal access</p><div class="formula">cost = p each</div></div><div class="mini"><div class="big">1 instruction</div><p>page fault</p><div class="formula">cost = p + q</div></div></div><p>Equivalently, the page-fault probability is:</p><div class="formula">page-fault rate = 1/100 = 0.01</div></div>
+
+<div class="step"><h3>4. Calculate total time for 100 instructions</h3><p>The 99 normal instructions cost:</p><div class="formula">99p</div><p>The one faulting instruction costs:</p><div class="formula">p + q</div><p>So total time is:</p><div class="formula">99p + (p + q)
+= 100p + q</div></div>
+
+<div class="step"><h3>5. Convert total time into average time per instruction</h3><p>We calculated the time for 100 instructions. Effective access time asks for the <b>average per instruction</b>, so divide by 100:</p><div class="formula">EAT = (100p + q) / 100
+    = p + q/100</div><div class="truth"><b>Answer: A) p + q/100</b></div></div>
+
+<div class="step"><h3>6. Same answer using probability</h3><table><tr><th>Case</th><th>Probability</th><th>Time</th></tr><tr><td>No page fault</td><td>99/100</td><td>p</td></tr><tr><td>Page fault</td><td>1/100</td><td>p + q</td></tr></table><div class="formula">EAT = (99/100)p + (1/100)(p + q)
+    = 99p/100 + p/100 + q/100
+    = p + q/100</div></div>
+
+<div class="step"><h3>7. Why is option B wrong?</h3><div class="formula">(p + q)/100   ← WRONG</div><p>This divides the normal memory cost <b>p</b> by 100. But memory access happens for every instruction, not once per 100 instructions. Only the <b>extra page-fault penalty q</b> is spread over 100 instructions.</p><div class="truth">That is the intuition to remember: <b>normal cost p every time + rare penalty q/100</b>.</div></div>
+
+<div class="step"><h3>8. Tiny numerical example</h3><p>Suppose:</p><div class="formula">p = 10 ns
+q = 1000 ns</div><p>For 100 instructions:</p><div class="formula">100 × 10 + 1000 = 2000 ns</div><p>Average:</p><div class="formula">2000 / 100 = 20 ns</div><p>Our formula gives the same:</p><div class="formula">p + q/100
+= 10 + 1000/100
+= 10 + 10
+= 20 ns</div></div>
+
+<div class="step"><h3>One line to remember</h3><div class="formula">Effective time
+= normal cost every time
++ rare extra cost averaged over all instructions
+
+= p + q/100</div><div class="key-insight"><b>Final answer: (a) p + q/100.</b></div></div>
+
+</div></section></main>
+<script>const s=[...document.querySelectorAll('.step')],n=document.getElementById('next'),r=document.getElementById('reset');let i=0;const l=['Next: what does additional q mean?','Next: interpret 1 in 100','Next: total for 100 instructions','Next: average per instruction','Next: probability method','Next: why B is wrong','Next: numerical example','Final memory rule','Completed'];n.addEventListener('click',()=>{if(i<s.length){s[i].classList.add('show');s[i].scrollIntoView({behavior:'smooth',block:'nearest'});i++;r.hidden=false;n.textContent=l[i-1]}if(i===s.length)n.disabled=true});r.addEventListener('click',()=>{i=0;s.forEach(e=>e.classList.remove('show'));n.disabled=false;n.textContent='Start reasoning';r.hidden=true})</script>
+</body></html>

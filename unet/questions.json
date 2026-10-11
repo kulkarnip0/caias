@@ -4,25 +4,77 @@
     "title": "Token Ring: one-bit delay and equivalent cable length",
     "domain": "Computer Networks",
     "topic": "Data Communication",
-    "concepts": ["Data Rate", "Propagation Speed", "Bit Time", "Propagation Delay", "Token Ring"],
-    "subconcepts": ["bit length", "unit conversion", "distance = speed × time"],
-    "question_type": "Numerical / Conceptual", "difficulty": "Foundation", "exam": "UGC-NET / Assistant Professor preparation", "source_year": null, "source_year_note": "User recalls that it may be from a 2024 paper; not yet verified.", "source_verified": false, "status": "Solved", "path": "questions/token-ring-bit-delay/", "references": []
+    "concepts": [
+      "Data Rate",
+      "Propagation Speed",
+      "Bit Time",
+      "Propagation Delay",
+      "Token Ring"
+    ],
+    "subconcepts": [
+      "bit length",
+      "unit conversion",
+      "distance = speed × time"
+    ],
+    "question_type": "Numerical / Conceptual",
+    "difficulty": "Foundation",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "User recalls that it may be from a 2024 paper; not yet verified.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/token-ring-bit-delay/",
+    "references": []
   },
   {
     "id": "algo-recurrence-order-002",
     "title": "Arrange recurrence relations in increasing order of time complexity",
-    "domain": "Algorithms", "topic": "Analysis of Algorithms",
-    "concepts": ["Recurrence Relations", "Time Complexity", "Recursion Tree", "Divide and Conquer", "Asymptotic Analysis"],
-    "subconcepts": ["number of recursive subproblems", "problem-size reduction", "work per recursion level", "recursion depth", "Master Theorem", "Big-Theta comparison"],
-    "question_type": "Ordering / Conceptual / Numerical Analysis", "difficulty": "Foundation to Intermediate", "exam": "UGC-NET / Assistant Professor preparation", "source_year": null, "source_year_note": "Paper/year not yet verified.", "source_verified": false, "status": "Solved", "path": "questions/recurrence-increasing-order/", "references": []
+    "domain": "Algorithms",
+    "topic": "Analysis of Algorithms",
+    "concepts": [
+      "Recurrence Relations",
+      "Time Complexity",
+      "Recursion Tree",
+      "Divide and Conquer",
+      "Asymptotic Analysis"
+    ],
+    "subconcepts": [
+      "number of recursive subproblems",
+      "problem-size reduction",
+      "work per recursion level",
+      "recursion depth",
+      "Master Theorem",
+      "Big-Theta comparison"
+    ],
+    "question_type": "Ordering / Conceptual / Numerical Analysis",
+    "difficulty": "Foundation to Intermediate",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "Paper/year not yet verified.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/recurrence-increasing-order/",
+    "references": []
   },
   {
     "id": "c-pointer-array-output-003",
     "title": "C pointer arithmetic and array loop: determine the output",
     "domain": "Programming Languages",
     "topic": "C Programming",
-    "concepts": ["Pointers", "Arrays", "Pointer Arithmetic", "Dereferencing", "Loop Tracing"],
-    "subconcepts": ["array-to-pointer decay", "x + offset", "pointer subtraction by integer", "dereference operator", "iteration trace"],
+    "concepts": [
+      "Pointers",
+      "Arrays",
+      "Pointer Arithmetic",
+      "Dereferencing",
+      "Loop Tracing"
+    ],
+    "subconcepts": [
+      "array-to-pointer decay",
+      "x + offset",
+      "pointer subtraction by integer",
+      "dereference operator",
+      "iteration trace"
+    ],
     "question_type": "Program Output / Tracing",
     "difficulty": "Foundation to Intermediate",
     "exam": "UGC-NET / Assistant Professor preparation",
@@ -38,8 +90,21 @@
     "title": "C char pointer cast and byte order: determine the output",
     "domain": "Programming Languages",
     "topic": "C Programming",
-    "concepts": ["Pointers", "Type Casting", "Memory Representation", "Bytes", "Endianness", "Dereferencing"],
-    "subconcepts": ["int byte representation", "char pointer aliasing", "least-significant byte", "little-endian memory order", "hexadecimal conversion"],
+    "concepts": [
+      "Pointers",
+      "Type Casting",
+      "Memory Representation",
+      "Bytes",
+      "Endianness",
+      "Dereferencing"
+    ],
+    "subconcepts": [
+      "int byte representation",
+      "char pointer aliasing",
+      "least-significant byte",
+      "little-endian memory order",
+      "hexadecimal conversion"
+    ],
     "question_type": "Program Output / Conceptual",
     "difficulty": "Foundation to Intermediate",
     "exam": "UGC-NET / Assistant Professor preparation",
@@ -55,8 +120,19 @@
     "title": "Page fault frequency and effective memory access time",
     "domain": "Operating Systems",
     "topic": "Virtual Memory",
-    "concepts": ["Page Fault", "Effective Access Time", "Virtual Memory", "Probability", "Average Cost"],
-    "subconcepts": ["page-fault rate", "additional page-fault penalty", "weighted average", "amortized overhead"],
+    "concepts": [
+      "Page Fault",
+      "Effective Access Time",
+      "Virtual Memory",
+      "Probability",
+      "Average Cost"
+    ],
+    "subconcepts": [
+      "page-fault rate",
+      "additional page-fault penalty",
+      "weighted average",
+      "amortized overhead"
+    ],
     "question_type": "Numerical / Conceptual",
     "difficulty": "Foundation",
     "exam": "UGC-NET / Assistant Professor preparation",
@@ -65,6 +141,34 @@
     "source_verified": false,
     "status": "Solved",
     "path": "questions/page-fault-effective-access-time/",
+    "references": []
+  },
+  {
+    "id": "toc-kleene-star-union-006",
+    "title": "Formal languages: empty language, Kleene star, union and concatenation",
+    "domain": "Theory of Computation",
+    "topic": "Formal Languages",
+    "concepts": [
+      "Empty Language",
+      "Empty String",
+      "Kleene Star",
+      "Union",
+      "Concatenation"
+    ],
+    "subconcepts": [
+      "empty language versus epsilon",
+      "zero repetitions",
+      "language concatenation identity",
+      "set union"
+    ],
+    "question_type": "Multiple Choice / Conceptual",
+    "difficulty": "Foundation",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "Paper/year not verified. Expression interpreted as L1* ∪ L2*L1*.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/formal-languages-kleene-star-union/",
     "references": []
   }
 ]

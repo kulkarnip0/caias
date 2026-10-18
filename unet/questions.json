@@ -170,5 +170,34 @@
     "status": "Solved",
     "path": "questions/formal-languages-kleene-star-union/",
     "references": []
+  },
+  {
+    "id": "os-virtual-pages-page-table-size-007",
+    "title": "4 GB virtual space, 4 KB pages and 5-byte PTE: number of pages and page-table size",
+    "domain": "Operating Systems",
+    "topic": "Memory Management",
+    "concepts": [
+      "Virtual Address Space",
+      "Paging",
+      "Page Table",
+      "Page Table Entry",
+      "Address Translation"
+    ],
+    "subconcepts": [
+      "binary units",
+      "virtual pages",
+      "physical frames",
+      "page number and offset",
+      "single-level page table size"
+    ],
+    "question_type": "Numerical / Conceptual",
+    "difficulty": "Foundation",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "Paper/year not verified; assumes binary units and one PTE per virtual page.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/virtual-pages-page-table-size/",
+    "references": []
   }
 ]

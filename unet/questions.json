@@ -199,5 +199,35 @@
     "status": "Solved",
     "path": "questions/virtual-pages-page-table-size/",
     "references": []
+  },
+  {
+    "id": "ai-feedforward-neural-network-sigmoid-008",
+    "title": "Feedforward neural network: sigmoid outputs and matrix multiplication",
+    "domain": "Artificial Intelligence",
+    "topic": "Artificial Neural Networks",
+    "concepts": [
+      "Feedforward Neural Network",
+      "Sigmoid Activation",
+      "Matrix Multiplication",
+      "Weighted Sum",
+      "Forward Propagation"
+    ],
+    "subconcepts": [
+      "4-3-2 architecture",
+      "matrix dimensions",
+      "hidden layer computation",
+      "output layer computation",
+      "rounding",
+      "bias assumptions"
+    ],
+    "question_type": "Numerical / Conceptual",
+    "difficulty": "Foundation to Intermediate",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "Paper/year not verified. Standard calculation gives [0.63, 0.67], which does not exactly match any option; (a) is closest.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/feedforward-neural-network-sigmoid/",
+    "references": []
   }
 ]

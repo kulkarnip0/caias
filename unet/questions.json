@@ -229,5 +229,33 @@
     "status": "Solved",
     "path": "questions/feedforward-neural-network-sigmoid/",
     "references": []
+  },
+  {
+    "id": "java-string-pass-by-value-009",
+    "source_question_number": 42,
+    "title": "Java Strings and pass-by-value: trace the program output",
+    "domain": "Programming Languages",
+    "topic": "Java Programming",
+    "concepts": [
+      "String Immutability",
+      "Pass by Value",
+      "Method Parameters",
+      "String Concatenation",
+      "Output Tracing"
+    ],
+    "subconcepts": [
+      "local parameter reassignment",
+      "return values",
+      "print without newline"
+    ],
+    "question_type": "Program Output / Tracing",
+    "difficulty": "Foundation",
+    "exam": "UGC-NET / Assistant Professor preparation",
+    "source_year": null,
+    "source_year_note": "Question number 42 in user-provided image; paper/year unverified.",
+    "source_verified": false,
+    "status": "Solved",
+    "path": "questions/java-string-pass-by-value-output/",
+    "references": []
   }
 ]
